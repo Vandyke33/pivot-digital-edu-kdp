@@ -162,7 +162,8 @@ def cmd_build_interior(args: argparse.Namespace) -> None:
 def cmd_build_cover(args: argparse.Namespace) -> None:
     out_pdf = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "cover-proof.pdf"
     front_art = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "approved-line-art" / "sun.png"
-    logo_svg = REPO_ROOT / "assets" / "brand" / "pivot_digital_logo_dark.svg"
+    logo_kids = REPO_ROOT / "assets" / "logo" / "pivot_kids.svg"
+    logo_svg = logo_kids if logo_kids.exists() else REPO_ROOT / "assets" / "brand" / "pivot_digital_logo_dark.svg"
     cover_cmd = [
         PYTHON,
         str(REPO_ROOT / "scripts" / "compile_cover.py"),

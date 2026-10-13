@@ -136,6 +136,7 @@ def draw_cover(
             height=art_box_h,
             preserveAspectRatio=True,
             anchor="c",
+            mask="auto",
         )
 
     # Educational Feature Callout
@@ -198,7 +199,7 @@ def draw_cover(
             if thumb.exists():
                 c.setFillColor(white)
                 c.rect(tx - 2, thumb_y - 2, thumb_w + 4, thumb_h + 4, fill=1, stroke=0)
-                c.drawImage(str(thumb), tx, thumb_y, width=thumb_w, height=thumb_h, preserveAspectRatio=True, anchor="c")
+                c.drawImage(str(thumb), tx, thumb_y, width=thumb_w, height=thumb_h, preserveAspectRatio=True, anchor="c", mask="auto")
 
     # Barcode Area (Amazon KDP reserves 2.0 x 1.2 in at bottom-right of back cover)
     # 0.25 in from spine and bottom margin
@@ -211,20 +212,81 @@ def draw_cover(
     c.drawCentredString(barcode_x + 1.0 * inch, barcode_y + 0.55 * inch, "[ Amazon KDP Barcode Location ]")
 
     # Publisher Logo on Back Cover (Bottom Left)
+    tmp_logo_path: Path | None = None
     if logo_svg_path and logo_svg_path.exists():
-        logo_png_bytes = resvg_py.svg_to_bytes(svg_path=str(logo_svg_path), width=480, height=112)
         import tempfile
+        logo_png_bytes = resvg_py.svg_to_bytes(svg_path=str(logo_svg_path), width=700)
         with tempfile.NamedTemporaryFile("wb", suffix=".png", delete=False) as tmp_logo:
             tmp_logo.write(logo_png_bytes)
             tmp_logo_path = Path(tmp_logo.name)
-        c.drawImage(str(tmp_logo_path), (dims["back_left_in"] + 0.5) * inch, 0.7 * inch, width=2.4 * inch, height=0.56 * inch, preserveAspectRatio=True)
-        tmp_logo_path.unlink()
+
+        with Image.open(tmp_logo_path) as logo_im:
+            lw, lh = logo_im.size
+        aspect = lh / lw
+
+        logo_x = (dims["back_left_in"] + 0.5) * inch
+
+        if aspect > 0.5:
+            # Vertical / Badge logo (e.g. Pivot Kids emblem)
+            target_w = 1.6 * inch
+            target_h = target_w * aspect
+            logo_y = 0.45 * inch
+
+            # Elegant white card so vibrant colors pop cleanly against space navy
+            c.setFillColor(HexColor("#FFFFFF"))
+            c.roundRect(
+                logo_x - 0.08 * inch,
+                logo_y - 0.08 * inch,
+                target_w + 0.16 * inch,
+                target_h + 0.16 * inch,
+                8,
+                fill=1,
+                stroke=0,
+            )
+            c.drawImage(
+                str(tmp_logo_path),
+                logo_x,
+                logo_y,
+                width=target_w,
+                height=target_h,
+                preserveAspectRatio=True,
+                anchor="sw",
+                mask="auto",
+            )
+            # Imprint credit beside logo
+            text_x = logo_x + target_w + 0.25 * inch
+            c.setFillColor(HexColor("#E2E8F0"))
+            c.setFont("Helvetica-Bold", 10)
+            c.drawString(text_x, logo_y + target_h / 2.0 + 4, "Published by")
+            c.setFillColor(HexColor("#94A3B8"))
+            c.setFont("Helvetica", 9)
+            c.drawString(text_x, logo_y + target_h / 2.0 - 9, publisher_name)
+        else:
+            # Horizontal banner logo
+            target_w = 2.4 * inch
+            target_h = target_w * aspect
+            logo_y = 0.7 * inch
+            c.drawImage(
+                str(tmp_logo_path),
+                logo_x,
+                logo_y,
+                width=target_w,
+                height=target_h,
+                preserveAspectRatio=True,
+                anchor="sw",
+                mask="auto",
+            )
     else:
         c.setFillColor(HexColor("#94A3B8"))
         c.setFont("Helvetica-Bold", 10)
         c.drawString((dims["back_left_in"] + 0.5) * inch, 0.8 * inch, publisher_name)
 
     c.save()
+    if tmp_logo_path and tmp_logo_path.exists():
+        try:
+            tmp_logo_path.unlink()
+        except OSError:
+            pass
     return output_pdf_path
 
 
@@ -237,7 +299,7 @@ def main() -> int:
     parser.add_argument("--author", default=None, help="Author name to display on cover")
     parser.add_argument("--front-art", type=Path, help="Focal front cover artwork (PNG/JPG)")
     parser.add_argument("--thumbnails", type=Path, nargs="*", help="Interior preview thumbnails (up to 4)")
-    parser.add_argument("--logo-svg", type=Path, default=Path("assets/brand/pivot_digital_logo_dark.svg"), help="Publisher logo SVG")
+    parser.add_argument("--logo-svg", type=Path, default=Path("assets/logo/pivot_kids.svg"), help="Publisher logo SVG")
     parser.add_argument("--page-count", type=int, default=32, help="Interior total page count")
 
     args = parser.parse_args()
