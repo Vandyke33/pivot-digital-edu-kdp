@@ -1,4 +1,4 @@
-"""Compile a flat, print-ready full paperback cover spread for 'Copy to Color: Animals'."""
+"""Compile a flat, print-ready full paperback cover spread for 'My First Copy to Color: Animals'."""
 
 from __future__ import annotations
 
@@ -15,20 +15,20 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
 import resvg_py
 
-# 12 Titles for the back cover 4x3 grid
+# 12 distinct miniature titles for the back cover 4x3 grid
 SERIES_TITLES_12 = [
-    {"title": "Alphabet", "color": "#EA580C", "accent": "#FACC15"},
-    {"title": "Birds", "color": "#10B981", "accent": "#FACC15"},
-    {"title": "Sports", "color": "#84CC16", "accent": "#FEF08A"},
-    {"title": "Monsters", "color": "#D946EF", "accent": "#FDE047"},
-    {"title": "Numbers", "color": "#991B1B", "accent": "#FACC15"},
-    {"title": "Fruits", "color": "#0D9488", "accent": "#FACC15"},
-    {"title": "Shapes", "color": "#FB7185", "accent": "#FDE047"},
-    {"title": "Toys", "color": "#0284C7", "accent": "#FACC15"},
-    {"title": "Flowers", "color": "#78350F", "accent": "#FACC15"},
-    {"title": "Transport", "color": "#1D4ED8", "accent": "#F59E0B"},
-    {"title": "Vegetables", "color": "#6B21A8", "accent": "#FACC15"},
-    {"title": "Cartoons", "color": "#F59E0B", "accent": "#0F172A"},
+    {"title": "Alphabet", "color": "#EA580C", "accent": "#FDE047", "vol": 1},
+    {"title": "Birds", "color": "#059669", "accent": "#FDE047", "vol": 2},
+    {"title": "Sports", "color": "#65A30D", "accent": "#FEF08A", "vol": 3},
+    {"title": "Monsters", "color": "#DB2777", "accent": "#FDE047", "vol": 4},
+    {"title": "Numbers", "color": "#881337", "accent": "#FACC15", "vol": 5},
+    {"title": "Fruits", "color": "#0D9488", "accent": "#FEF08A", "vol": 6},
+    {"title": "Shapes", "color": "#E11D48", "accent": "#FDE047", "vol": 7},
+    {"title": "Toys", "color": "#0284C7", "accent": "#FEF08A", "vol": 8},
+    {"title": "Flowers", "color": "#78350F", "accent": "#FDE047", "vol": 9},
+    {"title": "Transport", "color": "#1D4ED8", "accent": "#FBBF24", "vol": 10},
+    {"title": "Vegetables", "color": "#6B21A8", "accent": "#FDE047", "vol": 11},
+    {"title": "Cartoons", "color": "#D97706", "accent": "#FFFFFF", "vol": 12},
 ]
 
 # Paper thickness: 55# white paper (0.002252 in per page)
@@ -134,6 +134,79 @@ def draw_crayon(
     c.restoreState()
 
 
+def draw_3d_title(
+    c: canvas.Canvas,
+    text: str,
+    x: float,
+    y: float,
+    font_name: str,
+    font_size: float,
+    fill_hex: str,
+    outline_hex: str,
+    outline_width: float = 4.0,
+    extrusion_depth: int = 5,
+    extrusion_hex: str = "#000000",
+    secondary_border_hex: str | None = None,
+    secondary_width: float = 1.5,
+) -> None:
+    """Draw chunky 3D bouncing bubble typography with volumetric extrusion and multi-layer borders."""
+    w = stringWidth(text, font_name, font_size)
+    ox = x - w / 2.0
+
+    # 1. 3D Volumetric Extrusion (stacked downward vector passes)
+    c.saveState()
+    c.setLineWidth(outline_width)
+    c.setLineJoin(1)  # Round join
+    c.setLineCap(1)   # Round cap
+    for d in range(extrusion_depth, 0, -1):
+        ts = c.beginText(ox, y - d)
+        ts.setFont(font_name, font_size)
+        ts.setTextRenderMode(2)  # Fill and stroke
+        ts.setFillColor(HexColor(extrusion_hex))
+        ts.setStrokeColor(HexColor(extrusion_hex))
+        ts.textOut(text)
+        c.drawText(ts)
+    c.restoreState()
+
+    # 2. Outer Contour / Thick Border
+    c.saveState()
+    c.setLineWidth(outline_width)
+    c.setLineJoin(1)
+    c.setLineCap(1)
+    t_out = c.beginText(ox, y)
+    t_out.setFont(font_name, font_size)
+    t_out.setTextRenderMode(2)
+    t_out.setFillColor(HexColor(outline_hex))
+    t_out.setStrokeColor(HexColor(outline_hex))
+    t_out.textOut(text)
+    c.drawText(t_out)
+    c.restoreState()
+
+    # 3. Secondary Contrasting Inner Border (if provided)
+    if secondary_border_hex:
+        c.saveState()
+        c.setLineWidth(secondary_width)
+        c.setLineJoin(1)
+        c.setLineCap(1)
+        t_sec = c.beginText(ox, y)
+        t_sec.setFont(font_name, font_size)
+        t_sec.setTextRenderMode(1)  # Stroke only
+        t_sec.setStrokeColor(HexColor(secondary_border_hex))
+        t_sec.textOut(text)
+        c.drawText(t_sec)
+        c.restoreState()
+
+    # 4. Pure Inner Fill (clean top layer)
+    c.saveState()
+    t_fill = c.beginText(ox, y)
+    t_fill.setFont(font_name, font_size)
+    t_fill.setTextRenderMode(0)  # Fill only
+    t_fill.setFillColor(HexColor(fill_hex))
+    t_fill.textOut(text)
+    c.drawText(t_fill)
+    c.restoreState()
+
+
 def draw_outlined_text(
     c: canvas.Canvas,
     text: str,
@@ -152,29 +225,29 @@ def draw_outlined_text(
     w = stringWidth(text, font_name, font_size)
     ox = x - w / 2.0 if centered else x
 
-    # 1. Subtle drop shadow (if specified)
+    # 1. Subtle drop shadow
     if shadow_color:
         c.saveState()
         c.setLineWidth(outline_width)
-        c.setLineJoin(1)  # Round join
-        c.setLineCap(1)   # Round cap
+        c.setLineJoin(1)
+        c.setLineCap(1)
         ts = c.beginText(ox + shadow_offset[0], y + shadow_offset[1])
         ts.setFont(font_name, font_size)
-        ts.setTextRenderMode(2)  # Fill and stroke
+        ts.setTextRenderMode(2)
         ts.setFillColor(HexColor(shadow_color))
         ts.setStrokeColor(HexColor(shadow_color))
         ts.textOut(text)
         c.drawText(ts)
         c.restoreState()
 
-    # 2. Main text with native vector stroke & fill (Mode 2: 100% infinite-resolution vector)
+    # 2. Main text with native vector stroke & fill
     c.saveState()
     c.setLineWidth(outline_width)
-    c.setLineJoin(1)  # Round join
-    c.setLineCap(1)   # Round cap
+    c.setLineJoin(1)
+    c.setLineCap(1)
     t = c.beginText(ox, y)
     t.setFont(font_name, font_size)
-    t.setTextRenderMode(2)  # Fill and stroke
+    t.setTextRenderMode(2)
     t.setFillColor(HexColor(fill_color))
     t.setStrokeColor(HexColor(outline_color))
     t.textOut(text)
@@ -183,10 +256,10 @@ def draw_outlined_text(
 
 
 def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) -> None:
-    """Draw the rich coral-red to warm orange gradient and bottom grassy hills."""
-    # 1. Base Coral-Red to Warm Orange Gradient simulation via fine horizontal bands
-    top_color = (255, 76, 76)     # #FF4C4C (Vivid Coral-Red)
-    bottom_color = (255, 138, 61) # #FF8A3D (Warm Sunlit Orange)
+    """Draw rich coral-red to warm orange gradient, starbursts, paint droplets, decorative dotted trails, and hills."""
+    # 1. Coral-Red (#FF4949) to Warm Orange (#FF8A3D) Gradient
+    top_color = (255, 73, 73)      # #FF4949 (Rich Coral-Red)
+    bottom_color = (255, 138, 61)  # #FF8A3D (Warm Orange)
 
     bands = 60
     band_h = height_pt / bands
@@ -215,7 +288,25 @@ def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) 
         dr = rng.uniform(1.5, 4.0)
         c.circle(dx, dy, dr, fill=1, stroke=0)
 
-    # 3. Continuous Rolling Green Grassy Hills along bottom edge
+    # 3. Playful White Dotted Decorative Curved Trails
+    c.saveState()
+    c.setStrokeColor(white)
+    c.setStrokeAlpha(0.40)
+    c.setLineWidth(1.8)
+    c.setDash([4, 6])
+
+    p_trail1 = c.beginPath()
+    p_trail1.moveTo(0.8 * inch, height_pt - 1.2 * inch)
+    p_trail1.curveTo(3.2 * inch, height_pt - 0.7 * inch, 5.8 * inch, height_pt - 1.8 * inch, 8.2 * inch, height_pt - 1.3 * inch)
+    c.drawPath(p_trail1, stroke=1, fill=0)
+
+    p_trail2 = c.beginPath()
+    p_trail2.moveTo(9.2 * inch, height_pt - 1.0 * inch)
+    p_trail2.curveTo(11.8 * inch, height_pt - 1.7 * inch, 14.5 * inch, height_pt - 0.8 * inch, 16.8 * inch, height_pt - 1.4 * inch)
+    c.drawPath(p_trail2, stroke=1, fill=0)
+    c.restoreState()
+
+    # 4. Continuous Rolling Green Grassy Hills along bottom edge
     # Midground hill (#22C55E)
     c.saveState()
     c.setFillColor(HexColor("#22C55E"))
@@ -239,7 +330,6 @@ def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) 
     p2.close()
     c.drawPath(p2, fill=1, stroke=0)
 
-    # Flowers and Ladybugs along the grassy hill
     # Tiny Daisies
     flower_xs = [0.8, 2.2, 3.8, 5.5, 7.0, 9.2, 11.5, 13.0, 14.8, 16.2]
     for fx_in in flower_xs:
@@ -257,15 +347,170 @@ def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) 
     for lx_in in ladybug_xs:
         lx = lx_in * inch
         ly = 0.45 * inch + rng.uniform(0.1, 0.4) * inch
-        # Body (Red)
         c.setFillColor(HexColor("#EF4444"))
         c.circle(lx, ly, 4.0, fill=1, stroke=0)
-        # Head (Black)
         c.setFillColor(HexColor("#000000"))
         c.circle(lx + 3.5, ly, 2.0, fill=1, stroke=0)
-        # Spots
         c.circle(lx - 1, ly + 1.5, 0.8, fill=1, stroke=0)
         c.circle(lx - 1, ly - 1.5, 0.8, fill=1, stroke=0)
+
+    c.restoreState()
+
+
+def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz: float) -> None:
+    """Draw distinct, recognizable cartoon vector artwork for each of the 12 series covers."""
+    c.saveState()
+    if subject_idx == 0:  # Alphabet: A B C blocks
+        c.setFillColor(HexColor("#EF4444"))
+        c.roundRect(cx - 15, cy - 9, 13, 13, 2, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("Helvetica-Bold", 9); c.drawCentredString(cx - 8.5, cy - 7, "A")
+        c.setFillColor(HexColor("#3B82F6"))
+        c.roundRect(cx + 2, cy - 9, 13, 13, 2, fill=1, stroke=0)
+        c.setFillColor(white); c.setFont("Helvetica-Bold", 9); c.drawCentredString(cx + 8.5, cy - 7, "B")
+        c.setFillColor(HexColor("#FACC15"))
+        c.roundRect(cx - 6.5, cy + 3, 13, 13, 2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#1E293B")); c.setFont("Helvetica-Bold", 9); c.drawCentredString(cx, cy + 5, "C")
+
+    elif subject_idx == 1:  # Birds: Cute parrot
+        c.setFillColor(HexColor("#10B981"))
+        c.ellipse(cx - 9, cy - 13, cx + 7, cy + 9, fill=1, stroke=0)
+        c.setFillColor(HexColor("#EF4444"))
+        c.circle(cx - 2, cy + 5, 7.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#F59E0B"))
+        p = c.beginPath(); p.moveTo(cx - 8, cy + 6); p.lineTo(cx - 15, cy + 3); p.lineTo(cx - 8, cy + 0); p.close()
+        c.drawPath(p, fill=1, stroke=0)
+        c.setFillColor(white); c.circle(cx - 4, cy + 7, 2.8, fill=1, stroke=0)
+        c.setFillColor(HexColor("#000000")); c.circle(cx - 4.5, cy + 7, 1.4, fill=1, stroke=0)
+        c.setFillColor(HexColor("#3B82F6"))
+        p_w = c.beginPath(); p_w.moveTo(cx - 2, cy + 1); p_w.curveTo(cx + 7, cy + 3, cx + 11, cy - 8, cx + 3, cy - 10); p_w.close()
+        c.drawPath(p_w, fill=1, stroke=0)
+
+    elif subject_idx == 2:  # Sports: Soccer & basketball
+        c.setFillColor(white); c.setStrokeColor(HexColor("#0F172A")); c.setLineWidth(1)
+        c.circle(cx - 6, cy, 10.5, fill=1, stroke=1)
+        c.setFillColor(HexColor("#0F172A"))
+        c.circle(cx - 6, cy, 3.5, fill=1, stroke=0)
+        for ang in [0, 72, 144, 216, 288]:
+            rad = math.radians(ang)
+            c.circle(cx - 6 + 6.5 * math.cos(rad), cy + 6.5 * math.sin(rad), 1.8, fill=1, stroke=0)
+        c.setFillColor(HexColor("#EA580C"))
+        c.circle(cx + 8, cy - 4, 7.5, fill=1, stroke=0)
+        c.setStrokeColor(HexColor("#7C2D12")); c.setLineWidth(0.8)
+        c.line(cx + 1, cy - 4, cx + 15, cy - 4)
+
+    elif subject_idx == 3:  # Monsters: Fuzzy blue monster
+        c.setFillColor(HexColor("#38BDF8"))
+        c.roundRect(cx - 11, cy - 11, 22, 22, 7, fill=1, stroke=0)
+        c.setFillColor(HexColor("#FDE047"))
+        p_h1 = c.beginPath(); p_h1.moveTo(cx - 8, cy + 9); p_h1.lineTo(cx - 12, cy + 16); p_h1.lineTo(cx - 4, cy + 10); p_h1.close(); c.drawPath(p_h1, fill=1, stroke=0)
+        p_h2 = c.beginPath(); p_h2.moveTo(cx + 8, cy + 9); p_h2.lineTo(cx + 12, cy + 16); p_h2.lineTo(cx + 4, cy + 10); p_h2.close(); c.drawPath(p_h2, fill=1, stroke=0)
+        c.setFillColor(white); c.circle(cx - 4.5, cy + 3, 4.5, fill=1, stroke=0); c.circle(cx + 4.5, cy + 3, 4.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A")); c.circle(cx - 3.8, cy + 3, 1.8, fill=1, stroke=0); c.circle(cx + 3.8, cy + 3, 1.8, fill=1, stroke=0)
+        c.setStrokeColor(HexColor("#0F172A")); c.setLineWidth(1.1)
+        c.arc(cx - 5, cy - 8, cx + 5, cy - 2, 190, 160)
+        c.setFillColor(white); c.rect(cx - 1.8, cy - 5.5, 2.8, 2.8, fill=1, stroke=0)
+
+    elif subject_idx == 4:  # Numbers: Giraffe & 1 2 3
+        c.setFillColor(HexColor("#FACC15"))
+        c.circle(cx - 6, cy + 5, 7.5, fill=1, stroke=0)
+        c.rect(cx - 8, cy - 11, 5.5, 14, fill=1, stroke=0)
+        c.circle(cx - 9, cy + 13, 1.8, fill=1, stroke=0); c.circle(cx - 3, cy + 13, 1.8, fill=1, stroke=0)
+        c.setFillColor(HexColor("#92400E"))
+        c.circle(cx - 5, cy - 2, 1.8, fill=1, stroke=0); c.circle(cx - 6, cy - 7, 1.6, fill=1, stroke=0)
+        c.circle(cx - 7, cy + 6, 1.1, fill=1, stroke=0)
+        c.setFillColor(HexColor("#DC2626")); c.setFont("Helvetica-Bold", 10); c.drawString(cx + 3, cy + 4, "1")
+        c.setFillColor(HexColor("#2563EB")); c.drawString(cx + 6, cy - 4, "2")
+        c.setFillColor(HexColor("#16A34A")); c.drawString(cx + 4, cy - 12, "3")
+
+    elif subject_idx == 5:  # Fruits: Pineapple & banana
+        c.setFillColor(HexColor("#F59E0B"))
+        c.ellipse(cx - 11, cy - 11, cx + 1, cy + 7, fill=1, stroke=0)
+        c.setFillColor(HexColor("#16A34A"))
+        p_c = c.beginPath(); p_c.moveTo(cx - 8, cy + 5); p_c.lineTo(cx - 11, cy + 15); p_c.lineTo(cx - 5, cy + 10); p_c.lineTo(cx - 2, cy + 16); p_c.lineTo(cx + 1, cy + 7); p_c.close()
+        c.drawPath(p_c, fill=1, stroke=0)
+        c.setFillColor(HexColor("#FACC15"))
+        p_b = c.beginPath(); p_b.moveTo(cx + 2, cy + 4); p_b.curveTo(cx + 13, cy + 5, cx + 15, cy - 8, cx + 4, cy - 11); p_b.curveTo(cx + 11, cy - 6, cx + 9, cy + 1, cx + 2, cy + 4); p_b.close()
+        c.drawPath(p_b, fill=1, stroke=0)
+
+    elif subject_idx == 6:  # Shapes: Star with kawaii face
+        c.setFillColor(HexColor("#FACC15"))
+        p_s = c.beginPath()
+        for i in range(10):
+            r = 13 if i % 2 == 0 else 5.5
+            ang = math.radians(i * 36 - 90)
+            px = cx + r * math.cos(ang); py = cy + r * math.sin(ang)
+            if i == 0: p_s.moveTo(px, py)
+            else: p_s.lineTo(px, py)
+        p_s.close(); c.drawPath(p_s, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A"))
+        c.circle(cx - 3.5, cy, 1.4, fill=1, stroke=0); c.circle(cx + 3.5, cy, 1.4, fill=1, stroke=0)
+        c.arc(cx - 2.5, cy - 4.5, cx + 2.5, cy - 0.5, 190, 160)
+
+    elif subject_idx == 7:  # Toys: Teddy bear
+        c.setFillColor(HexColor("#92400E"))
+        c.circle(cx - 7.5, cy + 7.5, 3.8, fill=1, stroke=0); c.circle(cx + 7.5, cy + 7.5, 3.8, fill=1, stroke=0)
+        c.circle(cx, cy + 2.5, 8.5, fill=1, stroke=0)
+        c.circle(cx, cy - 7.5, 9.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#FDE68A"))
+        c.circle(cx, cy + 0.5, 4.2, fill=1, stroke=0)
+        c.circle(cx, cy - 7.5, 5.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#000000"))
+        c.circle(cx - 2.8, cy + 3.5, 1.1, fill=1, stroke=0); c.circle(cx + 2.8, cy + 3.5, 1.1, fill=1, stroke=0)
+        c.circle(cx, cy + 1.5, 1.4, fill=1, stroke=0)
+
+    elif subject_idx == 8:  # Flowers: Cheerful sunflower
+        c.setFillColor(HexColor("#FACC15"))
+        for ang in range(0, 360, 30):
+            rad = math.radians(ang)
+            c.circle(cx + 9.5 * math.cos(rad), cy + 2 + 9.5 * math.sin(rad), 4.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#78350F"))
+        c.circle(cx, cy + 2, 7.5, fill=1, stroke=0)
+        c.setStrokeColor(HexColor("#16A34A")); c.setLineWidth(2.2)
+        c.line(cx, cy - 5.5, cx, cy - 15)
+
+    elif subject_idx == 9:  # Transport: Cute red car
+        c.setFillColor(HexColor("#EF4444"))
+        p_car = c.beginPath()
+        p_car.moveTo(cx - 14, cy - 5.5)
+        p_car.lineTo(cx - 14, cy - 1)
+        p_car.lineTo(cx - 7, cy + 1)
+        p_car.lineTo(cx - 3.5, cy + 7.5)
+        p_car.lineTo(cx + 6.5, cy + 7.5)
+        p_car.lineTo(cx + 10.5, cy + 1)
+        p_car.lineTo(cx + 15, cy - 1)
+        p_car.lineTo(cx + 15, cy - 5.5)
+        p_car.close(); c.drawPath(p_car, fill=1, stroke=0)
+        c.setFillColor(HexColor("#BAE6FD"))
+        c.rect(cx - 2.5, cy + 1, 8.5, 5.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A"))
+        c.circle(cx - 8.5, cy - 5.5, 4.2, fill=1, stroke=0); c.circle(cx + 8.5, cy - 5.5, 4.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#CBD5E1"))
+        c.circle(cx - 8.5, cy - 5.5, 1.8, fill=1, stroke=0); c.circle(cx + 8.5, cy - 5.5, 1.8, fill=1, stroke=0)
+
+    elif subject_idx == 10:  # Vegetables: Carrot & eggplant
+        c.setFillColor(HexColor("#EA580C"))
+        p_crt = c.beginPath(); p_crt.moveTo(cx - 11, cy + 5); p_crt.lineTo(cx - 4, cy + 7); p_crt.lineTo(cx - 7, cy - 13); p_crt.close()
+        c.drawPath(p_crt, fill=1, stroke=0)
+        c.setFillColor(HexColor("#16A34A"))
+        c.circle(cx - 7, cy + 10, 3.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#7E22CE"))
+        c.ellipse(cx + 2, cy - 11, cx + 13, cy + 3.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#16A34A"))
+        c.rect(cx + 5.5, cy + 1.5, 3.8, 5.5, fill=1, stroke=0)
+
+    elif subject_idx == 11:  # Cartoons: Police officer
+        c.setFillColor(HexColor("#FED7AA"))
+        c.circle(cx, cy, 7.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#1E3A8A"))
+        c.rect(cx - 7.5, cy - 11, 15, 6.5, fill=1, stroke=0)
+        p_cap = c.beginPath(); p_cap.moveTo(cx - 9.5, cy + 4.5); p_cap.lineTo(cx - 8.5, cy + 12); p_cap.lineTo(cx + 8.5, cy + 12); p_cap.lineTo(cx + 9.5, cy + 4.5); p_cap.close()
+        c.drawPath(p_cap, fill=1, stroke=0)
+        c.setFillColor(HexColor("#FACC15"))
+        c.circle(cx, cy + 10, 2.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A"))
+        c.circle(cx - 2.8, cy + 1, 1.1, fill=1, stroke=0); c.circle(cx + 2.8, cy + 1, 1.1, fill=1, stroke=0)
+        c.setStrokeColor(HexColor("#0F172A")); c.setLineWidth(0.8)
+        c.arc(cx - 2.8, cy - 3.8, cx + 2.8, cy, 190, 160)
 
     c.restoreState()
 
@@ -279,18 +524,20 @@ def draw_mini_book_cover(
     title: str,
     theme_color: str,
     accent_color: str,
+    vol_num: int = 1,
+    subject_idx: int = 0,
 ) -> None:
-    """Draw a single miniature book cover card for the back cover 4x3 grid."""
+    """Draw a single miniature children's book cover with Vol # badge and recognizable cartoon art."""
     c.saveState()
 
-    # White card base with subtle outline
+    # White card base with subtle outline and soft shadow
     c.setFillColor(HexColor("#FFFFFF"))
     c.setStrokeColor(HexColor("#CBD5E1"))
     c.setLineWidth(0.8)
     c.roundRect(x, y, w, h, 4, fill=1, stroke=1)
 
     # Top Arched Banner in Theme Color
-    banner_h = h * 0.32
+    banner_h = h * 0.35
     c.setFillColor(HexColor(theme_color))
     c.saveState()
     p = c.beginPath()
@@ -311,40 +558,45 @@ def draw_mini_book_cover(
     c.line(x + 2, y + h - banner_h + 1, x + w - 2, y + h - banner_h + 1)
     c.setDash([])
 
-    # Top series brand banner: "PIVOT KIDS"
+    # Tiny "VOL. #" Badge in top-right corner
+    vol_w = 21
+    vol_h = 7.5
+    vol_x = x + w - vol_w - 2.5
+    vol_y = y + h - vol_h - 2.5
     c.setFillColor(HexColor("#FFFFFF"))
-    c.setFont("Helvetica-Bold", 4.8)
-    c.drawCentredString(x + w / 2.0, y + h - 8.5, "PIVOT KIDS")
+    c.roundRect(vol_x, vol_y, vol_w, vol_h, 2.5, fill=1, stroke=0)
+    c.setFillColor(HexColor(theme_color))
+    c.setFont("Helvetica-Bold", 4.5)
+    c.drawCentredString(vol_x + vol_w / 2.0, vol_y + 1.8, f"Vol. {vol_num}")
 
-    # "Copy to Color" tiny text
-    c.setFillColor(HexColor("#FEF08A"))
-    c.setFont("Helvetica-Bold", 5.2)
-    c.drawCentredString(x + w / 2.0, y + h - 15.5, "Copy to Color")
+    # Top brand / series: "Copy to Color"
+    c.setFillColor(HexColor("#FFFFFF"))
+    c.setFont("Helvetica-Bold", 5.0)
+    c.drawString(x + 4, y + h - 8.5, "Copy to Color")
 
-    # Subject Title in Accent Color (Bolder & slightly larger)
+    # Subject Title in Accent Color (Bolder & readable)
     c.setFillColor(HexColor(accent_color))
     c.setFont("Helvetica-Bold", 7.2)
-    c.drawCentredString(x + w / 2.0, y + h - 23.5, title)
+    c.drawCentredString(x + w / 2.0, y + h - 23.0, title)
 
-    # 3 tiny crayons on left
+    # 3 tiny crayons on left edge (Yellow, Red, Blue)
     crayon_colors = ["#FBBF24", "#EF4444", "#38BDF8"]
     for idx, col in enumerate(crayon_colors):
         cy_y = y + h * 0.45 - idx * 5.0
         draw_crayon(c, x + 2, cy_y, length=12, width=2.2, angle_deg=25, color_hex=col)
 
-    # Miniature sample card thumbnail in center-right
-    card_w = w * 0.42
-    card_h = h * 0.40
-    card_x = x + w * 0.52
+    # Miniature sample card in center-right with recognizable cartoon artwork
+    card_w = w * 0.44
+    card_h = h * 0.42
+    card_x = x + w * 0.50
     card_y = y + 8
-    c.setFillColor(HexColor("#F8FAFC"))
+    c.setFillColor(HexColor("#FFFFFF"))
     c.setStrokeColor(HexColor("#E2E8F0"))
-    c.setLineWidth(0.5)
-    c.roundRect(card_x, card_y, card_w, card_h, 2, fill=1, stroke=1)
+    c.setLineWidth(0.6)
+    c.roundRect(card_x, card_y, card_w, card_h, 3, fill=1, stroke=1)
 
-    # Little character doodle placeholder inside card
-    c.setFillColor(HexColor(theme_color))
-    c.circle(card_x + card_w * 0.5, card_y + card_h * 0.5, 4.0, fill=1, stroke=0)
+    # Recognizable cartoon vector art inside the card!
+    draw_thumb_art(c, subject_idx=subject_idx, cx=card_x + card_w * 0.5, cy=card_y + card_h * 0.5, sz=card_w * 0.7)
 
     # Tiny green grass hill at base of book
     c.setFillColor(HexColor("#4ADE80"))
@@ -364,24 +616,20 @@ def draw_back_cover(
     dims: dict[str, float],
     logo_path: Path | None = None,
 ) -> None:
-    """Render the Back Cover (Left Third) with 4x3 grid, blurb, and barcode."""
+    """Render the Back Cover (Left Third) with transparent sticker logo, 4x3 grid, green container, and barcode."""
     back_left_pt = dims["back_left_in"] * inch
     back_width_pt = dims["trim_width_in"] * inch
     center_x = back_left_pt + back_width_pt / 2.0
 
-    # 1. Top Row: "THE PIVOT KIDS" logo on left, Blue Banner on right
+    # 1. Top Row: "THE PIVOT KIDS COLOR & PLAY" brand logo on left, Blue Banner on right
     top_y = (dims["total_height_in"] - dims["bleed_in"] - 0.95) * inch
 
-    # The Pivot Kids Logo Badge (Left)
+    # Transparent sticker logo (NO square white background box)
     if logo_path and logo_path.exists():
         logo_w = 1.35 * inch
         logo_h = 1.45 * inch
         logo_x = back_left_pt + 0.5 * inch
-        logo_y = top_y - 0.4 * inch
-
-        # White pill card for logo
-        c.setFillColor(HexColor("#FFFFFF"))
-        c.roundRect(logo_x - 4, logo_y - 4, logo_w + 8, logo_h + 8, 8, fill=1, stroke=0)
+        logo_y = top_y - 0.40 * inch
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
 
     # Blue Ribbon Banner: "TITLES IN THIS SERIES" (Center-Right)
@@ -405,8 +653,7 @@ def draw_back_cover(
     c.drawCentredString(banner_x + banner_w / 2.0, banner_y + 0.11 * inch, "★ TITLES IN THIS SERIES ★")
     c.restoreState()
 
-    # 2. Centered 4x3 Grid of 12 Miniature Book Covers
-    # Grid area parameters
+    # 2. Centered 4x3 Grid of 12 Miniature Book Covers (No placeholder dots!)
     grid_start_x = back_left_pt + 0.65 * inch
     grid_start_y = top_y - 0.7 * inch
     card_w = 2.05 * inch
@@ -430,39 +677,38 @@ def draw_back_cover(
             title=item["title"],
             theme_color=item["color"],
             accent_color=item["accent"],
+            vol_num=item.get("vol", idx + 1),
+            subject_idx=idx,
         )
 
-    # 3. Bottom Row: Marketing Pitch Blurb on Left, Barcode Box on Right
-    blurb_x = back_left_pt + 0.6 * inch
-    blurb_y = (dims["bleed_in"] + 1.25) * inch
+    # 3. Bottom Left: Playful Green Container with Collector's Series
+    container_x = back_left_pt + 0.55 * inch
+    container_y = (dims["bleed_in"] + 1.05) * inch
+    container_w = 4.6 * inch
+    container_h = 0.38 * inch
 
     c.saveState()
-    # Semi-translucent soft backdrop for crystal-clear readability
-    c.setFillColor(HexColor("#991B1B"))
-    c.setFillAlpha(0.25)
-    c.roundRect(blurb_x - 8, blurb_y - 0.55 * inch - 6, 4.8 * inch, 1.15 * inch, 8, fill=1, stroke=0)
-    c.setFillAlpha(1.0)
+    # Playful Green Container
+    c.setFillColor(HexColor("#16A34A"))
+    c.setStrokeColor(HexColor("#15803D"))
+    c.setLineWidth(1.2)
+    c.roundRect(container_x, container_y, container_w, container_h, 8, fill=1, stroke=1)
 
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 10.5)
-    c.drawString(blurb_x, blurb_y, "A playful, easy coloring series designed for early learners")
-    c.drawString(blurb_x, blurb_y - 0.20 * inch, "to copy, color, and play!")
-    c.setFillColor(HexColor("#FEF08A"))
-    c.setFont("Helvetica-Bold", 10.5)
-    c.drawString(blurb_x, blurb_y - 0.44 * inch, "★ Collector's Series of 15 Interactive Titles ★")
+    c.drawCentredString(container_x + container_w / 2.0, container_y + 0.10 * inch, "★ Collector's Series of 15 Interactive Titles ★")
 
-    # Publisher Copyright Notice
-    c.setFillColor(HexColor("#FFFFFF"))
-    c.setFont("Helvetica", 8.5)
-    c.drawString(blurb_x, (dims["bleed_in"] + 0.35) * inch, "© The Pivot Digital Publications. All rights reserved.")
+    # Text below green container
+    c.setFont("Helvetica-Bold", 10.0)
+    c.drawString(container_x + 4, container_y - 0.24 * inch, "A playful, easy coloring series designed for early learners")
+    c.drawString(container_x + 4, container_y - 0.44 * inch, "to copy, color, and play!")
     c.restoreState()
 
-    # White Amazon KDP Barcode Box Placeholder (Bottom-Right)
-    # Amazon KDP reserves 2.0 x 1.2 in at bottom-right of back cover
+    # 4. Bottom Center-Right: White Barcode Box with Copyright Below
     barcode_w = 2.0 * inch
     barcode_h = 1.2 * inch
-    barcode_x = (dims["back_right_in"] - 2.3) * inch
-    barcode_y = (dims["bleed_in"] + 0.3) * inch
+    barcode_x = (dims["back_right_in"] - 2.4) * inch
+    barcode_y = (dims["bleed_in"] + 0.45) * inch
 
     c.saveState()
     c.setFillColor(HexColor("#FFFFFF"))
@@ -472,28 +718,33 @@ def draw_back_cover(
     c.setFillColor(HexColor("#64748B"))
     c.setFont("Helvetica", 8)
     c.drawCentredString(barcode_x + barcode_w / 2.0, barcode_y + barcode_h / 2.0, "[ Amazon KDP Barcode Location ]")
+
+    # Copyright below barcode box
+    c.setFillColor(HexColor("#FFFFFF"))
+    c.setFont("Helvetica-Bold", 7.8)
+    c.drawCentredString(barcode_x + barcode_w / 2.0, (dims["bleed_in"] + 0.20) * inch, "© The Pivot Digital Publications. All rights reserved.")
     c.restoreState()
 
 
-def draw_spine(c: canvas.Canvas, dims: dict[str, float]) -> None:
-    """Render the Center Strip (Spine) with vertical typography."""
+def draw_spine(c: canvas.Canvas, dims: dict[str, float], logo_path: Path | None = None) -> None:
+    """Render the Center Strip (Spine) with vertical typography and base logo."""
     spine_left_pt = dims["spine_left_in"] * inch
     spine_w_pt = dims["spine_width_in"] * inch
     height_pt = dims["total_height_in"] * inch
 
     c.saveState()
     # Spine background (matching coral-red)
-    c.setFillColor(HexColor("#FF4C4C"))
+    c.setFillColor(HexColor("#FF4949"))
     c.rect(spine_left_pt, 0, spine_w_pt, height_pt, fill=1, stroke=0)
 
     # Vertical text rotated 90 degrees (running from top to bottom)
     c.translate(spine_left_pt + spine_w_pt / 2.0, height_pt / 2.0)
     c.rotate(-90)
 
-    # Spine text: "THE PIVOT KIDS | Copy to Color: Animals"
+    # Spine text: "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2"
     c.setFillColor(HexColor("#FFFFFF"))
-    c.setFont("Helvetica-Bold", 6.0)
-    c.drawCentredString(0, -2, "THE PIVOT KIDS   •   Copy to Color: Animals")
+    c.setFont("Helvetica-Bold", 5.8)
+    c.drawCentredString(0, -2, "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2")
 
     c.restoreState()
 
@@ -506,19 +757,18 @@ def draw_front_cover(
     card_color_thumb: Path | None = None,
     card_bw_outline: Path | None = None,
 ) -> None:
-    """Render the Front Cover (Right Third) matching GoWoo reference layout."""
+    """Render the Front Cover (Right Third) with 3D bubble fonts, curved My First banner, and hero art."""
     front_left_pt = dims["front_left_in"] * inch
     front_width_pt = dims["trim_width_in"] * inch
     center_x = front_left_pt + front_width_pt / 2.0
     height_pt = dims["total_height_in"] * inch
 
     # 1. TOP HEADER ARCH: Coral-Red curved ribbon with stitched white border
-    header_h = 3.35 * inch
+    header_h = 3.65 * inch
     arch_bottom = height_pt - header_h
 
     c.saveState()
-    # Arched header path
-    c.setFillColor(HexColor("#FF4C4C"))
+    c.setFillColor(HexColor("#FF4949"))
     p_arch = c.beginPath()
     p_arch.moveTo(front_left_pt - 2, height_pt + 2)
     p_arch.lineTo(front_left_pt + front_width_pt + 2, height_pt + 2)
@@ -546,63 +796,78 @@ def draw_front_cover(
     c.setDash([])
     c.restoreState()
 
-    # 2. TOP BRAND LOGO (Followed directly by title, NO "My First" badge)
-    # "THE PIVOT KIDS COLOR & PLAY" Brand Logo (Top Center)
+    # 2. TOP BRAND LOGO: Transparently integrated onto background with white contour (NO square white box!)
     if logo_path and logo_path.exists():
         logo_w = 1.45 * inch
         logo_h = 1.55 * inch
         logo_x = center_x - logo_w / 2.0
         logo_y = height_pt - 1.70 * inch
-
-        # White pill badge behind logo so it pops cleanly
-        c.saveState()
-        c.setFillColor(HexColor("#FFFFFF"))
-        c.roundRect(logo_x - 8, logo_y - 8, logo_w + 16, logo_h + 16, 12, fill=1, stroke=0)
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
-        c.restoreState()
 
-    # 3. MAIN TITLES: "Copy to Color" & "Animals"
-    # Large rounded white lettering with dark blue outline: "Copy to Color"
-    title1_y = height_pt - 2.45 * inch
-    draw_outlined_text(
+    # 3. TOP TITLE: Slightly curved white banner reading "My First"
+    banner_w = 2.4 * inch
+    banner_h = 0.42 * inch
+    banner_x = center_x - banner_w / 2.0
+    banner_y = height_pt - 2.12 * inch
+
+    c.saveState()
+    # Soft drop shadow
+    c.setFillColor(HexColor("#991B1B"))
+    c.roundRect(banner_x, banner_y - 2, banner_w, banner_h, 10, fill=1, stroke=0)
+    # White banner body
+    c.setFillColor(HexColor("#FFFFFF"))
+    c.setStrokeColor(HexColor("#FDE047"))
+    c.setLineWidth(1.4)
+    c.roundRect(banner_x, banner_y, banner_w, banner_h, 10, fill=1, stroke=1)
+    # Banner text
+    c.setFillColor(HexColor("#1E3A8A"))
+    c.setFont("Helvetica-Bold", 16)
+    c.drawCentredString(center_x, banner_y + 0.10 * inch, "My First")
+    c.restoreState()
+
+    # 4. MAIN TITLE: Heavy, bouncing, 3D bubble fonts "Copy to Color"
+    title1_y = height_pt - 2.70 * inch
+    draw_3d_title(
         c,
         text="Copy to Color",
         x=center_x,
         y=title1_y,
         font_name="Helvetica-Bold",
         font_size=46,
-        fill_color="#FFFFFF",
-        outline_color="#0F294A",
-        outline_width=3.8,
-        shadow_color="#081726",
-        shadow_offset=(0, -3.5),
-        centered=True,
+        fill_hex="#FFFFFF",
+        outline_hex="#0F294A",
+        outline_width=4.5,
+        extrusion_depth=5,
+        extrusion_hex="#081726",
+        secondary_border_hex="#1E3A8A",
+        secondary_width=1.5,
     )
 
-    # Giant yellow bubble lettering with dark outline: "Animals"
-    title2_y = height_pt - 3.25 * inch
-    draw_outlined_text(
+    # 5. BOOK SUBJECT: Giant, chunky, playful "Animals" bubble text with 3D volumetric extrusion
+    title2_y = height_pt - 3.48 * inch
+    draw_3d_title(
         c,
         text="Animals",
         x=center_x,
         y=title2_y,
         font_name="Helvetica-Bold",
         font_size=54,
-        fill_color="#FACC15",
-        outline_color="#78350F",
-        outline_width=4.5,
-        shadow_color="#451A03",
-        shadow_offset=(0, -4.0),
-        centered=True,
+        fill_hex="#FACC15",
+        outline_hex="#78350F",
+        outline_width=5.0,
+        extrusion_depth=6,
+        extrusion_hex="#451A03",
+        secondary_border_hex="#DC2626",
+        secondary_width=2.0,
     )
 
-    # 4. LEFT CRAYONS TRIO: Yellow, Red, Orange pointing inward at an angle
+    # 6. LEFT CHUNKY CRAYONS TRIO: Yellow, Red, Blue pointing inward from the edge
     crayons_start_x = front_left_pt + 0.1 * inch
     crayons_base_y = height_pt - 4.25 * inch
     crayons_data = [
         {"color": "#FDE047", "angle": -25, "y_off": 0.0},
         {"color": "#EF4444", "angle": -25, "y_off": -0.45 * inch},
-        {"color": "#FB923C", "angle": -25, "y_off": -0.90 * inch},
+        {"color": "#2563EB", "angle": -25, "y_off": -0.90 * inch},
     ]
     for cr in crayons_data:
         draw_crayon(
@@ -615,15 +880,20 @@ def draw_front_cover(
             color_hex=cr["color"],
         )
 
-    # 5. INSET "BEFORE & AFTER" ACTIVITY CARD: Labeled "TIGER"
-    # White rounded rectangle with color thumbnail on left and B&W outline on right
+    # 7. INSET "BEFORE & AFTER" ACTIVITY CARD: Paper-like card with drop-shadow labeled "TIGER"
     card_w = 2.9 * inch
     card_h = 3.6 * inch
     card_x = front_left_pt + front_width_pt - card_w - 0.7 * inch
-    card_y = height_pt - 7.5 * inch
+    card_y = height_pt - 7.55 * inch
 
     c.saveState()
-    # White card shadow & base
+    # Paper-like card drop shadow
+    c.setFillColor(HexColor("#000000"))
+    c.setFillAlpha(0.18)
+    c.roundRect(card_x + 3, card_y - 3, card_w, card_h, 12, fill=1, stroke=0)
+    c.setFillAlpha(1.0)
+
+    # Main white card body
     c.setFillColor(HexColor("#FFFFFF"))
     c.setStrokeColor(HexColor("#94A3B8"))
     c.setLineWidth(1.2)
@@ -650,7 +920,6 @@ def draw_front_cover(
     if card_color_thumb and card_color_thumb.exists():
         c.drawImage(str(card_color_thumb), thumb_box_x, thumb_box_y, width=thumb_box_w, height=thumb_box_h, preserveAspectRatio=True, mask="auto")
     else:
-        # Placeholder color indicator
         c.setFillColor(HexColor("#F97316"))
         c.roundRect(thumb_box_x, thumb_box_y, thumb_box_w, thumb_box_h, 4, fill=1, stroke=0)
 
@@ -667,7 +936,6 @@ def draw_front_cover(
     if card_bw_outline and card_bw_outline.exists():
         c.drawImage(str(card_bw_outline), outline_box_x, outline_box_y, width=outline_box_w, height=outline_box_h, preserveAspectRatio=True, mask="auto")
     else:
-        # Outline placeholder
         c.setFillColor(HexColor("#FFFFFF"))
         c.setStrokeColor(HexColor("#000000"))
         c.setLineWidth(1)
@@ -679,7 +947,7 @@ def draw_front_cover(
 
     c.restoreState()
 
-    # 6. FOREGROUND HERO CHARACTERS: Cute Cartoon Tiger Cub & Monkey on Grass
+    # 8. FOREGROUND HERO CHARACTERS: Cute Cartoon Tiger Cub & Monkey on Grass
     if hero_art_path and hero_art_path.exists():
         hero_w = 4.8 * inch
         hero_h = 4.8 * inch
@@ -711,7 +979,7 @@ def draw_animals_cover_spread(
     draw_back_cover(c, dims, logo_path=logo_path)
 
     # 3. Spine (Center Strip)
-    draw_spine(c, dims)
+    draw_spine(c, dims, logo_path=logo_path)
 
     # 4. Front Cover (Right Third)
     draw_front_cover(
@@ -731,17 +999,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
     parser.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation")
-    parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids.png"), help="Logo PNG/SVG")
+    parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=Path("local_builds/animals/assets/tiger_color_thumb.png"), help="Activity card color guide")
     parser.add_argument("--card-outline", type=Path, default=Path("local_builds/animals/assets/tiger_outline.png"), help="Activity card B&W outline")
 
     args = parser.parse_args()
 
+    # Fallback to standard pivot_kids.png if sticker not found
+    logo_file = args.logo if args.logo.exists() else Path("assets/logos/pivot_kids.png")
+
     out = draw_animals_cover_spread(
         output_pdf_path=args.output,
         page_count=args.page_count,
-        logo_path=args.logo if args.logo.exists() else None,
+        logo_path=logo_file if logo_file.exists() else None,
         hero_art_path=args.hero_art if args.hero_art.exists() else None,
         card_color_thumb=args.card_color if args.card_color.exists() else None,
         card_bw_outline=args.card_outline if args.card_outline.exists() else None,
