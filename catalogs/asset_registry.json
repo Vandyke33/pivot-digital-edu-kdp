@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "categories": [
+    "animals",
+    "flowers",
+    "trees",
+    "cartoons",
+    "solar-system",
+    "vehicles",
+    "other"
+  ],
+  "reuse_policy": {
+    "exact_published_duplicate": "block",
+    "exact_registered_master_duplicate": "block",
+    "similarity_metric": "64-bit dHash over approved QA preview",
+    "similarity_hamming_threshold": 6,
+    "similarity_action": "require documented human ACCEPT_DISTINCT review",
+    "derivative_rule": "new asset_id, parent_asset_id, and specific change_note required"
+  },
+  "assets": {},
+  "published_editions": {}
+}

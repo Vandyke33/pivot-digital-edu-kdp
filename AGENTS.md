@@ -14,6 +14,8 @@ Never claim that generated art is print-ready until it passes visual and technic
 - Generated art must have crisp black contours on a white background, with broad closed colorable regions and age-appropriate scene density. Never use gray shading, gradients, crosshatching, photographic texture, or generated text.
 - Record each asset's series, edition, subject ID, source prompt, provider/model/version, seed, generation timestamp, review status, and GCS URI.
 - Preserve source files and never silently overwrite approved or released assets. Use a new versioned object path for revisions.
+- Keep SVG masters outside Git under `assets/svg/<category>/<asset-id>/v1.svg`; store stable IDs, source and preview hashes, visual fingerprints, QA, lineage, and edition usage in `catalogs/asset_registry.json`.
+- Block exact repeats of published assets. Flag visually similar previews (64-bit dHash distance <= 6) and require a target-specific `ACCEPT_DISTINCT` human review with reviewer, timestamp, and rationale before build. New derivatives need a new ID, parent ID, and meaningful change note.
 
 ## Research_Agent
 
@@ -39,7 +41,7 @@ Generate a consistent batch of original line-art assets from the versioned promp
 
 ### Procedure
 1. Parse `prompts.yaml` and select a `book_series_blueprints` entry, an age profile, and an edition modifier. Reject a subject request that has no matching record instead of inventing untracked prompt content.
-2. Assemble prompt sections in exactly this order: global style, age-profile modifier, edition modifier, interpolated blueprint template, then global negative prompt. Use `scripts/render_prompts.py` so each subject prompt is logged consistently.
+2. Assemble prompt sections in exactly this order: global style, age-profile modifier, selected skill-level modifier, edition modifier, interpolated blueprint template, then global negative prompt. Use `scripts/render_prompts.py` so each subject prompt is logged consistently.
 3. Preserve age rules. For ages 1-3 use one large focal object and 4-6 pt final-size contours. For ages 4-6 use simple scenes and 2-3 pt contours. For ages 6-8 use moderate scene complexity and 1.5-2.5 pt contours. Final rendered line weight, not model wording, determines compliance.
 4. Use stable per-subject seeds where the provider supports seeds. Keep provider, model/version, generation settings, prompt text, seed, and output URI in the batch manifest. Seeds do not guarantee identical results across model versions.
 5. Generate one subject per output asset. Never ask the image model to produce readable text, tracing letters, science facts, logos, brand marks, or watermarks. Implement tracing and curriculum overlays in the layout stage using human-reviewed copy.
@@ -78,19 +80,28 @@ Issue an auditable PASS or FAIL decision for each asset before page assembly.
 ### Objective
 Compile only approved page assets into a print-ready interior and maintain a reproducible build record.
 
+### Activity layout contract
+- The legacy page plan remains a title, black reverse, then single illustration/black-reverse pairs. Do not change its `expected_subjects` sequence implicitly.
+- Flexible activity books must set `page_plan_mode: flexible_activity`, explicit `interior_color_mode`, and an explicit page list. Supported page types are `title`, `reverse`, `illustration`, `multi_panel`, `color_reference`, `connect_dots`, and `trace_path`.
+- `multi_panel` assets are generated and QA-reviewed individually; panel geometry, safe margins, and gutters are applied by the PDF builder.
+- `color_reference` requires a color interior and two separately QA-approved assets showing the same composition. A B&W interior is not an acceptable substitute because the printed reference would lose its color.
+- `connect_dots` and `trace_path` use ordered, human-reviewed vector points in the manifest. Never ask the image model to place the dots, numbers, or paths. Connect-the-dots is age-gated to 4+ by default.
+- Treat `manifests/activity-layouts-v1-example.json` as a layout example only. Replace its example assets and pending statuses before building a real title.
+
 ### Procedure
 1. Read the edition's page plan and the QA-approved asset manifest. Fail closed if any required asset is missing, duplicated unexpectedly, or not marked PASS.
-2. Confirm the local Python environment has the dependencies from `requirements.txt` installed. The builder entry point is `scripts/compile_interior.py`; it fails closed unless every illustration is present and has `qa_status: PASS`.
-3. From the repository root, invoke the builder with the tracked page manifest, output path, trim, bleed mode, and reverse-page policy. The seed edition uses full-page black reverse sides, so it is configured for bleed:
+2. Run the asset-reuse gate via `python scripts/asset_registry.py check --manifest .\manifests\<edition>.json`; production PDF compilation also enforces the registry declared by the manifest.
+3. Confirm the local Python environment has the dependencies from `requirements.txt` installed. The builder entry point is `scripts/compile_interior.py`; it fails closed unless every illustration is present, registered, and has `qa_status: PASS`.
+4. From the repository root, invoke the builder with the tracked page manifest, output path, trim, bleed mode, and reverse-page policy. The seed edition uses full-page black reverse sides, so it is configured for bleed:
 
    ```powershell
    python scripts/compile_interior.py --manifest .\manifests\solar-system-explorers-v1.0-core.json --output .\local_builds\solar-system-explorers\v1.0-core\interior.pdf --trim 8.5x11 --bleed all --reverse-page black
    ```
 
    The manifest and CLI bleed/reverse settings must agree. The builder uses a 8.625 x 11.25 inch PDF page for 8.5 x 11 inch trim with bleed. Confirm the current KDP template and previewer before release.
-4. Verify output page count, page dimensions, alternating illustration/reverse-page sequence, page orientation, margins, and embedded image/vector quality. Ensure the final PDF meets the edition's page-count and KDP requirements.
-5. Render a proof of every page or use an approved preflight tool. Review all warnings and correct the source/layout rather than suppressing warnings without evidence.
-6. Store final PDFs and proof reports in the release-artifact GCS path. Keep binaries out of Git. Update the catalog only after human release approval.
+5. Verify output page count, page dimensions, alternating illustration/reverse-page sequence, page orientation, margins, and embedded image/vector quality. Ensure the final PDF meets the edition's page-count and KDP requirements.
+6. Render a proof of every page or use an approved preflight tool. Review all warnings and correct the source/layout rather than suppressing warnings without evidence.
+7. Store final PDFs and proof reports in the release-artifact GCS path. Keep binaries out of Git. Update the catalog only after human release approval.
 
 ### Required release artifacts
 Interior PDF, input manifest, build log, page proof/contact sheet, QA report, and final GCS URI. A cover is a separate artifact and must use dimensions from the current KDP cover calculator for its actual page count and paper type.

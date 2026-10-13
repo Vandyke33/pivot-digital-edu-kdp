@@ -21,6 +21,13 @@
         "minimum_years": 4,
         "maximum_years": 6
       },
+      "product_taxonomy": {
+        "age_band": "4-6",
+        "skill_level": "beginner",
+        "activity_modes": ["single_image"],
+        "page_layout": "full_page",
+        "interior_color_mode": "black_and_white"
+      },
       "language": "English",
       "markets": ["US", "UK", "DE", "FR", "ES", "CA"],
       "identifiers": {

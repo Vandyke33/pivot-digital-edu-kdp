@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "manifest_kind": "layout_example_not_release_ready",
+  "book_id": "PIVOT-ACTIVITY-EXAMPLE",
+  "series_id": "little-learners-activity-sampler",
+  "edition_id": "layout-patterns-v1-example",
+  "page_plan_mode": "flexible_activity",
+  "title": "Little Learners Activity Sampler",
+  "subtitle": "Layout proof for distinct coloring and drawing activities",
+  "publisher": "Pivot Education Press",
+  "target_audience": {
+    "age_bands": ["2-3", "4-6", "6-8"],
+    "skill_levels": ["beginner", "intermediate", "advanced"]
+  },
+  "activity_modes": ["multi_panel", "connect_dots", "trace_path", "color_reference"],
+  "interior_color_mode": "color",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "black",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "expected_page_count": 10,
+  "asset_root": "../local_builds/activity-layouts-v1-example/approved-assets",
+  "asset_policy": "Replace every example path with original rights-cleared assets. Complete human QA before setting any asset qa_status to PASS.",
+  "pages": [
+    {"number": 1, "type": "title"},
+    {"number": 2, "type": "reverse", "design": "black"},
+    {
+      "number": 3,
+      "type": "multi_panel",
+      "activity_mode": "multi_panel",
+      "age_band": "4-6",
+      "skill_level": "beginner",
+      "panels": [
+        {"asset": "rabbit.png", "qa_status": "PENDING_QA", "rect": {"x": 0.08, "y": 0.52, "width": 0.4, "height": 0.4}},
+        {"asset": "puppy.png", "qa_status": "PENDING_QA", "rect": {"x": 0.52, "y": 0.52, "width": 0.4, "height": 0.4}},
+        {"asset": "kitten.png", "qa_status": "PENDING_QA", "rect": {"x": 0.08, "y": 0.08, "width": 0.4, "height": 0.4}},
+        {"asset": "owl.png", "qa_status": "PENDING_QA", "rect": {"x": 0.52, "y": 0.08, "width": 0.4, "height": 0.4}}
+      ]
+    },
+    {"number": 4, "type": "reverse", "design": "black"},
+    {
+      "number": 5,
+      "type": "connect_dots",
+      "activity_mode": "connect_dots",
+      "age_band": "6-8",
+      "skill_level": "intermediate",
+      "minimum_age_years": 4,
+      "show_solution": false,
+      "points": [
+        {"x": 0.3, "y": 0.3, "label": 1},
+        {"x": 0.5, "y": 0.3, "label": 2},
+        {"x": 0.7, "y": 0.3, "label": 3},
+        {"x": 0.7, "y": 0.5, "label": 4},
+        {"x": 0.7, "y": 0.7, "label": 5},
+        {"x": 0.5, "y": 0.7, "label": 6},
+        {"x": 0.3, "y": 0.7, "label": 7},
+        {"x": 0.3, "y": 0.5, "label": 8}
+      ]
+    },
+    {"number": 6, "type": "reverse", "design": "black"},
+    {
+      "number": 7,
+      "type": "trace_path",
+      "activity_mode": "trace_path",
+      "age_band": "2-3",
+      "skill_level": "beginner",
+      "points": [
+        {"x": 0.3, "y": 0.4},
+        {"x": 0.32, "y": 0.4},
+        {"x": 0.34, "y": 0.4},
+        {"x": 0.36, "y": 0.4},
+        {"x": 0.38, "y": 0.4},
+        {"x": 0.4, "y": 0.4}
+      ]
+    },
+    {"number": 8, "type": "reverse", "design": "black"},
+    {
+      "number": 9,
+      "type": "color_reference",
+      "activity_mode": "color_reference",
+      "age_band": "2-3",
+      "skill_level": "beginner",
+      "line_art_width_ratio": 0.68,
+      "line_art": {"asset": "large-animal-line-art.png", "qa_status": "PENDING_QA"},
+      "colored_reference": {"asset": "large-animal-color-reference.png", "qa_status": "PENDING_QA"}
+    },
+    {"number": 10, "type": "reverse", "design": "black"}
+  ]
+}

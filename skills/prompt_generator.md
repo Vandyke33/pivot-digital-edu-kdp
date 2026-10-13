@@ -16,7 +16,7 @@ If a requested subject is not in the registry, request a reviewed registry chang
 ## Prompt construction
 
 1. Load the exact blueprint `prompt_template` and fill every declared subject parameter.
-2. Assemble sections in this exact order: global style, age-profile modifier, selected edition modifier, interpolated blueprint template, and global negative prompt. `scripts/render_prompts.py` enforces and logs this ordering.
+2. Assemble sections in this exact order: global style, age-profile modifier, skill-level modifier, selected edition modifier, interpolated blueprint template, and global negative prompt. `scripts/render_prompts.py` enforces and logs this ordering.
 3. Preserve all negative constraints; provider-specific syntax may be adapted only if the resulting exclusions remain explicit and logged.
 4. Use a portrait 4:5 source by default, or 1:1 for a centered single object. Fit to the portrait print safe area without stretching or cropping identifying features.
 5. Use the stable subject seed policy when supported. Store prompt, seed, provider/model/version, generation date, and source asset URI in the batch manifest.

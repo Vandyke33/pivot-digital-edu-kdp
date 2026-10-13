@@ -24,6 +24,12 @@ secrets/
 *.zip
 *.tar.gz
 
+# Local categorized asset library; only folder markers and documentation are tracked
+assets/svg/**/*.svg
+assets/previews/**/*.png
+assets/previews/**/*.jpg
+assets/raw/**
+
 # Python environments, caches, and test output
 __pycache__/
 *.py[cod]

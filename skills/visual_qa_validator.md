@@ -47,6 +47,16 @@ Audit generated line art before page layout and again after final-size rendering
 - [ ] Artwork is fitted proportionally; no stretching, unintended crop, clipping, or transparency artifacts.
 - [ ] Final-size proof is inspected at 100 percent and at normal print viewing distance.
 
+## Activity-layout checks
+
+- [ ] `single_image`: one focal illustration fills its assigned live area proportionally; no stretched art or clipped contours.
+- [ ] `color_reference`: interior is declared color; the color key depicts the same reviewed line-art composition; the coloring panel retains at least 60 percent of live width; color reproduction is checked in the color proof. Do not describe a color key as bleed prevention.
+- [ ] `multi_panel`: every panel asset passes its own QA; panel bounds stay inside safe margins, do not overlap, and retain at least a 0.15 inch gutter; each panel is still practical to color for the stated age/skill level.
+- [ ] `connect_dots`: only use for ages 4+ unless developmental review authorizes otherwise; labels are sequential and legible, no label collisions occur, and the unconnected points form a recognizable intended silhouette.
+- [ ] `trace_path`: path spacing is suitable for the child's motor skill, the line of travel is unambiguous, and the path does not merge visually with decorative art.
+- [ ] Check actual minimum coloring-region size against the edition's skill profile: 12 mm beginner, 7 mm intermediate, and 4 mm advanced, unless a documented age-specific rule is stricter.
+- [ ] Age band and skill level are both stated; skill level does not replace developmental age review.
+
 ## Decision rules
 
 - Mark `FAIL` if any required checklist item fails, if evidence is missing, or if the line weight cannot be verified at final trim.
