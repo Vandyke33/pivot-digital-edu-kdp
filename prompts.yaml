@@ -38,6 +38,7 @@ global_settings:
   prompt_assembly_order:
     - "global_style"
     - "age_profiles[blueprint.age_profile].modifier"
+    - "skill_levels[skill_level].modifier"
     - "edition_modifiers[edition].image_modifier"
     - "blueprint.prompt_template interpolated with subject parameters"
     - "global_negative_prompt"
@@ -90,11 +91,77 @@ age_profiles:
       - "Educational elements are represented by shapes or objects, never generated text."
       - "Avoid fine hatching, tiny labels, and details that would disappear at print size."
 
+skill_levels:
+  beginner:
+    intended_use: "First coloring experiences; choose alongside the child's age band, not as an age substitute."
+    minimum_coloring_region_mm: 12
+    detail_density: "very_low"
+    contour_policy: "Use the selected age profile's target line weight; toddler artwork remains 4-6 pt at final trim."
+    modifier: "beginner coloring skill, broad open regions, few interior divisions, familiar silhouette, generous room for broad crayons"
+  intermediate:
+    intended_use: "Children comfortable coloring enclosed shapes and following simple visual instructions."
+    minimum_coloring_region_mm: 7
+    detail_density: "moderate"
+    contour_policy: "Use age-profile target line weight and keep every region visibly closed at normal print size."
+    modifier: "intermediate coloring skill, several clearly separated enclosed regions, moderate internal detail, visual hierarchy remains obvious"
+  advanced:
+    intended_use: "Experienced colorists; recommended for ages 8+ unless adult review confirms developmental suitability."
+    minimum_coloring_region_mm: 4
+    detail_density: "high_but_printable"
+    contour_policy: "Thinnest meaningful contour must be at least 2 pt at final trim; use nested regions, not shading, hatching, or textures."
+    modifier: "advanced coloring skill, add layered nested regions and intricate but clean closed contours, preserve at least 4 mm colorable regions and at least 2 pt printed contours"
+
+activity_modes:
+  single_image:
+    page_type: "illustration"
+    image_count_per_page: 1
+    interior_color_mode: "black_and_white"
+    layout_rule: "One illustration fills the safe area proportionally; preserve its original aspect ratio."
+  color_reference:
+    page_type: "color_reference"
+    image_count_per_page: 2
+    interior_color_mode: "color_required"
+    layout_rule: "Place the large uncolored image in 68 percent of the live page width and the colored reference in 32 percent; keep both inside the safe area with a clear gutter."
+    qa_rules:
+      - "The colored reference must be a human-reviewed color rendering of the same approved line-art composition."
+      - "Do not describe a color example as a marker-bleed solution; confirm the paper and printing configuration."
+      - "For ages 2-3, verify that the coloring panel remains large enough for broad crayon strokes; reject overly narrow coloring panels."
+  multi_panel:
+    page_type: "multi_panel"
+    image_count_per_page: "2-4"
+    interior_color_mode: "black_and_white"
+    layout_rule: "Generate each panel image separately. The page compositor controls panel bounds, gutters, and reading order; never ask the image model to draw a grid."
+    qa_rules:
+      - "Each panel must remain large enough for its age and skill profile."
+      - "Panel borders, labels, and numbering are layout elements and must not overlap the image safe area."
+      - "Check reading order and consistent contour weight across panels."
+  connect_dots:
+    page_type: "connect_dots"
+    image_count_per_page: 0
+    interior_color_mode: "black_and_white"
+    layout_rule: "Draw curated numbered vector points in order; keep connecting lines absent from the activity page and optionally draw the solution on a separate answer-key page."
+    minimum_age_years: 4
+    qa_rules:
+      - "The sequence must form a recognizable closed or intentionally open outline when connected in order."
+      - "Number labels must be sequential, readable at print size, and collision-free."
+      - "Review point spacing and safe margins at 100 percent print scale."
+  trace_path:
+    page_type: "trace_path"
+    image_count_per_page: 0
+    interior_color_mode: "black_and_white"
+    layout_rule: "Draw the approved path as evenly spaced, large monochrome dots or dashes using vector layout primitives, not generated lettering."
+    minimum_age_years: 2
+    qa_rules:
+      - "Use a short, unnumbered path for ages 2-3; add direction cues only when developmentally reviewed."
+      - "Keep path marks distinct from nearby illustration contours and within the safe area."
+      - "Provide adequate spacing for a child's pencil or crayon to follow the path."
+
 edition_modifiers:
   core_coloring:
     description: "Standard single-sided coloring illustration."
     image_modifier: >-
-      centered full-page coloring illustration only, generous white space,
+      centered full-page coloring illustration, large prominent subject filling
+      75-80 percent of the frame, bold clear contours, balanced margins,
       no reserved text panel, no printed text
     layout_reservation: "No typography overlay; artwork must remain inside the no-bleed safe area."
   tracing_edition:
@@ -117,6 +184,7 @@ book_series_blueprints:
   solar_system_explorers:
     series_title: "Solar System Explorers"
     target_age_profile: "preschool_4_6"
+    default_skill_level: "beginner"
     default_edition: "core_coloring"
     trim: "8.5x11"
     prompt_template: >-
@@ -238,6 +306,7 @@ book_series_blueprints:
   big_vehicles_machines:
     series_title: "Big Vehicles & Machines"
     target_age_profile: "toddler_1_3"
+    default_skill_level: "beginner"
     default_edition: "core_coloring"
     trim: "8.5x11"
     prompt_template: >-

@@ -17,6 +17,33 @@
     "similarity_action": "require documented human ACCEPT_DISTINCT review",
     "derivative_rule": "new asset_id, parent_asset_id, and specific change_note required"
   },
-  "assets": {},
+  "assets": {
+    "solar_system_explorers.sun.v1": {
+      "asset_id": "solar_system_explorers.sun.v1",
+      "category": "solar-system",
+      "subject_id": "sun",
+      "status": "approved",
+      "master_format": "svg",
+      "svg_master_path": "assets/svg/solar-system/solar_system_explorers.sun.v1/v1.svg",
+      "svg_master_uri": null,
+      "svg_sha256": "5e0fa411e6ec4d7f3db67841029e143618cb2bb4682b27f72dc691131bd11a2e",
+      "normalized_svg_sha256": "0b44922adabc7496b4d707afbb83847e8c6a2aa497b4ba468b5fcfe37e5afaf2",
+      "preview_path": "assets/previews/solar-system/solar_system_explorers.sun.v1/v1.png",
+      "preview_uri": null,
+      "preview_sha256": "b881b50ab1080c5042dcfd87a140f9e8b72e4a3501868ae2da3ba6f460c7f3c8",
+      "visual_fingerprint": "00b2c4ccd4e83000",
+      "fingerprint_algorithm": "dhash-64-v1",
+      "parent_asset_id": null,
+      "change_note": null,
+      "similarity_review": null,
+      "similar_to_asset_ids": [],
+      "qa": {
+        "status": "PASS",
+        "reviewer": "QA Validator Agent",
+        "reviewed_at_utc": "2026-10-13T14:48:00Z"
+      },
+      "edition_history": []
+    }
+  },
   "published_editions": {}
 }
