@@ -10,7 +10,12 @@ from typing import Any
 import yaml
 
 
-def render_registry(registry: dict[str, Any], series_id: str, edition_id: str) -> list[dict[str, Any]]:
+def render_registry(
+    registry: dict[str, Any],
+    series_id: str,
+    edition_id: str,
+    skill_level_id: str | None = None,
+) -> list[dict[str, Any]]:
     blueprints = registry.get("book_series_blueprints", {})
     if series_id not in blueprints:
         raise ValueError(f"Unknown series_id: {series_id}")
@@ -19,8 +24,13 @@ def render_registry(registry: dict[str, Any], series_id: str, edition_id: str) -
     if edition_id not in registry.get("edition_modifiers", {}):
         raise ValueError(f"Unknown edition_id: {edition_id}")
 
+    skill_level_id = skill_level_id or blueprint.get("default_skill_level", "beginner")
+    if skill_level_id not in registry.get("skill_levels", {}):
+        raise ValueError(f"Unknown skill_level: {skill_level_id}")
+
     age_profile_id = blueprint["target_age_profile"]
     age_profile = registry["age_profiles"][age_profile_id]
+    skill_level = registry["skill_levels"][skill_level_id]
     edition = registry["edition_modifiers"][edition_id]
     settings = registry["global_settings"]
     base_seed = int(settings["seed_management"]["base_seed"])
@@ -32,6 +42,7 @@ def render_registry(registry: dict[str, Any], series_id: str, edition_id: str) -
         sections = {
             "global_style": settings["global_style"],
             "age_profiles[blueprint.age_profile].modifier": age_profile["modifier"],
+            "skill_levels[skill_level].modifier": skill_level["modifier"],
             "edition_modifiers[edition].image_modifier": edition["image_modifier"],
             "blueprint.prompt_template interpolated with subject parameters": template,
             "global_negative_prompt": settings["global_negative_prompt"],
@@ -47,6 +58,7 @@ def render_registry(registry: dict[str, Any], series_id: str, edition_id: str) -
                 "series_id": series_id,
                 "edition_id": edition_id,
                 "age_profile_id": age_profile_id,
+                "skill_level_id": skill_level_id,
                 "subject_id": subject["id"],
                 "seed": base_seed + int(subject["index"]),
                 "prompt": prompt,
@@ -65,12 +77,13 @@ def main() -> int:
     parser.add_argument("--registry", type=Path, default=Path("prompts.yaml"))
     parser.add_argument("--series", required=True)
     parser.add_argument("--edition", required=True)
+    parser.add_argument("--skill-level", choices=["beginner", "intermediate", "advanced"])
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
     try:
         registry = yaml.safe_load(args.registry.read_text(encoding="utf-8"))
-        prompts = render_registry(registry, args.series, args.edition)
+        prompts = render_registry(registry, args.series, args.edition, args.skill_level)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             "".join(json.dumps(prompt, ensure_ascii=True) + "\n" for prompt in prompts),

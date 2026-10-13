@@ -15,6 +15,7 @@ REQUIRED_PROMPT_FIELDS = {
     "series_id",
     "edition_id",
     "age_profile_id",
+    "skill_level_id",
     "subject_id",
     "seed",
     "prompt",
@@ -37,7 +38,7 @@ def load_prompt_batch(path: Path) -> list[dict[str, Any]]:
 
     if not prompts:
         raise ValueError("Prompt batch is empty")
-    for field in ("registry_version", "series_id", "edition_id", "age_profile_id"):
+    for field in ("registry_version", "series_id", "edition_id", "age_profile_id", "skill_level_id"):
         if len({prompt[field] for prompt in prompts}) != 1:
             raise ValueError(f"Prompt batch must contain one consistent {field}")
     for field in ("subject_id", "seed"):
@@ -53,6 +54,7 @@ def build_batch_manifest(
     model: str,
     model_version: str,
     asset_dir: Path,
+    edition_id: str | None = None,
 ) -> dict[str, Any]:
     created_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     batch_id = "-".join(
@@ -63,12 +65,16 @@ def build_batch_manifest(
             uuid4().hex[:8],
         ]
     )
+    prompt_edition_modifier_id = prompts[0]["edition_id"]
+    edition_id = edition_id or prompt_edition_modifier_id
     assets = []
     for prompt in prompts:
         assets.append(
             {
-                "asset_id": f"{prompts[0]['series_id']}.{prompt['subject_id']}.{prompts[0]['edition_id']}",
+                "asset_id": f"{prompts[0]['series_id']}.{prompt['subject_id']}.v1",
                 "subject_id": prompt["subject_id"],
+                "edition_id": edition_id,
+                "prompt_edition_modifier_id": prompt_edition_modifier_id,
                 "prompt_registry_version": prompt["registry_version"],
                 "prompt_text": prompt["prompt"],
                 "provider": provider,
@@ -87,8 +93,10 @@ def build_batch_manifest(
         "schema_version": "1.0.0",
         "batch_id": batch_id,
         "series_id": prompts[0]["series_id"],
-        "edition_id": prompts[0]["edition_id"],
+        "edition_id": edition_id,
+        "prompt_edition_modifier_id": prompt_edition_modifier_id,
         "age_profile_id": prompts[0]["age_profile_id"],
+        "skill_level_id": prompts[0]["skill_level_id"],
         "provider": provider,
         "model": model,
         "model_version": model_version,
@@ -104,6 +112,7 @@ def main() -> int:
     parser.add_argument("--provider", required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--model-version", required=True)
+    parser.add_argument("--edition-id", help="Actual product edition/version, e.g. v1.0-core")
     parser.add_argument("--asset-dir", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
@@ -120,6 +129,7 @@ def main() -> int:
             args.model.strip(),
             args.model_version.strip(),
             args.asset_dir,
+            args.edition_id,
         )
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

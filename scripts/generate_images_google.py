@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 from typing import Any
+from PIL.PngImagePlugin import PngInfo
 
 from PIL import Image, ImageOps
 
@@ -39,17 +40,30 @@ def extract_image_bytes(response: Any) -> bytes:
     raise ValueError("Google image model returned no image data; the request may have been blocked or returned text only")
 
 
-def normalize_candidate(raw_bytes: bytes, destination: Path, threshold: int = 200) -> None:
+def normalize_candidate(raw_bytes: bytes, destination: Path, threshold: int = 200) -> dict[str, Any]:
     if not 0 < threshold < 255:
         raise ValueError("threshold must be between 1 and 254")
     destination.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(BytesIO(raw_bytes)) as opened:
         source = ImageOps.exif_transpose(opened).convert("L")
+        source_width, source_height = source.size
+        native_dpi = min(source_width / 7.5, source_height / 10.0)
         source.thumbnail((2250, 3000), Image.Resampling.LANCZOS)
         binary = source.point(lambda pixel: 0 if pixel < threshold else 255, mode="1").convert("L")
         page = Image.new("L", (2550, 3300), 255)
         page.paste(binary, ((2550 - binary.width) // 2, (3300 - binary.height) // 2))
-        page.convert("1").save(destination, format="PNG", dpi=(300, 300), optimize=True)
+        metadata = PngInfo()
+        metadata.add_text("source_native_dpi", f"{native_dpi:.2f}")
+        metadata.add_text("source_dimensions_px", f"{source_width}x{source_height}")
+        metadata.add_text("upscaled_from_model_output", "true")
+        page.convert("1").save(destination, format="PNG", pnginfo=metadata, optimize=True)
+    return {
+        "source_dimensions_px": f"{source_width}x{source_height}",
+        "source_native_dpi_at_max_safe_placement": round(native_dpi, 2),
+        "normalized_page_dimensions_px": "2550x3300",
+        "upscaled_from_model_output": True,
+        "requires_vectorization_or_native_300dpi_replacement": native_dpi < 300,
+    }
 
 
 def _upload_file(bucket_name: str, object_name: str, local_path: Path) -> str:
@@ -79,6 +93,30 @@ def _archive_manifest(batch: dict[str, Any], manifest_path: Path, bucket: str, u
     batch["manifest_uri"] = f"gs://{bucket}/{object_name}"
     _write_json_atomic(manifest_path, batch)
     uploader(bucket, object_name, manifest_path)
+
+
+def create_google_client(
+    project: str | None,
+    location: str,
+    credentials_file: Path | None = None,
+    client_factory: Any = None,
+) -> tuple[Any, str]:
+    import google.auth
+    from google import genai
+
+    if credentials_file is not None:
+        credentials, credential_project = google.auth.load_credentials_from_file(
+            str(credentials_file), scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
+    else:
+        credentials, credential_project = google.auth.default(
+            scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
+    resolved_project = project or credential_project
+    if not resolved_project:
+        raise ValueError("Set --project or provide credentials with a Google Cloud project")
+    factory = client_factory or genai.Client
+    return factory(enterprise=True, project=resolved_project, location=location, credentials=credentials), resolved_project
 
 
 def generate_batch(
@@ -150,14 +188,14 @@ def generate_batch(
         raw_bytes = extract_image_bytes(response)
         raw_path.parent.mkdir(parents=True, exist_ok=True)
         raw_path.write_bytes(raw_bytes)
-        normalize_candidate(raw_bytes, candidate_path, threshold)
+        normalization_details = normalize_candidate(raw_bytes, candidate_path, threshold)
 
         asset.update(
             {
                 "provider": "Google Gemini Enterprise Agent Platform",
                 "model": model,
                 "model_version": model,
-                "generation_status": "GENERATED_LOCAL_PENDING_UPLOAD",
+                "generation_status": "GENERATED_LOCAL_PENDING_UPLOAD" if gcs_bucket else "GENERATED_LOCAL",
                 "review_status": "PENDING_QA",
                 "generation_settings": {
                     "aspect_ratio": aspect_ratio,
@@ -165,6 +203,7 @@ def generate_batch(
                     "candidate_threshold": threshold,
                     "seed_recorded_but_not_sent": asset.get("seed"),
                     "prompt_enhancement": "provider default",
+                    **normalization_details,
                 },
                 "prompt_sent": prompt,
                 "generated_at_utc": _utc_now(),
@@ -203,36 +242,45 @@ def main() -> int:
     parser.add_argument("--output-manifest", type=Path, required=True)
     parser.add_argument("--candidate-dir", type=Path, required=True)
     parser.add_argument("--project", default=os.getenv("GOOGLE_CLOUD_PROJECT"))
-    parser.add_argument("--location", default=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"))
+    parser.add_argument("--location", default=os.getenv("GOOGLE_CLOUD_LOCATION", "global"))
     parser.add_argument("--model", default=os.getenv("GOOGLE_IMAGE_MODEL", "gemini-3.1-flash-lite-image"))
+    parser.add_argument("--credentials-file", type=Path, default=None)
     parser.add_argument("--aspect-ratio", default=os.getenv("GOOGLE_IMAGE_ASPECT_RATIO", "3:4"))
     parser.add_argument("--threshold", type=int, default=int(os.getenv("GOOGLE_IMAGE_THRESHOLD", "200")))
     parser.add_argument("--max-assets", type=int, required=True, help="Explicit cost guard: generate at most this many images")
     parser.add_argument("--gcs-bucket", default=os.getenv("GCS_ASSET_BUCKET"))
+    parser.add_argument("--local-only", action="store_true", help="Do not upload source images, candidates, or manifest to GCS")
     args = parser.parse_args()
 
-    if not args.project or args.project == "your-google-cloud-project-id":
-        parser.error("set --project or GOOGLE_CLOUD_PROJECT to a real Google Cloud project ID")
     if args.gcs_bucket == "your-private-production-assets-bucket":
         parser.error("set --gcs-bucket or GCS_ASSET_BUCKET to a provisioned private bucket, or pass an empty value to keep outputs local")
 
     try:
-        from google import genai
-
         batch = json.loads(args.batch.read_text(encoding="utf-8"))
-        client = genai.Client(enterprise=True, project=args.project, location=args.location)
+        credentials_file = args.credentials_file
+        if credentials_file is None and os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+            credentials_file = Path(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+        if credentials_file is None:
+            default_credentials = Path(__file__).resolve().parents[1] / "gcp_credentials.json"
+            if default_credentials.is_file():
+                credentials_file = default_credentials
+        client, resolved_project = create_google_client(
+            args.project,
+            args.location,
+            credentials_file=credentials_file,
+        )
         completed = generate_batch(
             batch=batch,
             output_manifest=args.output_manifest,
             candidate_dir=args.candidate_dir,
-            project=args.project,
+            project=resolved_project,
             location=args.location,
             model=args.model,
             aspect_ratio=args.aspect_ratio,
             threshold=args.threshold,
             max_assets=args.max_assets,
             image_client=client,
-            gcs_bucket=args.gcs_bucket or None,
+            gcs_bucket=None if args.local_only else (args.gcs_bucket or None),
         )
     except (ImportError, OSError, KeyError, TypeError, ValueError) as error:
         parser.error(str(error))

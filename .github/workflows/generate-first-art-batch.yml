@@ -61,7 +61,7 @@ jobs:
       - name: Generate candidates and archive source, candidates, and manifest in GCS
         env:
           GOOGLE_CLOUD_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT }}
-          GOOGLE_CLOUD_LOCATION: ${{ vars.GOOGLE_CLOUD_LOCATION || 'us-central1' }}
+          GOOGLE_CLOUD_LOCATION: ${{ vars.GOOGLE_CLOUD_LOCATION || 'global' }}
           GOOGLE_IMAGE_MODEL: ${{ vars.GOOGLE_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}
           GCS_ASSET_BUCKET: ${{ vars.GCS_ASSET_BUCKET }}
         run: |
