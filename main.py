@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent
-PYTHON = sys.executable
+_VENV_PYTHON = REPO_ROOT / ".venv" / "Scripts" / "python.exe" if os.name == "nt" else REPO_ROOT / ".venv" / "bin" / "python"
+PYTHON = str(_VENV_PYTHON) if _VENV_PYTHON.exists() else sys.executable
 
 
 def run_cmd(args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -192,6 +193,18 @@ def cmd_build_cover(args: argparse.Namespace) -> None:
     print(f"\n[OK] Full-Wrap Cover PDF compiled: {out_pdf}")
 
 
+def cmd_build_animals_cover(args: argparse.Namespace) -> None:
+    out_pdf = getattr(args, "output", None) or (REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / "animals-cover-spread.pdf")
+    page_count = getattr(args, "page_count", 32)
+    run_cmd([
+        PYTHON,
+        str(REPO_ROOT / "scripts" / "compile_animals_cover.py"),
+        "--output", str(out_pdf),
+        "--page-count", str(page_count),
+    ])
+    print(f"\n[OK] Animals Cover Spread compiled: {out_pdf}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="KDP Publishing Operations Runner Suite")
     subparsers = parser.add_subparsers(dest="command")
@@ -230,6 +243,11 @@ def main() -> int:
     p_cover = subparsers.add_parser("build-cover", help="Compile KDP full-wrap paperback cover PDF")
     p_cover.add_argument("--author", default=None, help="Author name to display on cover")
 
+    # build-animals-cover
+    p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'My First Copy to Colour: Animals' full-wrap cover spread")
+    p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
+    p_animals.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation")
+
     # build-all
     p_all = subparsers.add_parser("build-all", help="Compile both interior and cover PDFs")
     p_all.add_argument("--author", default=None, help="Author name to display on cover")
@@ -254,6 +272,8 @@ def main() -> int:
         cmd_build_interior(args)
     elif args.command == "build-cover":
         cmd_build_cover(args)
+    elif args.command == "build-animals-cover":
+        cmd_build_animals_cover(args)
     elif args.command == "build-all":
         cmd_build_cover(args)
         cmd_build_interior(args)
