@@ -1,4 +1,4 @@
-"""Compile a flat, print-ready full paperback cover spread for 'My First Copy to Colour: Animals'."""
+"""Compile a flat, print-ready full paperback cover spread for 'Copy to Color: Animals'."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ from typing import Any
 from PIL import Image
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.pagesizes import inch
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
 import resvg_py
 
@@ -142,32 +143,42 @@ def draw_outlined_text(
     font_size: float,
     fill_color: str,
     outline_color: str,
-    outline_width: float = 3.0,
+    outline_width: float = 3.5,
+    shadow_color: str | None = None,
+    shadow_offset: tuple[float, float] = (0.0, -3.5),
     centered: bool = True,
 ) -> None:
-    """Draw bold text with a thick outer outline."""
+    """Draw bold text with a silky smooth, native vector PDF outline and optional drop shadow."""
+    w = stringWidth(text, font_name, font_size)
+    ox = x - w / 2.0 if centered else x
+
+    # 1. Subtle drop shadow (if specified)
+    if shadow_color:
+        c.saveState()
+        c.setLineWidth(outline_width)
+        c.setLineJoin(1)  # Round join
+        c.setLineCap(1)   # Round cap
+        ts = c.beginText(ox + shadow_offset[0], y + shadow_offset[1])
+        ts.setFont(font_name, font_size)
+        ts.setTextRenderMode(2)  # Fill and stroke
+        ts.setFillColor(HexColor(shadow_color))
+        ts.setStrokeColor(HexColor(shadow_color))
+        ts.textOut(text)
+        c.drawText(ts)
+        c.restoreState()
+
+    # 2. Main text with native vector stroke & fill (Mode 2: 100% infinite-resolution vector)
     c.saveState()
-    c.setFont(font_name, font_size)
-
-    # Draw outline by offsetting text slightly in 8 directions
-    c.setFillColor(HexColor(outline_color))
-    steps = 8
-    radius = outline_width
-    for i in range(steps):
-        angle = 2 * math.pi * i / steps
-        dx = radius * math.cos(angle)
-        dy = radius * math.sin(angle)
-        if centered:
-            c.drawCentredString(x + dx, y + dy, text)
-        else:
-            c.drawString(x + dx, y + dy, text)
-
-    # Draw inner fill
-    c.setFillColor(HexColor(fill_color))
-    if centered:
-        c.drawCentredString(x, y, text)
-    else:
-        c.drawString(x, y, text)
+    c.setLineWidth(outline_width)
+    c.setLineJoin(1)  # Round join
+    c.setLineCap(1)   # Round cap
+    t = c.beginText(ox, y)
+    t.setFont(font_name, font_size)
+    t.setTextRenderMode(2)  # Fill and stroke
+    t.setFillColor(HexColor(fill_color))
+    t.setStrokeColor(HexColor(outline_color))
+    t.textOut(text)
+    c.drawText(t)
     c.restoreState()
 
 
@@ -300,26 +311,20 @@ def draw_mini_book_cover(
     c.line(x + 2, y + h - banner_h + 1, x + w - 2, y + h - banner_h + 1)
     c.setDash([])
 
-    # "My First" tiny pill
-    pill_w = w * 0.55
-    pill_h = 7.5
-    pill_x = x + (w - pill_w) / 2.0
-    pill_y = y + h - 9.5
-    c.setFillColor(HexColor("#FFF7ED"))
-    c.roundRect(pill_x, pill_y, pill_w, pill_h, 3, fill=1, stroke=0)
-    c.setFillColor(HexColor("#431407"))
-    c.setFont("Helvetica-Bold", 4.5)
-    c.drawCentredString(x + w / 2.0, pill_y + 2.0, "My First")
-
-    # "Copy to Colour" tiny text
+    # Top series brand banner: "PIVOT KIDS"
     c.setFillColor(HexColor("#FFFFFF"))
-    c.setFont("Helvetica-Bold", 5.0)
-    c.drawCentredString(x + w / 2.0, y + h - 16.5, "Copy to Colour")
+    c.setFont("Helvetica-Bold", 4.8)
+    c.drawCentredString(x + w / 2.0, y + h - 8.5, "PIVOT KIDS")
+
+    # "Copy to Color" tiny text
+    c.setFillColor(HexColor("#FEF08A"))
+    c.setFont("Helvetica-Bold", 5.2)
+    c.drawCentredString(x + w / 2.0, y + h - 15.5, "Copy to Color")
 
     # Subject Title in Accent Color (Bolder & slightly larger)
     c.setFillColor(HexColor(accent_color))
-    c.setFont("Helvetica-Bold", 7.0)
-    c.drawCentredString(x + w / 2.0, y + h - 24.5, title)
+    c.setFont("Helvetica-Bold", 7.2)
+    c.drawCentredString(x + w / 2.0, y + h - 23.5, title)
 
     # 3 tiny crayons on left
     crayon_colors = ["#FBBF24", "#EF4444", "#38BDF8"]
@@ -485,10 +490,10 @@ def draw_spine(c: canvas.Canvas, dims: dict[str, float]) -> None:
     c.translate(spine_left_pt + spine_w_pt / 2.0, height_pt / 2.0)
     c.rotate(-90)
 
-    # Spine text: "THE PIVOT KIDS | My First Copy to Colour: Animals"
+    # Spine text: "THE PIVOT KIDS | Copy to Color: Animals"
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 6.0)
-    c.drawCentredString(0, -2, "THE PIVOT KIDS   •   My First Copy to Colour: Animals")
+    c.drawCentredString(0, -2, "THE PIVOT KIDS   •   Copy to Color: Animals")
 
     c.restoreState()
 
@@ -508,7 +513,7 @@ def draw_front_cover(
     height_pt = dims["total_height_in"] * inch
 
     # 1. TOP HEADER ARCH: Coral-Red curved ribbon with stitched white border
-    header_h = 3.2 * inch
+    header_h = 3.35 * inch
     arch_bottom = height_pt - header_h
 
     c.saveState()
@@ -541,64 +546,59 @@ def draw_front_cover(
     c.setDash([])
     c.restoreState()
 
-    # 2. TOP BRAND LOGO & "My First" BADGE
-    # "THE PIVOT KIDS" Brand Logo (Top Center)
+    # 2. TOP BRAND LOGO (Followed directly by title, NO "My First" badge)
+    # "THE PIVOT KIDS COLOR & PLAY" Brand Logo (Top Center)
     if logo_path and logo_path.exists():
-        logo_w = 1.35 * inch
-        logo_h = 1.45 * inch
+        logo_w = 1.45 * inch
+        logo_h = 1.55 * inch
         logo_x = center_x - logo_w / 2.0
-        logo_y = height_pt - 1.55 * inch
+        logo_y = height_pt - 1.70 * inch
 
         # White pill badge behind logo so it pops cleanly
+        c.saveState()
         c.setFillColor(HexColor("#FFFFFF"))
-        c.roundRect(logo_x - 6, logo_y - 6, logo_w + 12, logo_h + 12, 10, fill=1, stroke=0)
+        c.roundRect(logo_x - 8, logo_y - 8, logo_w + 16, logo_h + 16, 12, fill=1, stroke=0)
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
+        c.restoreState()
 
-    # "My First" Curved Pill Badge (Below logo)
-    badge_w = 2.4 * inch
-    badge_h = 0.45 * inch
-    badge_x = center_x - badge_w / 2.0
-    badge_y = height_pt - 1.95 * inch
-    c.setFillColor(HexColor("#FFF7ED"))
-    c.roundRect(badge_x, badge_y, badge_w, badge_h, 12, fill=1, stroke=0)
-    c.setFillColor(HexColor("#3F1D0B"))
-    c.setFont("Helvetica-Bold", 17)
-    c.drawCentredString(center_x, badge_y + 0.1 * inch, "My First")
-
-    # 3. MAIN TITLES: "Copy to Colour" & "Animals"
-    # Huge rounded white lettering with dark blue outline: "Copy to Colour"
-    title1_y = height_pt - 2.65 * inch
+    # 3. MAIN TITLES: "Copy to Color" & "Animals"
+    # Large rounded white lettering with dark blue outline: "Copy to Color"
+    title1_y = height_pt - 2.45 * inch
     draw_outlined_text(
         c,
-        text="Copy to Colour",
+        text="Copy to Color",
         x=center_x,
         y=title1_y,
         font_name="Helvetica-Bold",
-        font_size=42,
+        font_size=46,
         fill_color="#FFFFFF",
         outline_color="#0F294A",
-        outline_width=4.0,
+        outline_width=3.8,
+        shadow_color="#081726",
+        shadow_offset=(0, -3.5),
         centered=True,
     )
 
     # Giant yellow bubble lettering with dark outline: "Animals"
-    title2_y = height_pt - 3.35 * inch
+    title2_y = height_pt - 3.25 * inch
     draw_outlined_text(
         c,
         text="Animals",
         x=center_x,
         y=title2_y,
         font_name="Helvetica-Bold",
-        font_size=48,
+        font_size=54,
         fill_color="#FACC15",
-        outline_color="#713F12",
+        outline_color="#78350F",
         outline_width=4.5,
+        shadow_color="#451A03",
+        shadow_offset=(0, -4.0),
         centered=True,
     )
 
     # 4. LEFT CRAYONS TRIO: Yellow, Red, Orange pointing inward at an angle
     crayons_start_x = front_left_pt + 0.1 * inch
-    crayons_base_y = height_pt - 4.15 * inch
+    crayons_base_y = height_pt - 4.25 * inch
     crayons_data = [
         {"color": "#FDE047", "angle": -25, "y_off": 0.0},
         {"color": "#EF4444", "angle": -25, "y_off": -0.45 * inch},

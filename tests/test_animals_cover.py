@@ -1,4 +1,4 @@
-"""Unit tests for 'My First Copy to Colour: Animals' full-wrap cover spread generator."""
+"""Unit tests for 'Copy to Color: Animals' full-wrap cover spread generator."""
 
 from __future__ import annotations
 
@@ -113,3 +113,4 @@ class AnimalsCoverSpreadTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

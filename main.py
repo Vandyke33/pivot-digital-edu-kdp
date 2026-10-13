@@ -244,7 +244,7 @@ def main() -> int:
     p_cover.add_argument("--author", default=None, help="Author name to display on cover")
 
     # build-animals-cover
-    p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'My First Copy to Colour: Animals' full-wrap cover spread")
+    p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'Copy to Color: Animals' full-wrap cover spread")
     p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
     p_animals.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation")
 
