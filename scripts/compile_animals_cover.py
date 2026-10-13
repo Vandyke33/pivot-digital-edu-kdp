@@ -764,7 +764,7 @@ def draw_front_cover(
     height_pt = dims["total_height_in"] * inch
 
     # 1. TOP HEADER ARCH: Coral-Red curved ribbon with stitched white border
-    header_h = 3.65 * inch
+    header_h = 4.05 * inch
     arch_bottom = height_pt - header_h
 
     c.saveState()
@@ -796,19 +796,19 @@ def draw_front_cover(
     c.setDash([])
     c.restoreState()
 
-    # 2. TOP BRAND LOGO: Transparently integrated onto background with white contour (NO square white box!)
+    # 2. TOP BRAND LOGO: Prominent transparent sticker logo with white contour (NO square white box!)
     if logo_path and logo_path.exists():
-        logo_w = 1.45 * inch
-        logo_h = 1.55 * inch
+        logo_w = 1.85 * inch
+        logo_h = 2.00 * inch
         logo_x = center_x - logo_w / 2.0
-        logo_y = height_pt - 1.70 * inch
+        logo_y = height_pt - 2.16 * inch
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
 
     # 3. TOP TITLE: Slightly curved white banner reading "My First"
-    banner_w = 2.4 * inch
-    banner_h = 0.42 * inch
+    banner_w = 2.35 * inch
+    banner_h = 0.40 * inch
     banner_x = center_x - banner_w / 2.0
-    banner_y = height_pt - 2.12 * inch
+    banner_y = height_pt - 2.58 * inch
 
     c.saveState()
     # Soft drop shadow
@@ -821,19 +821,19 @@ def draw_front_cover(
     c.roundRect(banner_x, banner_y, banner_w, banner_h, 10, fill=1, stroke=1)
     # Banner text
     c.setFillColor(HexColor("#1E3A8A"))
-    c.setFont("Helvetica-Bold", 16)
-    c.drawCentredString(center_x, banner_y + 0.10 * inch, "My First")
+    c.setFont("Helvetica-Bold", 15)
+    c.drawCentredString(center_x, banner_y + 0.09 * inch, "My First")
     c.restoreState()
 
     # 4. MAIN TITLE: Heavy, bouncing, 3D bubble fonts "Copy to Color"
-    title1_y = height_pt - 2.70 * inch
+    title1_y = height_pt - 3.16 * inch
     draw_3d_title(
         c,
         text="Copy to Color",
         x=center_x,
         y=title1_y,
         font_name="Helvetica-Bold",
-        font_size=46,
+        font_size=44,
         fill_hex="#FFFFFF",
         outline_hex="#0F294A",
         outline_width=4.5,
@@ -844,17 +844,17 @@ def draw_front_cover(
     )
 
     # 5. BOOK SUBJECT: Giant, chunky, playful "Animals" bubble text with 3D volumetric extrusion
-    title2_y = height_pt - 3.48 * inch
+    title2_y = height_pt - 3.84 * inch
     draw_3d_title(
         c,
         text="Animals",
         x=center_x,
         y=title2_y,
         font_name="Helvetica-Bold",
-        font_size=54,
+        font_size=48,
         fill_hex="#FACC15",
         outline_hex="#78350F",
-        outline_width=5.0,
+        outline_width=4.8,
         extrusion_depth=6,
         extrusion_hex="#451A03",
         secondary_border_hex="#DC2626",
@@ -863,7 +863,7 @@ def draw_front_cover(
 
     # 6. LEFT CHUNKY CRAYONS TRIO: Yellow, Red, Blue pointing inward from the edge
     crayons_start_x = front_left_pt + 0.1 * inch
-    crayons_base_y = height_pt - 4.25 * inch
+    crayons_base_y = height_pt - 4.65 * inch
     crayons_data = [
         {"color": "#FDE047", "angle": -25, "y_off": 0.0},
         {"color": "#EF4444", "angle": -25, "y_off": -0.45 * inch},
@@ -881,10 +881,10 @@ def draw_front_cover(
         )
 
     # 7. INSET "BEFORE & AFTER" ACTIVITY CARD: Paper-like card with drop-shadow labeled "TIGER"
-    card_w = 2.9 * inch
-    card_h = 3.6 * inch
-    card_x = front_left_pt + front_width_pt - card_w - 0.7 * inch
-    card_y = height_pt - 7.55 * inch
+    card_w = 2.85 * inch
+    card_h = 3.55 * inch
+    card_x = front_left_pt + front_width_pt - card_w - 0.65 * inch
+    card_y = height_pt - 8.10 * inch
 
     c.saveState()
     # Paper-like card drop shadow
