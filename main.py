@@ -161,9 +161,17 @@ def cmd_build_interior(args: argparse.Namespace) -> None:
 
 def cmd_build_cover(args: argparse.Namespace) -> None:
     out_pdf = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "cover-proof.pdf"
-    front_art = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "approved-line-art" / "sun.png"
-    logo_kids = REPO_ROOT / "assets" / "logo" / "pivot_kids.svg"
-    logo_svg = logo_kids if logo_kids.exists() else REPO_ROOT / "assets" / "brand" / "pivot_digital_logo_dark.svg"
+    cover_art = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "cover-art.png"
+    front_art = cover_art if cover_art.exists() else None
+
+    # Thumbnail previews for back cover "LOOK INSIDE" gallery
+    thumb_sun = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "approved-line-art" / "sun.png"
+    thumbnails = [thumb_sun] if thumb_sun.exists() else []
+
+    # High-resolution native logo
+    logo_png = REPO_ROOT / "assets" / "logos" / "pivot_kids.png"
+    logo_file = logo_png if logo_png.exists() else (REPO_ROOT / "assets" / "logo" / "pivot_kids.svg")
+
     cover_cmd = [
         PYTHON,
         str(REPO_ROOT / "scripts" / "compile_cover.py"),
@@ -171,11 +179,13 @@ def cmd_build_cover(args: argparse.Namespace) -> None:
         "--title", "SOLAR SYSTEM EXPLORERS",
         "--subtitle", "Coloring Book for Kids Ages 4-6",
         "--publisher", "The Pivot Digital Publication",
-        "--front-art", str(front_art) if front_art.exists() else "",
-        "--logo-svg", str(logo_svg) if logo_svg.exists() else "",
-        "--thumbnails", str(front_art) if front_art.exists() else "",
+        "--logo", str(logo_file),
         "--page-count", "32",
     ]
+    if front_art:
+        cover_cmd.extend(["--front-art", str(front_art)])
+    if thumbnails:
+        cover_cmd.extend(["--thumbnails"] + [str(t) for t in thumbnails])
     if getattr(args, "author", None):
         cover_cmd.extend(["--author", args.author])
     run_cmd(cover_cmd)

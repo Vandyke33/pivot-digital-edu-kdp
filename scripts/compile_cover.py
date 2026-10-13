@@ -53,6 +53,158 @@ def calculate_cover_dimensions(
     }
 
 
+def draw_front_hero_scene(c: canvas.Canvas, cx: float, cy: float) -> None:
+    """Draw a rich, vibrant full-color space illustration for the front cover."""
+    # 1. Soft glowing nebula backdrop
+    c.saveState()
+    for r, col, alpha in [
+        (2.6 * inch, "#1E3A8A", 0.35),
+        (2.0 * inch, "#3B82F6", 0.20),
+        (1.4 * inch, "#06B6D4", 0.15),
+    ]:
+        c.setFillColor(HexColor(col))
+        c.setFillAlpha(alpha)
+        c.circle(cx, cy, r, fill=1, stroke=0)
+    c.restoreState()
+
+    # 2. Orbital trajectory path (dashed arc)
+    c.saveState()
+    c.setStrokeColor(HexColor("#38BDF8"))
+    c.setLineWidth(1.8)
+    c.setDash([6, 6])
+    p = c.beginPath()
+    p.moveTo(cx - 2.5 * inch, cy - 1.8 * inch)
+    p.curveTo(cx - 1.2 * inch, cy - 2.2 * inch, cx + 1.2 * inch, cy - 0.5 * inch, cx + 1.8 * inch, cy + 2.0 * inch)
+    c.drawPath(p, stroke=1, fill=0)
+    c.restoreState()
+
+    # 3. Saturn with Rings (Left side, slightly below center)
+    saturn_x = cx - 1.2 * inch
+    saturn_y = cy - 0.4 * inch
+    saturn_r = 0.9 * inch
+
+    # Back half of ring
+    c.saveState()
+    c.setStrokeColor(HexColor("#FBBF24"))
+    c.setLineWidth(14)
+    c.setStrokeAlpha(0.7)
+    c.ellipse(saturn_x - 1.6 * inch, saturn_y - 0.4 * inch, saturn_x + 1.6 * inch, saturn_y + 0.4 * inch, stroke=1, fill=0)
+    c.restoreState()
+
+    # Planet body
+    c.setFillColor(HexColor("#F59E0B"))
+    c.circle(saturn_x, saturn_y, saturn_r, fill=1, stroke=0)
+    # Band accents
+    c.setFillColor(HexColor("#D97706"))
+    c.rect(saturn_x - saturn_r + 0.1 * inch, saturn_y - 0.15 * inch, saturn_r * 1.8, 0.18 * inch, fill=1, stroke=0)
+    c.setFillColor(HexColor("#FDE68A"))
+    c.rect(saturn_x - saturn_r + 0.18 * inch, saturn_y + 0.15 * inch, saturn_r * 1.6, 0.12 * inch, fill=1, stroke=0)
+
+    # Front half of ring
+    c.saveState()
+    c.setStrokeColor(HexColor("#FDE68A"))
+    c.setLineWidth(8)
+    c.setStrokeAlpha(0.9)
+    c.ellipse(saturn_x - 1.6 * inch, saturn_y - 0.4 * inch, saturn_x + 1.6 * inch, saturn_y + 0.4 * inch, stroke=1, fill=0)
+    c.restoreState()
+
+    # 4. Colorful Rocket Ship (Right side, angled upward)
+    rx = cx + 0.9 * inch
+    ry = cy + 0.5 * inch
+
+    # Rocket Exhaust Flame
+    c.saveState()
+    c.setFillColor(HexColor("#EF4444"))
+    flame1 = c.beginPath()
+    flame1.moveTo(rx - 0.3 * inch, ry - 0.7 * inch)
+    flame1.lineTo(rx - 0.55 * inch, ry - 1.5 * inch)
+    flame1.lineTo(rx - 0.05 * inch, ry - 0.75 * inch)
+    c.drawPath(flame1, fill=1, stroke=0)
+    c.setFillColor(HexColor("#FBBF24"))
+    flame2 = c.beginPath()
+    flame2.moveTo(rx - 0.25 * inch, ry - 0.7 * inch)
+    flame2.lineTo(rx - 0.45 * inch, ry - 1.25 * inch)
+    flame2.lineTo(rx - 0.1 * inch, ry - 0.75 * inch)
+    c.drawPath(flame2, fill=1, stroke=0)
+    c.restoreState()
+
+    # Rocket Body (clean white capsule)
+    c.saveState()
+    c.setFillColor(white)
+    c.roundRect(rx - 0.35 * inch, ry - 0.7 * inch, 0.7 * inch, 1.4 * inch, 0.35 * inch, fill=1, stroke=0)
+    # Red Nose Cone
+    c.setFillColor(HexColor("#EF4444"))
+    nose = c.beginPath()
+    nose.moveTo(rx - 0.35 * inch, ry + 0.3 * inch)
+    nose.curveTo(rx - 0.35 * inch, ry + 0.9 * inch, rx, ry + 1.2 * inch, rx, ry + 1.2 * inch)
+    nose.curveTo(rx, ry + 1.2 * inch, rx + 0.35 * inch, ry + 0.9 * inch, rx + 0.35 * inch, ry + 0.3 * inch)
+    nose.close()
+    c.drawPath(nose, fill=1, stroke=0)
+    # Red Fins
+    c.setFillColor(HexColor("#DC2626"))
+    fin_l = c.beginPath()
+    fin_l.moveTo(rx - 0.35 * inch, ry - 0.3 * inch)
+    fin_l.lineTo(rx - 0.75 * inch, ry - 0.75 * inch)
+    fin_l.lineTo(rx - 0.35 * inch, ry - 0.65 * inch)
+    fin_l.close()
+    c.drawPath(fin_l, fill=1, stroke=0)
+    fin_r = c.beginPath()
+    fin_r.moveTo(rx + 0.35 * inch, ry - 0.3 * inch)
+    fin_r.lineTo(rx + 0.75 * inch, ry - 0.75 * inch)
+    fin_r.lineTo(rx + 0.35 * inch, ry - 0.65 * inch)
+    fin_r.close()
+    c.drawPath(fin_r, fill=1, stroke=0)
+    # Cyan Porthole Window
+    c.setFillColor(HexColor("#0284C7"))
+    c.circle(rx, ry + 0.1 * inch, 0.22 * inch, fill=1, stroke=0)
+    c.setFillColor(HexColor("#38BDF8"))
+    c.circle(rx, ry + 0.1 * inch, 0.17 * inch, fill=1, stroke=0)
+    c.setFillColor(white)
+    c.circle(rx + 0.05 * inch, ry + 0.15 * inch, 0.05 * inch, fill=1, stroke=0)
+    c.restoreState()
+
+    # 5. Moon & Distant Friendly Planets
+    # Crescent Moon (top left)
+    mx, my = cx - 2.0 * inch, cy + 1.6 * inch
+    c.saveState()
+    c.setFillColor(HexColor("#FEF08A"))
+    c.circle(mx, my, 0.45 * inch, fill=1, stroke=0)
+    c.setFillColor(HexColor("#0B132B"))
+    c.circle(mx + 0.18 * inch, my + 0.08 * inch, 0.42 * inch, fill=1, stroke=0)
+    c.restoreState()
+
+    # Distant Earth (top center-right)
+    ex, ey = cx + 0.2 * inch, cy + 1.8 * inch
+    c.setFillColor(HexColor("#3B82F6"))
+    c.circle(ex, ey, 0.32 * inch, fill=1, stroke=0)
+    c.setFillColor(HexColor("#10B981"))
+    c.circle(ex - 0.08 * inch, ey + 0.05 * inch, 0.12 * inch, fill=1, stroke=0)
+
+    # Distant Mars (bottom right)
+    mars_x, mars_y = cx + 2.1 * inch, cy - 1.4 * inch
+    c.setFillColor(HexColor("#F87171"))
+    c.circle(mars_x, mars_y, 0.24 * inch, fill=1, stroke=0)
+
+    # 6. Sparkle & Golden Stars around scene
+    for sx, sy, sz in [
+        (cx - 0.8 * inch, cy + 1.2 * inch, 7),
+        (cx + 1.8 * inch, cy + 1.3 * inch, 9),
+        (cx - 2.1 * inch, cy - 0.2 * inch, 6),
+        (cx + 2.2 * inch, cy + 0.2 * inch, 8),
+        (cx + 0.1 * inch, cy - 1.5 * inch, 6),
+    ]:
+        c.saveState()
+        c.setFillColor(HexColor("#FDE047"))
+        star = c.beginPath()
+        star.moveTo(sx, sy + sz)
+        star.curveTo(sx, sy, sx, sy, sx + sz, sy)
+        star.curveTo(sx, sy, sx, sy, sx, sy - sz)
+        star.curveTo(sx, sy, sx, sy, sx - sz, sy)
+        star.curveTo(sx, sy, sx, sy, sx, sy + sz)
+        c.drawPath(star, fill=1, stroke=0)
+        c.restoreState()
+
+
 def draw_cover(
     output_pdf_path: Path,
     title: str = "SOLAR SYSTEM EXPLORERS",
@@ -61,7 +213,7 @@ def draw_cover(
     publisher_name: str = "The Pivot Digital Publication",
     front_art_path: Path | None = None,
     thumbnail_paths: list[Path] | None = None,
-    logo_svg_path: Path | None = None,
+    logo_path: Path | None = None,
     page_count: int = 32,
 ) -> Path:
     """Generate an Amazon KDP compliant full-wrap paperback cover PDF."""
@@ -119,15 +271,13 @@ def draw_cover(
     c.drawCentredString(front_center_x, badge_y + 0.12 * inch, "AGES 4 - 6  •  PRESCHOOL")
 
     # Front Artwork / Central Focal Illustration
+    hero_center_y = height_pt - 5.6 * inch
     if front_art_path and front_art_path.exists():
         art_box_w = 5.2 * inch
         art_box_h = 5.2 * inch
         art_box_x = front_center_x - art_box_w / 2.0
-        art_box_y = height_pt - 8.4 * inch
+        art_box_y = hero_center_y - art_box_h / 2.0
 
-        # White backdrop card for the artwork so line art / color stands out cleanly
-        c.setFillColor(HexColor("#FFFFFF"))
-        c.roundRect(art_box_x - 0.1 * inch, art_box_y - 0.1 * inch, art_box_w + 0.2 * inch, art_box_h + 0.2 * inch, 16, fill=1, stroke=0)
         c.drawImage(
             str(front_art_path),
             art_box_x,
@@ -138,6 +288,9 @@ def draw_cover(
             anchor="c",
             mask="auto",
         )
+    else:
+        # Draw rich, colorful space hero scene
+        draw_front_hero_scene(c, front_center_x, hero_center_y)
 
     # Educational Feature Callout
     c.setFillColor(HexColor("#38BDF8"))
@@ -213,14 +366,18 @@ def draw_cover(
 
     # Publisher Logo on Back Cover (Bottom Left)
     tmp_logo_path: Path | None = None
-    if logo_svg_path and logo_svg_path.exists():
-        import tempfile
-        logo_png_bytes = resvg_py.svg_to_bytes(svg_path=str(logo_svg_path), width=700)
-        with tempfile.NamedTemporaryFile("wb", suffix=".png", delete=False) as tmp_logo:
-            tmp_logo.write(logo_png_bytes)
-            tmp_logo_path = Path(tmp_logo.name)
+    if logo_path and logo_path.exists():
+        if logo_path.suffix.lower() == ".svg":
+            import tempfile
+            logo_png_bytes = resvg_py.svg_to_bytes(svg_path=str(logo_path), width=700)
+            with tempfile.NamedTemporaryFile("wb", suffix=".png", delete=False) as tmp_logo:
+                tmp_logo.write(logo_png_bytes)
+                tmp_logo_path = Path(tmp_logo.name)
+            img_to_draw = tmp_logo_path
+        else:
+            img_to_draw = logo_path
 
-        with Image.open(tmp_logo_path) as logo_im:
+        with Image.open(img_to_draw) as logo_im:
             lw, lh = logo_im.size
         aspect = lh / lw
 
@@ -244,7 +401,7 @@ def draw_cover(
                 stroke=0,
             )
             c.drawImage(
-                str(tmp_logo_path),
+                str(img_to_draw),
                 logo_x,
                 logo_y,
                 width=target_w,
@@ -267,7 +424,7 @@ def draw_cover(
             target_h = target_w * aspect
             logo_y = 0.7 * inch
             c.drawImage(
-                str(tmp_logo_path),
+                str(img_to_draw),
                 logo_x,
                 logo_y,
                 width=target_w,
@@ -299,10 +456,23 @@ def main() -> int:
     parser.add_argument("--author", default=None, help="Author name to display on cover")
     parser.add_argument("--front-art", type=Path, help="Focal front cover artwork (PNG/JPG)")
     parser.add_argument("--thumbnails", type=Path, nargs="*", help="Interior preview thumbnails (up to 4)")
-    parser.add_argument("--logo-svg", type=Path, default=Path("assets/logo/pivot_kids.svg"), help="Publisher logo SVG")
+    parser.add_argument("--logo", type=Path, default=None, help="Publisher logo (PNG or SVG)")
+    parser.add_argument("--logo-svg", type=Path, default=None, help="Publisher logo SVG (alias)")
     parser.add_argument("--page-count", type=int, default=32, help="Interior total page count")
 
     args = parser.parse_args()
+    logo_file = args.logo or args.logo_svg
+    if not logo_file:
+        for cand in [
+            Path("assets/logos/pivot_kids.png"),
+            Path("assets/logo/pivot_kids.png"),
+            Path("assets/logos/pivot_kids.svg"),
+            Path("assets/logo/pivot_kids.svg"),
+        ]:
+            if cand.exists():
+                logo_file = cand
+                break
+
     out = draw_cover(
         output_pdf_path=args.output,
         title=args.title,
@@ -311,10 +481,11 @@ def main() -> int:
         publisher_name=args.publisher,
         front_art_path=args.front_art,
         thumbnail_paths=args.thumbnails or [],
-        logo_svg_path=args.logo_svg if args.logo_svg and args.logo_svg.exists() else None,
+        logo_path=logo_file if logo_file and logo_file.exists() else None,
         page_count=args.page_count,
     )
     print(f"Cover PDF generated successfully: {out}")
+    return 0
     return 0
 
 

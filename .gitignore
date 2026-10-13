@@ -13,6 +13,8 @@ secrets/
 
 # Heavy source and print assets managed in GCS
 *.png
+!assets/logos/pivot_*.png
+!assets/logo/pivot_*.png
 *.jpg
 *.jpeg
 *.webp
