@@ -1,0 +1,364 @@
+schema_version: "1.0.0"
+registry_name: "pivot-edu-kdp-childrens-line-art"
+description: >-
+  Parametric prompt registry for print-oriented children's coloring and activity
+  books. Generated art is source artwork, not a print-ready page; all files must
+  pass visual QA and be placed into the 8.5 x 11 inch layout pipeline.
+
+global_settings:
+  print_target:
+    trim_width_in: 8.5
+    trim_height_in: 11.0
+    minimum_dpi: 300
+    minimum_canvas_px:
+      width: 2550
+      height: 3300
+    color_mode: "1-bit monochrome preferred; RGB source accepted only if pixels are pure black or white after thresholding"
+    background: "pure white (#FFFFFF)"
+  default_aspect_ratios:
+    - ratio: "4:5"
+      use: "preferred portrait generation ratio; fit to 8.5 x 11 with white margins and no stretching"
+    - ratio: "1:1"
+      use: "acceptable source ratio for a single centered subject; fit inside portrait safe area"
+  seed_management:
+    strategy: "stable_per_subject"
+    base_seed: 41000
+    derivation: "seed = base_seed + stable_subject_index; keep the same seed and provider model for revisions of a subject"
+    reproducibility_note: "Seeds improve consistency but do not guarantee identical results across providers, model revisions, samplers, or software versions. Record provider, model, model version, seed, prompt, and generation date with each asset."
+  global_style: >-
+    children's coloring book line art, crisp solid black outlines, pure white
+    untextured background, closed colorable shapes, even contour weight, clean
+    printable composition, no border, no letters, no words, no numbers, no logo,
+    no watermark
+  global_negative_prompt: >-
+    --no color, shading, grayscale, gradients, photorealism, crosshatching,
+    complex texture, halftone, drop shadows, gray background, sketch marks,
+    open broken contours, tiny isolated details, text, letters, numbers, logo,
+    watermark
+  prompt_assembly_order:
+    - "global_style"
+    - "age_profiles[blueprint.age_profile].modifier"
+    - "edition_modifiers[edition].image_modifier"
+    - "blueprint.prompt_template interpolated with subject parameters"
+    - "global_negative_prompt"
+  generation_constraints:
+    - "Never stretch artwork to fill the page; preserve aspect ratio and fit within the approved safe area."
+    - "Do not ask an image model to draw tracing letters, scientific facts, labels, or readable signs; reserve space and add typography in the layout stage."
+    - "Keep all line work inside a 0.5 inch safe margin for no-bleed interiors."
+    - "Use one focal subject per page unless the subject record explicitly calls for a simple supporting element."
+    - "Generate black outlines on white only; reject gray antialiasing or remove it through documented thresholding before approval."
+
+age_profiles:
+  toddler_1_3:
+    age_range: "1-3"
+    line_weight_pt_at_final_trim: "4-6"
+    modifier: >-
+      toddler ages 1-3, extra-thick smooth 4-6 pt equivalent contours at final
+      8.5 x 11 inch trim, one large focal object, rounded silhouette, very large
+      closed coloring regions, no background scene, no small parts or sharp
+      details, generous open white space, recognizable simple proportions
+    scene_density: "single object; zero background clutter"
+    complexity_rules:
+      - "One dominant subject occupying 65-78 percent of the safe-area height."
+      - "Use broad closed regions large enough for crayons; omit micro-details and thin mechanical parts."
+      - "No more than two simple secondary shapes, and only when required to identify the subject."
+  preschool_4_6:
+    age_range: "4-6"
+    line_weight_pt_at_final_trim: "2-3"
+    modifier: >-
+      preschool ages 4-6, bold smooth 2-3 pt equivalent contours at final
+      8.5 x 11 inch trim, friendly expressive face where appropriate, one clear
+      main subject with at most two large supporting elements, simple readable
+      setting, closed coloring regions, balanced open white space
+    scene_density: "one principal subject with zero to two simple supporting elements"
+    complexity_rules:
+      - "Keep the silhouette and identifying features readable at thumbnail size."
+      - "Use broad, enclosed regions and avoid overlapping outlines that create ambiguous fill areas."
+      - "Background elements must remain secondary and must not form a dense scene."
+  elementary_6_8:
+    age_range: "6-8"
+    line_weight_pt_at_final_trim: "1.5-2.5"
+    modifier: >-
+      early elementary ages 6-8, clean moderate-weight 1.5-2.5 pt equivalent
+      contours at final 8.5 x 11 inch trim, dynamic but readable action, clear
+      foreground and background separation, moderate scene complexity, large
+      enclosed colorable regions, purposeful storytelling details without
+      micro-texture
+    scene_density: "one action scene with a small number of legible supporting elements"
+    complexity_rules:
+      - "Use a clear visual hierarchy and preserve a large central coloring area."
+      - "Educational elements are represented by shapes or objects, never generated text."
+      - "Avoid fine hatching, tiny labels, and details that would disappear at print size."
+
+edition_modifiers:
+  core_coloring:
+    description: "Standard single-sided coloring illustration."
+    image_modifier: >-
+      centered full-page coloring illustration only, generous white space,
+      no reserved text panel, no printed text
+    layout_reservation: "No typography overlay; artwork must remain inside the no-bleed safe area."
+  tracing_edition:
+    description: "Coloring illustration with clean space below for a human-typeset tracing guide."
+    image_modifier: >-
+      keep the lower 20 percent of the portrait composition completely blank
+      white for a later dotted name or alphabet tracing guide; keep all
+      illustration contours above that reserved band; do not draw dots or text
+    layout_reservation: "Reserve lower 20 percent of page for typeset tracing word and guide lines."
+  stem_curriculum:
+    description: "Educational coloring illustration with room for typeset fact and a search-and-find prompt."
+    image_modifier: >-
+      reserve a clean blank white footer band occupying the lower 18 percent
+      for a later typeset science fact and search-and-find checklist; include
+      the requested search objects as clear visual shapes in the illustration;
+      do not draw icons, labels, letters, numbers, or text
+    layout_reservation: "Reserve lower 18 percent of page for fact and search-and-find overlay; author verifies educational accuracy."
+
+book_series_blueprints:
+  solar_system_explorers:
+    series_title: "Solar System Explorers"
+    target_age_profile: "preschool_4_6"
+    default_edition: "core_coloring"
+    trim: "8.5x11"
+    prompt_template: >-
+      Create a single portrait coloring-book page featuring {subject}. Subject
+      parameters: {subject_parameters}. Action or expression: {action}. Include
+      only these supporting elements: {supporting_elements}. Composition:
+      {composition}. Keep every contour closed and clearly separated; use
+      consistent black line art on pure white; make the subject friendly,
+      scientifically recognizable, and suitable for children ages 4-6. Do not
+      include facts, labels, lettering, numbers, logos, or other text.
+    age_specific_modifier: "{age_profiles.preschool_4_6.modifier}"
+    subjects:
+      - id: "sun"
+        index: 1
+        subject: "the Sun"
+        subject_parameters: "large round star, simple circular center, eight broad alternating rounded rays"
+        action: "smiling gently with an open friendly expression"
+        supporting_elements: "two small simple stars"
+        composition: "single centered focal object, rays fully inside the safe area"
+      - id: "mercury"
+        index: 2
+        subject: "Mercury"
+        subject_parameters: "small round rocky planet, a few large smooth crater rings"
+        action: "floating calmly"
+        supporting_elements: "one small star"
+        composition: "planet centered and large; crater marks are broad closed ovals"
+      - id: "venus"
+        index: 3
+        subject: "Venus"
+        subject_parameters: "round planet with three broad curved cloud bands and a clear circular outline"
+        action: "floating calmly"
+        supporting_elements: "one simple orbit arc kept separate from the planet"
+        composition: "large centered planet with uncluttered white space"
+      - id: "earth"
+        index: 4
+        subject: "Earth"
+        subject_parameters: "round globe with large simplified continent shapes, no map labels"
+        action: "smiling gently"
+        supporting_elements: "one small Moon shown separately at a clear distance"
+        composition: "Earth is dominant; continents are closed shapes with broad boundaries"
+      - id: "moon"
+        index: 5
+        subject: "Earth's Moon"
+        subject_parameters: "round moon with four large simple crater shapes"
+        action: "floating quietly"
+        supporting_elements: "one small star"
+        composition: "single centered moon; craters remain large and widely spaced"
+      - id: "mars"
+        index: 6
+        subject: "Mars"
+        subject_parameters: "round rocky planet with two large simple surface patches and a small polar cap"
+        action: "smiling gently"
+        supporting_elements: "one tiny distant moon"
+        composition: "planet centered; surface regions are closed and not shaded"
+      - id: "asteroid_belt"
+        index: 7
+        subject: "the asteroid belt"
+        subject_parameters: "five large irregular rounded asteroids arranged along two simple orbit arcs"
+        action: "asteroids orbiting around an empty center"
+        supporting_elements: "one small planet placed outside the arcs"
+        composition: "clear separated rocks, no collisions or dense debris"
+      - id: "jupiter"
+        index: 8
+        subject: "Jupiter"
+        subject_parameters: "large striped gas planet with four broad curved bands and one large oval storm mark"
+        action: "floating with a friendly expression"
+        supporting_elements: "two small moons"
+        composition: "large centered planet; bands are clean closed regions without shading"
+      - id: "saturn"
+        index: 9
+        subject: "Saturn"
+        subject_parameters: "round gas planet with one broad, clearly separated ring system"
+        action: "floating calmly"
+        supporting_elements: "one small moon"
+        composition: "planet and rings centered, all ring contours closed and not crossing the face"
+      - id: "uranus"
+        index: 10
+        subject: "Uranus"
+        subject_parameters: "round planet tilted slightly with two broad curved atmospheric bands"
+        action: "floating calmly"
+        supporting_elements: "one small moon"
+        composition: "planet centered with simple separated orbit line"
+      - id: "neptune"
+        index: 11
+        subject: "Neptune"
+        subject_parameters: "round planet with three broad wind bands and one large oval cloud shape"
+        action: "floating calmly"
+        supporting_elements: "one small moon"
+        composition: "single large planet, no fine swirling details"
+      - id: "comet"
+        index: 12
+        subject: "a comet"
+        subject_parameters: "round comet nucleus with a broad curved tail divided into three closed ribbons"
+        action: "traveling through space"
+        supporting_elements: "two large simple stars"
+        composition: "diagonal motion with tail fully inside the safe area"
+      - id: "astronaut"
+        index: 13
+        subject: "a child astronaut"
+        subject_parameters: "one child in a simple spacesuit, round helmet, clear face, mitten-like gloves, boots"
+        action: "waving one hand"
+        supporting_elements: "one small floating star"
+        composition: "full figure centered; limbs separated and anatomically clear"
+      - id: "rocket_ship"
+        index: 14
+        subject: "a friendly rocket ship"
+        subject_parameters: "one rounded rocket with three fins, circular window, closed simple flame shapes"
+        action: "flying upward"
+        supporting_elements: "two broad clouds of space smoke and one star"
+        composition: "rocket centered on a gentle diagonal; flame remains separate from fins"
+      - id: "space_station"
+        index: 15
+        subject: "a small space station"
+        subject_parameters: "central cylindrical module, two simple rectangular solar panels, one docking port"
+        action: "orbiting peacefully"
+        supporting_elements: "one small planet in the distance"
+        composition: "simple symmetrical silhouette with wide panel cells and no tiny machinery"
+
+  big_vehicles_machines:
+    series_title: "Big Vehicles & Machines"
+    target_age_profile: "toddler_1_3"
+    default_edition: "core_coloring"
+    trim: "8.5x11"
+    prompt_template: >-
+      Create one very simple portrait coloring-book page featuring {subject}.
+      Subject parameters: {subject_parameters}. Action: {action}. Include only
+      these essential supporting elements: {supporting_elements}. Composition:
+      {composition}. Use an extra-thick smooth 4-6 pt equivalent black outline
+      at final 8.5 x 11 inch trim, one large focal object, huge closed coloring
+      regions, rounded child-friendly shapes, no background, no ground clutter,
+      and no small mechanical details. The vehicle must be recognizable by its
+      silhouette and remain fully inside the safe area. No text or logos.
+    age_specific_modifier: "{age_profiles.toddler_1_3.modifier}"
+    line_constraints:
+      line_weight_pt_at_final_trim: "4-6"
+      minimum_closed_region_mm: 12
+      focal_object_count: 1
+      background: "none"
+      forbidden: "thin hoses, exposed gears, tiny windows, dense tread marks, brand marks, readable text"
+    subjects:
+      - id: "bulldozer"
+        index: 1
+        subject: "a bulldozer"
+        subject_parameters: "one broad tracked base, large front blade, simple cab with one large window"
+        action: "pushing one large rounded pile of soil"
+        supporting_elements: "one soil mound touching the blade"
+        composition: "large side view, single vehicle dominates"
+      - id: "excavator"
+        index: 2
+        subject: "an excavator"
+        subject_parameters: "one tracked base, simple cab, one thick two-part arm and oversized bucket"
+        action: "scooping one large rounded patch of dirt"
+        supporting_elements: "one dirt mound"
+        composition: "large side view; arm parts are broad and clearly separated"
+      - id: "dump_truck"
+        index: 3
+        subject: "a dump truck"
+        subject_parameters: "one rounded cab, two large visible wheels, one simple tilting dump bed"
+        action: "carrying three large rounded stones"
+        supporting_elements: "three stones contained within the bed"
+        composition: "large side view with a clear truck silhouette"
+      - id: "concrete_mixer"
+        index: 4
+        subject: "a concrete mixer truck"
+        subject_parameters: "simple cab, two large wheels, one large rounded mixing drum with two broad bands"
+        action: "drum shown turning with two curved motion marks"
+        supporting_elements: "none"
+        composition: "large side view; drum is the dominant closed shape"
+      - id: "crane"
+        index: 5
+        subject: "a mobile crane truck"
+        subject_parameters: "simple wheeled base, one thick raised boom, one short straight cable, one large hook"
+        action: "lifting one large block"
+        supporting_elements: "one square block beneath the hook"
+        composition: "upright boom fully inside page; avoid crossing outlines"
+      - id: "tractor"
+        index: 6
+        subject: "a farm tractor"
+        subject_parameters: "one simple cab, one very large rear wheel, one smaller front wheel, broad fenders"
+        action: "parked with a friendly face in the front grille"
+        supporting_elements: "none"
+        composition: "large side view on blank white background"
+      - id: "fire_truck"
+        index: 7
+        subject: "a fire truck"
+        subject_parameters: "simple cab, two large wheels, one broad ladder secured on top, one rounded siren"
+        action: "driving forward with no emergency scene"
+        supporting_elements: "none"
+        composition: "large side view; ladder has only a few broad rungs"
+      - id: "school_bus"
+        index: 8
+        subject: "a school bus"
+        subject_parameters: "rounded rectangular bus body, two large wheels, three large windows, simple mirrors"
+        action: "parked with a friendly face on the front"
+        supporting_elements: "none"
+        composition: "large side view; windows are blank and contain no people or words"
+      - id: "garbage_truck"
+        index: 9
+        subject: "a garbage truck"
+        subject_parameters: "simple cab, two large wheels, one smooth large rear collection body"
+        action: "holding one large closed garbage bin at the rear"
+        supporting_elements: "one large bin"
+        composition: "large side view with no small refuse or street scene"
+      - id: "police_car"
+        index: 10
+        subject: "a generic police car"
+        subject_parameters: "simple rounded car body, two large wheels, one plain roof light bar, blank door panels"
+        action: "parked with a friendly face in the grille"
+        supporting_elements: "none"
+        composition: "large side view; no badge, insignia, word, number, or specific agency markings"
+      - id: "steamroller"
+        index: 11
+        subject: "a road steamroller"
+        subject_parameters: "simple cab, one large front roller drum, two large rear wheels"
+        action: "rolling over one broad flat road strip"
+        supporting_elements: "one flat road strip directly under the roller"
+        composition: "large side view; roller drum is a clean wide oval-cylinder shape"
+      - id: "forklift"
+        index: 12
+        subject: "a forklift"
+        subject_parameters: "simple cab, two large wheels, two thick vertical mast rails, two broad horizontal forks"
+        action: "carrying one large square crate"
+        supporting_elements: "one crate resting securely on both forks"
+        composition: "large side view; no chains, thin bars, or tiny controls"
+      - id: "tow_truck"
+        index: 13
+        subject: "a tow truck"
+        subject_parameters: "simple cab, two large wheels, one thick rear lifting arm and broad tow platform"
+        action: "carrying one small rounded car on the platform"
+        supporting_elements: "one clearly separated small car"
+        composition: "large side view; main tow truck remains the single dominant focal object"
+      - id: "train_engine"
+        index: 14
+        subject: "a steam train engine"
+        subject_parameters: "rounded engine body, one large front wheel, two smaller wheels, simple chimney, broad cowcatcher"
+        action: "releasing two large rounded steam puffs"
+        supporting_elements: "two steam puffs connected above the chimney"
+        composition: "three-quarter view with large clear locomotive silhouette"
+      - id: "airplane"
+        index: 15
+        subject: "a friendly passenger airplane"
+        subject_parameters: "rounded fuselage, two broad wings, two simple engines, tail fin, three large windows"
+        action: "flying gently through open sky"
+        supporting_elements: "one broad cloud shape"
+        composition: "three-quarter view, all wing tips inside safe area, no airport scene"

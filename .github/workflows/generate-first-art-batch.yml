@@ -1,0 +1,84 @@
+name: Generate first art batch
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_images:
+        description: "Maximum billable image generations for this run (pilot with 1)"
+        required: true
+        default: 1
+        type: choice
+        options:
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install pipeline dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Authenticate with Google Cloud using GitHub OIDC
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_GENERATION_SERVICE_ACCOUNT }}
+
+      - name: Render prompt registry
+        run: >-
+          python scripts/render_prompts.py
+          --series solar_system_explorers
+          --edition core_coloring
+          --output local_builds/solar-system-explorers/v1.0-core/prompts.jsonl
+
+      - name: Prepare generation manifest
+        run: >-
+          python scripts/prepare_generation_batch.py
+          --prompts local_builds/solar-system-explorers/v1.0-core/prompts.jsonl
+          --provider google-gemini-agent-platform
+          --model "${{ vars.GOOGLE_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}"
+          --model-version "${{ vars.GOOGLE_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}"
+          --asset-dir local_builds/solar-system-explorers/v1.0-core/raw
+          --output local_builds/solar-system-explorers/v1.0-core/generation-manifest.json
+
+      - name: Generate candidates and archive source, candidates, and manifest in GCS
+        env:
+          GOOGLE_CLOUD_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+          GOOGLE_CLOUD_LOCATION: ${{ vars.GOOGLE_CLOUD_LOCATION || 'us-central1' }}
+          GOOGLE_IMAGE_MODEL: ${{ vars.GOOGLE_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}
+          GCS_ASSET_BUCKET: ${{ vars.GCS_ASSET_BUCKET }}
+        run: |
+          if [ -z "$GCS_ASSET_BUCKET" ]; then
+            echo "Set the GCS_ASSET_BUCKET repository variable before dispatching this workflow."
+            exit 1
+          fi
+          python scripts/generate_images_google.py \
+            --batch local_builds/solar-system-explorers/v1.0-core/generation-manifest.json \
+            --output-manifest local_builds/solar-system-explorers/v1.0-core/generation-manifest.json \
+            --candidate-dir local_builds/solar-system-explorers/v1.0-core/candidate-pages \
+            --max-assets "${{ inputs.max_images }}"
+
+      - name: Preserve batch artifacts for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: solar-system-explorers-art-candidates
+          path: local_builds/solar-system-explorers/v1.0-core
+          if-no-files-found: error
+          retention-days: 14

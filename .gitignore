@@ -1,0 +1,48 @@
+docs/
+
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service_account.json
+gcp_credentials.json
+gha-creds-*.json
+secrets/
+
+# Heavy source and print assets managed in GCS
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.svg
+*.pdf
+*.ai
+*.psd
+*.eps
+*.zip
+*.tar.gz
+
+# Python environments, caches, and test output
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+env/
+.venv/
+
+# Local build and working directories
+temp/
+working_assets/
+local_builds/
+dist/
+build/
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+desktop.ini

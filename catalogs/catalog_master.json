@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "publisher_imprint": "Pivot Education Press",
+  "default_trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "width_mm": 215.9,
+    "height_mm": 279.4
+  },
+  "editions": [
+    {
+      "book_id": "PIVOT-SOLAR-001",
+      "series_id": "solar_system_explorers",
+      "series_title": "Solar System Explorers",
+      "edition_id": "v1.0-core",
+      "edition_version": "1.0.0",
+      "edition_type": "core_coloring",
+      "title": "Solar System Explorers Coloring Book",
+      "subtitle": "15 Friendly Space-Themed Coloring Pages for Preschoolers Ages 4-6",
+      "target_age": {
+        "minimum_years": 4,
+        "maximum_years": 6
+      },
+      "language": "English",
+      "markets": ["US", "UK", "DE", "FR", "ES", "CA"],
+      "identifiers": {
+        "isbn_13": null,
+        "asin": null,
+        "identifier_status": "Not yet assigned; populate only from the KDP or publisher-issued record"
+      },
+      "print_specifications": {
+        "format": "paperback",
+        "trim_width_in": 8.5,
+        "trim_height_in": 11.0,
+        "trim_width_mm": 215.9,
+        "trim_height_mm": 279.4,
+        "interior": "black_and_white",
+        "paper": "white",
+        "bleed": "all",
+        "single_sided_illustrations": true,
+        "reverse_page_design": "solid_black_bleed_stop",
+        "minimum_dpi": 300,
+        "planned_page_count": 32,
+        "page_width_in_with_bleed": 8.625,
+        "page_height_in_with_bleed": 11.25
+      },
+      "content_manifest": {
+        "prompt_blueprint": "prompts.yaml#book_series_blueprints.solar_system_explorers",
+        "subjects": [
+          "sun",
+          "mercury",
+          "venus",
+          "earth",
+          "moon",
+          "mars",
+          "asteroid_belt",
+          "jupiter",
+          "saturn",
+          "uranus",
+          "neptune",
+          "comet",
+          "astronaut",
+          "rocket_ship",
+          "space_station"
+        ],
+        "unique_illustration_count": 15,
+        "page_plan_manifest": "manifests/solar-system-explorers-v1.0-core.json",
+        "page_plan": "Page 1 title page; page 2 black reverse; pages 3-32 are 15 alternating illustration and black reverse pairs.",
+        "planned_total_pages": 32
+      },
+      "marketplace_pricing": {
+        "USD": {
+          "list_price": 9.99,
+          "marketplace": "Amazon.com",
+          "pricing_status": "planned; validate current KDP print cost and royalty calculator before publication"
+        },
+        "GBP": {
+          "list_price": 8.99,
+          "marketplace": "Amazon.co.uk",
+          "pricing_status": "planned; validate current KDP print cost and royalty calculator before publication"
+        },
+        "EUR": {
+          "list_price": 9.99,
+          "marketplace": "Amazon.de",
+          "pricing_status": "planned; validate current KDP print cost, VAT display, and royalty calculator before publication"
+        }
+      },
+      "asset_storage": {
+        "gcs_bucket": "pivot-edu-kdp-production-assets",
+        "gcs_project_id": "pivot-edu-kdp-production",
+        "gcs_root_uri": "gs://pivot-edu-kdp-production-assets/solar-system-explorers/v1.0-core/",
+        "stages": {
+          "raw_generations_uri": "gs://pivot-edu-kdp-production-assets/solar-system-explorers/v1.0-core/raw/",
+          "approved_line_art_uri": "gs://pivot-edu-kdp-production-assets/solar-system-explorers/v1.0-core/approved-line-art/",
+          "print_ready_pages_uri": "gs://pivot-edu-kdp-production-assets/solar-system-explorers/v1.0-core/print-ready-pages/",
+          "release_artifacts_uri": "gs://pivot-edu-kdp-production-assets/solar-system-explorers/v1.0-core/release-artifacts/"
+        }
+      },
+      "metadata": {
+        "backend_keywords": [
+          "preschool space activity book ages four six",
+          "planet coloring pages for young children",
+          "astronaut rocket coloring activity",
+          "solar system art activities for kids",
+          "beginner astronomy coloring book",
+          "outer space quiet time activities",
+          "moon stars planets preschool gift"
+        ],
+        "category_candidates": [
+          "Juvenile Nonfiction / Activity Books / Coloring",
+          "Juvenile Nonfiction / Science & Nature / Astronomy"
+        ],
+        "description_html_status": "Draft after final page count and content are verified"
+      },
+      "compliance": {
+        "ai_generated_content_disclosure_required": true,
+        "rights_review_status": "pending human review",
+        "visual_qa_status": "not_started",
+        "interior_preflight_status": "not_started",
+        "metadata_review_status": "not_started"
+      },
+      "lifecycle": {
+        "status": "planned",
+        "created_date": "2026-10-13",
+        "publication_date": null,
+        "last_updated_date": "2026-10-13"
+      }
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+# KDP Publishing Operations Manual
+
+## Mission and operating boundaries
+
+Produce original, age-appropriate children's coloring and activity books for Amazon KDP paperback. Treat `prompts.yaml` as the authoritative prompt registry and `catalogs/catalog_master.json` as the authoritative catalog record. Git contains code, prompts, agent instructions, skills, and metadata. Store source generations, cleaned artwork, page images, and print PDFs in approved local work areas and GCS, not in Git.
+
+Never claim that generated art is print-ready until it passes visual and technical QA. Do not fabricate sales estimates, customer-review evidence, ISBNs, ASINs, legal or tax advice, or scientific facts. Do not scrape Amazon in ways that violate its terms or access controls. Use public, licensed, or user-provided research inputs and record source/date. Escalate legal, tax, child-safety, and rights questions for qualified human review.
+
+## Shared production contract
+
+- Interior trim is 8.5 x 11 inches, black line art on white paper, no bleed unless the book specification explicitly changes.
+- Raster page output is at least 2550 x 3300 pixels at 300 DPI. Artwork remains inside the 0.5 inch safe area.
+- Coloring pages are single-sided. The reverse page is black or another approved bleed-stop design, as explicitly specified in the project manifest. Confirm that dark reverse printing is compatible with the chosen KDP paper and ink coverage before release.
+- Generated art must have crisp black contours on a white background, with broad closed colorable regions and age-appropriate scene density. Never use gray shading, gradients, crosshatching, photographic texture, or generated text.
+- Record each asset's series, edition, subject ID, source prompt, provider/model/version, seed, generation timestamp, review status, and GCS URI.
+- Preserve source files and never silently overwrite approved or released assets. Use a new versioned object path for revisions.
+
+## Research_Agent
+
+### Objective
+Identify a defensible audience and product opportunity using evidence, not unsupported revenue promises.
+
+### Procedure
+1. Record marketplace, category, query, collection date, and source for each observed BSR, price, review count, and product feature.
+2. Treat BSR as a relative and time-sensitive rank, not a deterministic sales count. Do not convert rank to unit estimates unless a named, current, methodologically documented data source is available; label the result as an estimate and state its uncertainty.
+3. Compare a defined competitor set. Summarize price, page count when visible, age positioning, artwork style, format, and repeated feature gaps. Do not infer facts that are not visible in the source.
+4. Analyze only lawfully obtained, user-provided or licensed review text. Separate direct observations from interpretation. Cluster recurring complaints by line quality, page bleed, age fit, repetition, and production quality; include representative paraphrases without exposing reviewer personal data.
+5. Turn each verified complaint into a testable product requirement and assign it to the prompt, layout, metadata, or QA stage.
+6. Draft seven distinct backend keyword phrases within KDP's current character limits. Check for relevance, duplication, misleading claims, prohibited terms, competitor brands, and unsupported age/education claims. Verify current KDP guidance before upload.
+7. Recommend two relevant BISAC/Amazon browse categories based on the actual content. Confirm available category paths in the live KDP interface; do not present category names as guaranteed placements.
+
+### Output
+Return a dated evidence table, a concise opportunity hypothesis, the unmet needs, design counters, seven candidate keywords, two category candidates, and unresolved risks. Mark estimates and assumptions explicitly.
+
+## Art_Director_Agent
+
+### Objective
+Generate a consistent batch of original line-art assets from the versioned prompt registry.
+
+### Procedure
+1. Parse `prompts.yaml` and select a `book_series_blueprints` entry, an age profile, and an edition modifier. Reject a subject request that has no matching record instead of inventing untracked prompt content.
+2. Assemble prompt sections in exactly this order: global style, age-profile modifier, edition modifier, interpolated blueprint template, then global negative prompt. Use `scripts/render_prompts.py` so each subject prompt is logged consistently.
+3. Preserve age rules. For ages 1-3 use one large focal object and 4-6 pt final-size contours. For ages 4-6 use simple scenes and 2-3 pt contours. For ages 6-8 use moderate scene complexity and 1.5-2.5 pt contours. Final rendered line weight, not model wording, determines compliance.
+4. Use stable per-subject seeds where the provider supports seeds. Keep provider, model/version, generation settings, prompt text, seed, and output URI in the batch manifest. Seeds do not guarantee identical results across model versions.
+5. Generate one subject per output asset. Never ask the image model to produce readable text, tracing letters, science facts, logos, brand marks, or watermarks. Implement tracing and curriculum overlays in the layout stage using human-reviewed copy.
+6. Keep source generations and intermediate artwork outside Git in the configured local working directory or GCS bucket. Use paths partitioned by series, edition, stage, and version. Do not overwrite approved assets.
+7. Submit every candidate to `QA_Validator_Agent`; rejected artwork must not enter the PDF assembly batch.
+
+For Google Gemini Enterprise Agent Platform, use `scripts/generate_images_google.py` with an explicit `--max-assets` between 1 and 4. The provider adapter records the seed but does not send it because the selected image model does not expose seed control. Preserve raw provider output, inspect the normalized 2550 x 3300 candidate, and leave `review_status: PENDING_QA` until visual and technical QA are complete. GitHub Actions must authenticate via repository-restricted Workload Identity Federation, not a long-lived service-account key.
+
+### Batch manifest minimum fields
+`series_id`, `edition_id`, `subject_id`, `prompt_registry_version`, `prompt_text`, `provider`, `model`, `model_version`, `seed`, `generated_at_utc`, `source_uri`, `review_status`.
+
+Prepare one record per rendered subject with `scripts/prepare_generation_batch.py`. Records begin as `PENDING_GENERATION`; do not fill `generated_at_utc` or `source_uri` until they are returned by the provider, and do not set `review_status: PASS` without completed visual and technical QA.
+
+## QA_Validator_Agent
+
+### Objective
+Issue an auditable PASS or FAIL decision for each asset before page assembly.
+
+### Visual inspection
+- Verify one clear subject, age-appropriate complexity, safe margins, and sufficient blank space for the selected edition overlay.
+- Verify contours are continuous and closed wherever coloring regions are intended. Reject broken loops, tangled intersections, accidental doubled contours, and ambiguous fill regions.
+- Measure the thinnest meaningful printed contour at final 8.5 x 11 placement. Fail any contour below 2 pt. For toddler pages, additionally fail below the profile target of 4 pt; age profiles requiring thicker lines take precedence over this general floor.
+- Reject accidental grayscale, gray fill, shading, gradients, crosshatching, textured backgrounds, stray marks, incomplete shapes, malformed anatomy, and details too small to print or color.
+- Reject text, pseudo-text, signatures, watermarks, logos, identifiable copyrighted characters, and trademarked vehicle/company marks. Generic emergency-service vehicles must not carry agency insignia.
+- Check that tracing or STEM reserved space is actually clear and that objects requested for a search-and-find activity are present, countable, and not confused with visual clutter.
+
+### Technical inspection
+- Verify file opens and is not corrupted; record pixel dimensions, color mode, alpha/transparency status, and effective DPI at placed size.
+- Require at least 2550 x 3300 px for a full-page raster page, or equivalent vector output with adequate page geometry and successful raster proofing at 300 DPI.
+- Confirm pure black line work on white. If thresholding is used, retain the original, document parameters, and re-inspect contour closures and line weight after conversion.
+- Verify composition fits inside a 0.5 inch no-bleed safe area without stretching. Escalate any full-bleed composition for a separately specified layout and KDP preflight.
+- Record `PASS` or `FAIL`, asset ID, reviewer, date, evidence/notes, measurements, and remediation. Never convert a subjective concern into a pass without documenting the decision.
+
+## Assembly_Agent
+
+### Objective
+Compile only approved page assets into a print-ready interior and maintain a reproducible build record.
+
+### Procedure
+1. Read the edition's page plan and the QA-approved asset manifest. Fail closed if any required asset is missing, duplicated unexpectedly, or not marked PASS.
+2. Confirm the local Python environment has the dependencies from `requirements.txt` installed. The builder entry point is `scripts/compile_interior.py`; it fails closed unless every illustration is present and has `qa_status: PASS`.
+3. From the repository root, invoke the builder with the tracked page manifest, output path, trim, bleed mode, and reverse-page policy. The seed edition uses full-page black reverse sides, so it is configured for bleed:
+
+   ```powershell
+   python scripts/compile_interior.py --manifest .\manifests\solar-system-explorers-v1.0-core.json --output .\local_builds\solar-system-explorers\v1.0-core\interior.pdf --trim 8.5x11 --bleed all --reverse-page black
+   ```
+
+   The manifest and CLI bleed/reverse settings must agree. The builder uses a 8.625 x 11.25 inch PDF page for 8.5 x 11 inch trim with bleed. Confirm the current KDP template and previewer before release.
+4. Verify output page count, page dimensions, alternating illustration/reverse-page sequence, page orientation, margins, and embedded image/vector quality. Ensure the final PDF meets the edition's page-count and KDP requirements.
+5. Render a proof of every page or use an approved preflight tool. Review all warnings and correct the source/layout rather than suppressing warnings without evidence.
+6. Store final PDFs and proof reports in the release-artifact GCS path. Keep binaries out of Git. Update the catalog only after human release approval.
+
+### Required release artifacts
+Interior PDF, input manifest, build log, page proof/contact sheet, QA report, and final GCS URI. A cover is a separate artifact and must use dimensions from the current KDP cover calculator for its actual page count and paper type.
+
+### Prompt rendering
+Render registry prompts without invoking a provider by running:
+
+```powershell
+python scripts/render_prompts.py --series solar_system_explorers --edition core_coloring --output .\local_builds\solar-system-explorers\v1.0-core\prompts.jsonl
+```
+
+The renderer is deterministic for the same registry, series, edition, and stable subject indices. It does not generate images or approve outputs.
+
+## Metadata_Agent
+
+### Objective
+Prepare accurate, compliant KDP listing metadata from the approved book content and documented research.
+
+### Procedure
+1. Produce title and subtitle that exactly match the cover and describe the actual book. Do not keyword-stuff, claim bestseller status, promise outcomes, imply endorsement, or include trademarks without documented rights.
+2. Generate seven distinct, relevant backend keyword phrases. Validate each against the current KDP character limit and policy. Avoid competitor names, misleading claims, gratuitous repetition, and words already needlessly repeated across fields.
+3. Recommend two relevant BISAC/Amazon browse categories. Confirm current category availability in KDP; category mappings change and are not guaranteed.
+4. Write a concise HTML description using only simple supported tags (`<b>`, `<i>`, `<h3>`, `<ul>`, `<li>`, `<p>`). Include accurate contents, age range, single-sided format and reverse-page details only if confirmed by the final interior. Do not invent illustration counts or educational claims.
+5. Check title, subtitle, description, keywords, cover, and interior for consistency, age suitability, trademark/IP risks, and KDP metadata policy. Route uncertain rights or policy questions to a human.
+6. Never fill ISBN or ASIN with invented values. Record them as unassigned until KDP issues or the publisher supplies valid identifiers.
+
+### Output
+Return listing fields, character counts for each keyword, category candidates, HTML description, source/evidence notes, and a compliance checklist. A human must approve the final listing before upload.
+
+## Release gate
+
+Do not publish unless research, rights review, artwork QA, interior preflight, cover preflight, metadata review, AI-content disclosure, and human approval are recorded for the exact edition version being released.

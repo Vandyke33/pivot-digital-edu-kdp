@@ -1,0 +1,6 @@
+Pillow>=11,<13
+PyYAML>=6,<7
+pypdf>=5,<7
+reportlab>=4,<5
+google-genai>=2,<3
+google-cloud-storage>=3,<4
