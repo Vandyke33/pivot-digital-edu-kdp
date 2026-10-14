@@ -115,8 +115,8 @@ def draw_bubble_text(draw: ImageDraw.ImageDraw, pos: tuple, text: str, font: Ima
 # ---------------------------------------------------------------------------
 # 4. BACK COVER SERIES GRID BUILDER
 # ---------------------------------------------------------------------------
-def render_back_cover_grid(draw: ImageDraw.ImageDraw, start_x: int, start_y: int, grid_w: int, grid_h: int):
-    """Programmatically constructs a 4x3 thumbnail grid of books in the series."""
+def render_back_cover_grid(cover: Image.Image, draw: ImageDraw.ImageDraw, start_x: int, start_y: int, grid_w: int, grid_h: int):
+    """Programmatically constructs a 4x3 thumbnail grid of books in the series with micro-asset art."""
     cols, rows = 3, 4
     cell_w = grid_w // cols
     cell_h = grid_h // rows
@@ -124,6 +124,9 @@ def render_back_cover_grid(draw: ImageDraw.ImageDraw, start_x: int, start_y: int
     font_vol = ImageFont.load_default()
     font_title = ImageFont.load_default()
     
+    from pathlib import Path
+    thumb_dir = Path("local_builds/animals/assets/thumbnails")
+
     for idx, item in enumerate(SERIES_TITLES):
         col = idx % cols
         row = idx // cols
@@ -145,8 +148,32 @@ def render_back_cover_grid(draw: ImageDraw.ImageDraw, start_x: int, start_y: int
         draw.text((x0 + 8, y0 + 16), item["title"], fill="white", font=font_title)
         draw.text((x1 - 38, y0 + 4), item["vol"], fill="white", font=font_vol)
         
-        # Thumbnail illustration placeholder box
-        draw.rectangle([x0 + 15, y0 + header_h + 8, x1 - 15, y1 - 8], fill="#F8FAFC", outline="#E2E8F0")
+        # Thumbnail illustration box
+        bx0 = x0 + 15
+        by0 = y0 + header_h + 8
+        bx1 = x1 - 15
+        by1 = y1 - 8
+        draw.rectangle([bx0, by0, bx1, by1], fill="#F8FAFC", outline="#E2E8F0")
+
+        # Dynamically load thumbnail PNG if present
+        vol_num = idx + 1
+        thumb_file = None
+        if thumb_dir.exists():
+            cands = sorted(list(thumb_dir.glob(f"vol_{vol_num:02d}*.png")))
+            if cands:
+                thumb_file = cands[0]
+
+        if thumb_file and thumb_file.exists():
+            try:
+                with Image.open(thumb_file).convert("RGBA") as thumb_im:
+                    max_tw = bx1 - bx0 - 4
+                    max_th = by1 - by0 - 4
+                    thumb_im.thumbnail((max_tw, max_th), Image.Resampling.LANCZOS)
+                    tx = bx0 + (bx1 - bx0 - thumb_im.width) // 2
+                    ty = by0 + (by1 - by0 - thumb_im.height) // 2
+                    cover.paste(thumb_im, (tx, ty), thumb_im)
+            except Exception:
+                pass
 
 # ---------------------------------------------------------------------------
 # 5. MAIN COMPILER FUNCTION
@@ -182,7 +209,8 @@ def build_kdp_cover(page_count: int, output_path: str, hero_image_path: str = No
     grid_start_y = 340
     grid_w = int(trim_w * 0.9)
     grid_h = int(h * 0.52)
-    render_back_cover_grid(draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h)
+    render_back_cover_grid(cover, draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h)
+
     
     # Barcode Safe Area (Bottom-Right of Back Cover: 2.0 x 1.2 in = 600 x 360 px)
     bc_w, bc_h = 600, 360
@@ -236,7 +264,10 @@ def build_kdp_cover(page_count: int, output_path: str, hero_image_path: str = No
     # Save Output
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     cover.convert("RGB").save(output_path, "PDF", resolution=DPI)
+    proof_path = str(output_path).replace(".pdf", "-proof.png")
+    cover.save(proof_path, "PNG")
     print(f"Successfully compiled print-ready KDP full-wrap cover: {output_path}")
+    print(f"Successfully saved 300 DPI preview proof: {proof_path}")
 
 if __name__ == "__main__":
     hero_path = "local_builds/animals/assets/tiger_monkey_transparent.png"
@@ -252,3 +283,4 @@ if __name__ == "__main__":
         hero_image_path=hero_path,
         logo_path=logo_path
     )
+

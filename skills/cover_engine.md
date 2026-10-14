@@ -60,3 +60,4 @@ The back cover acts as an automated cross-selling engine:
    - Blurb: *"A playful, easy coloring series designed for early learners to copy, color, and play!"*
 4. **KDP Barcode Exclusion Zone:**
    - Leave an unobstructed white rectangular area of exactly $2.0\text{ inches wide} \times 1.2\text{ inches high}$ located at the bottom right corner ($0.5\text{ inches}$ from the bottom and right trim margins).
+

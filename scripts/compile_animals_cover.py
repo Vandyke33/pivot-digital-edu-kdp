@@ -595,8 +595,29 @@ def draw_mini_book_cover(
     c.setLineWidth(0.6)
     c.roundRect(card_x, card_y, card_w, card_h, 3, fill=1, stroke=1)
 
-    # Recognizable cartoon vector art inside the card!
-    draw_thumb_art(c, subject_idx=subject_idx, cx=card_x + card_w * 0.5, cy=card_y + card_h * 0.5, sz=card_w * 0.7)
+    # Check for generated high-res thumbnail icon PNG
+    thumb_dir = Path("local_builds/animals/assets/thumbnails")
+    thumb_file = None
+    if thumb_dir.exists():
+        candidates = sorted(list(thumb_dir.glob(f"vol_{vol_num:02d}*.png")))
+        if candidates:
+            thumb_file = candidates[0]
+
+    if thumb_file and thumb_file.exists():
+        pad = 1.5
+        c.drawImage(
+            str(thumb_file),
+            card_x + pad,
+            card_y + pad,
+            width=card_w - 2 * pad,
+            height=card_h - 2 * pad,
+            preserveAspectRatio=True,
+            mask="auto",
+        )
+    else:
+        # Recognizable cartoon vector art inside the card!
+        draw_thumb_art(c, subject_idx=subject_idx, cx=card_x + card_w * 0.5, cy=card_y + card_h * 0.5, sz=card_w * 0.7)
+
 
     # Tiny green grass hill at base of book
     c.setFillColor(HexColor("#4ADE80"))
@@ -998,7 +1019,7 @@ def draw_animals_cover_spread(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
-    parser.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation")
+    parser.add_argument("--page-count", type=int, default=74, help="Book page count for spine calculation (default 74)")
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=Path("local_builds/animals/assets/tiger_color_thumb.png"), help="Activity card color guide")

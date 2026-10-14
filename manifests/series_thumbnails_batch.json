@@ -21,9 +21,9 @@
       "prompt": "Cute vibrant cartoon alphabet wooden toy blocks with cheerful letters A, B, C for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright warm orange #FF6B35 background, flat app-icon style",
       "negative_prompt": "text outside of toy blocks, book cover mockup, 3D realistic rendering, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51001,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_01_alphabet.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_01_alphabet.png"
     },
     {
       "vol": "Vol. 2",
@@ -36,9 +36,9 @@
       "prompt": "Cute vibrant cartoon baby tiger and baby monkey for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright coral red #FF4D4D background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51002,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_02_animals.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_02_animals.png"
     },
     {
       "vol": "Vol. 3",
@@ -51,9 +51,9 @@
       "prompt": "Cute vibrant cartoon colorful tropical parrot perched happily for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright teal #2EC4B6 background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, realistic feathers, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51003,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_03_birds.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_03_birds.png"
     },
     {
       "vol": "Vol. 4",
@@ -66,9 +66,9 @@
       "prompt": "Cute vibrant cartoon soccer ball smiling beside a cute colorful sports sneaker for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright mint green #80ED99 background, flat app-icon style",
       "negative_prompt": "text, brand logos, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51004,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_04_sports.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_04_sports.png"
     },
     {
       "vol": "Vol. 5",
@@ -81,9 +81,9 @@
       "prompt": "Cute vibrant cartoon friendly fuzzy little blue monster with tiny soft horns for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright lavender pink #E056FD background, flat app-icon style",
       "negative_prompt": "scary, text, book cover mockup, photorealistic fur, borders, drop shadows, watermarks, frames",
       "seed": 51005,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_05_monsters.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_05_monsters.png"
     },
     {
       "vol": "Vol. 6",
@@ -96,9 +96,9 @@
       "prompt": "Cute vibrant cartoon baby giraffe sitting beside colorful number blocks 1, 2, 3 for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright purple #9B5DE5 background, flat app-icon style",
       "negative_prompt": "text outside of numbers, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51006,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_06_numbers.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_06_numbers.png"
     },
     {
       "vol": "Vol. 7",
@@ -111,9 +111,9 @@
       "prompt": "Cute vibrant cartoon tropical smiling pineapple and friendly yellow banana for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright cyan #00BBF9 background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, realistic fruit skin, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51007,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_07_fruits.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_07_fruits.png"
     },
     {
       "vol": "Vol. 8",
@@ -126,9 +126,9 @@
       "prompt": "Cute vibrant cartoon joyful smiling golden star character with friendly geometric circle and square for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright rose pink #F15BB5 background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51008,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_08_shapes.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_08_shapes.png"
     },
     {
       "vol": "Vol. 9",
@@ -141,9 +141,9 @@
       "prompt": "Cute vibrant cartoon cuddly teddy bear sitting with a little red toy car for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright royal blue #0077B6 background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51009,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_09_toys.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_09_toys.png"
     },
     {
       "vol": "Vol. 10",
@@ -156,9 +156,9 @@
       "prompt": "Cute vibrant cartoon blooming smiling giant sunflower with cheerful green leaves for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid warm amber #6B4226 background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51010,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_10_flowers.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_10_flowers.png"
     },
     {
       "vol": "Vol. 11",
@@ -171,9 +171,9 @@
       "prompt": "Cute vibrant cartoon speedy little blue city car with round friendly headlights for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid deep blue #1D3557 background, flat app-icon style",
       "negative_prompt": "text, brand badges, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51011,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_11_transport.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_11_transport.png"
     },
     {
       "vol": "Vol. 12",
@@ -186,9 +186,9 @@
       "prompt": "Cute vibrant cartoon friendly smiling orange carrot and happy purple eggplant for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid deep violet #5A189A background, flat app-icon style",
       "negative_prompt": "text, book cover mockup, realistic vegetable skin, photographic texture, borders, drop shadows, watermarks, frames",
       "seed": 51012,
-      "review_status": "PENDING_GENERATION",
+      "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_12_vegetables.png"
+      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_12_vegetables.png"
     }
   ]
 }
