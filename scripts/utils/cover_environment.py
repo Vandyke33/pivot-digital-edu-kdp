@@ -5,8 +5,8 @@ Provides:
   - Checkered storybook borders (alternating red and cream tiles)
   - Dense vector pattern collages (paint splatters, doodles, bubbles, sparkle star clusters)
   - Lush jungalow nature elements (red polka-dot toadstool mushrooms, daisies, ladybugs, butterflies with flight trails)
-  - Back cover curved ribbon header (★ TITLES IN THIS SERIES ★)
-  - Mascot boy waving a glowing magic star wand with ★ CAN YOU COLLECT THEM ALL? ★ banner
+  - Back cover curved ribbon header (TITLES IN THIS SERIES)
+  - Mascot boy waving a glowing magic star wand with CAN YOU COLLECT THEM ALL? banner
 """
 
 from __future__ import annotations
@@ -303,13 +303,15 @@ def draw_jungalow_elements(canvas: Image.Image, width: int, height: int, is_spre
 def draw_curved_ribbon_header(canvas: Image.Image, cx: int, cy: int, text: str, font: ImageFont.FreeTypeFont) -> None:
     """
     Renders an ornate parchment ribbon banner with 3D drop shadow and triangular notched ends.
-    Text: ★ TITLES IN THIS SERIES ★
+    Text: TITLES IN THIS SERIES (flanked by procedural golden vector stars)
     """
     draw = ImageDraw.Draw(canvas)
-    bbox = draw.textbbox((0, 0), text, font=font)
+    # Strip any accidental unicode stars from text to avoid missing glyph tofu boxes
+    clean_text = text.replace("\u2605", "").replace("\u2606", "").strip()
+    bbox = draw.textbbox((0, 0), clean_text, font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
-    bw = tw + 180
+    bw = tw + 200
     bh = th + 45
     x0 = cx - bw // 2
     y0 = cy - bh // 2
@@ -332,7 +334,12 @@ def draw_curved_ribbon_header(canvas: Image.Image, cx: int, cy: int, text: str, 
     draw.rounded_rectangle([x0 + 8, y0 + 8, x1 - 8, y1 - 8], radius=16, outline=(245, 158, 11, 255), width=3)
 
     # Center text
-    draw.text((cx - tw // 2, cy - th // 2 - 4), text, fill=(69, 26, 3, 255), font=font)
+    draw.text((cx - tw // 2, cy - th // 2 - 4), clean_text, fill=(69, 26, 3, 255), font=font)
+
+    # Flank with procedural golden vector sparkle stars
+    star_offset = tw // 2 + 42
+    draw_sparkle_star(draw, cx - star_offset, cy - 2, outer_r=20, inner_r=5, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
+    draw_sparkle_star(draw, cx + star_offset, cy - 2, outer_r=20, inner_r=5, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
 
 
 def draw_mascot_boy_with_wand(canvas: Image.Image, cx: int, cy: int) -> None:
@@ -393,10 +400,18 @@ def draw_mascot_boy_with_wand(canvas: Image.Image, cx: int, cy: int) -> None:
     # Outer yellow glow halo
     draw.ellipse([star_cx - 50, star_cy - 50, star_cx + 50, star_cy + 50], fill=(254, 240, 138, 140))
     # 4-point Starburst
-    draw_sparkle_star(draw, star_cx, star_cy, outer_r=38, inner_r=9)
+    draw_sparkle_star(draw, star_cx, star_cy, outer_r=38, inner_r=9, fill=(255, 230, 80, 255), outline=(245, 158, 11, 255))
 
 
-def draw_sparkle_star(draw: ImageDraw.ImageDraw, cx: int, cy: int, outer_r: int = 22, inner_r: int = 5) -> None:
+def draw_sparkle_star(
+    draw: ImageDraw.ImageDraw,
+    cx: int,
+    cy: int,
+    outer_r: int = 22,
+    inner_r: int = 5,
+    fill: tuple = (255, 255, 255, 255),
+    outline: tuple = (255, 240, 130, 255),
+) -> None:
     """Draws a crisp 4-point vector diamond sparkle star with a bright white core."""
     pts = [
         (cx, cy - outer_r),
@@ -408,5 +423,7 @@ def draw_sparkle_star(draw: ImageDraw.ImageDraw, cx: int, cy: int, outer_r: int 
         (cx - outer_r, cy),
         (cx - inner_r, cy - inner_r),
     ]
-    draw.polygon(pts, fill=(255, 255, 255, 255), outline=(255, 240, 130, 255))
-    draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=(255, 255, 255, 255))
+    draw.polygon(pts, fill=fill, outline=outline)
+    core_r = max(2, inner_r - 1)
+    draw.ellipse([cx - core_r, cy - core_r, cx + core_r, cy + core_r], fill=(255, 255, 255, 255))
+

@@ -1,9 +1,4 @@
 """
-[DEPRECATION NOTICE]
-`compile_cover_pil.py` is the experimental PIL-based cover compiler.
-The canonical production cover engine is `compile_animals_cover.py` (ReportLab Two-Pass vector engine).
-This module is maintained for reference and thumbnail generation compatibility.
-
 Automated KDP Full-Wrap Cover Spread Generator (Two-Pass Series Architecture - PIL Engine)
 
 Pass 1: Generates all 12 standalone Front Covers with custom theme palettes, bundled fancy fonts,
@@ -217,7 +212,15 @@ def draw_rolling_hills(canvas: Image.Image, height: int, width: int) -> None:
     draw.polygon(pts_fore, fill=GRASS_COLOR)
 
 
-def draw_sparkle_star(draw: ImageDraw.ImageDraw, cx: int, cy: int, outer_r: int = 22, inner_r: int = 5) -> None:
+def draw_sparkle_star(
+    draw: ImageDraw.ImageDraw,
+    cx: int,
+    cy: int,
+    outer_r: int = 22,
+    inner_r: int = 5,
+    fill: tuple = (255, 255, 255, 255),
+    outline: tuple = (255, 240, 130, 255),
+) -> None:
     """Draws a crisp 4-point vector diamond sparkle star with a bright white core."""
     pts = [
         (cx, cy - outer_r),
@@ -229,8 +232,10 @@ def draw_sparkle_star(draw: ImageDraw.ImageDraw, cx: int, cy: int, outer_r: int 
         (cx - outer_r, cy),
         (cx - inner_r, cy - inner_r),
     ]
-    draw.polygon(pts, fill=(255, 255, 255, 255), outline=(255, 240, 130, 255))
-    draw.ellipse([cx - 3, cy - 3, cx + 3, cy + 3], fill=(255, 255, 255, 255))
+    draw.polygon(pts, fill=fill, outline=outline)
+    core_r = max(2, inner_r - 1)
+    draw.ellipse([cx - core_r, cy - core_r, cx + core_r, cy + core_r], fill=(255, 255, 255, 255))
+
 
 
 def draw_crayon_graphic(length: int = 240, width: int = 46, color: tuple = (255, 204, 0, 255)) -> Image.Image:
@@ -511,12 +516,25 @@ def prebuild_all_series_front_covers(
                 if os.path.exists(cand):
                     hero_candidate = cand
                     break
-            inset_cand = "local_builds/animals/assets/inset_tiger_split.png"
         else:
             cand = os.path.join(thumbnails_dir, f"{vol_id}.png")
             if not os.path.exists(cand):
                 cand = f"local_builds/animals/assets/thumbnails/{vol_id}.png"
             hero_candidate = cand if os.path.exists(cand) else None
+
+        # Resolve split color guide + B&W outline activity preview card
+        inset_cand = None
+        split_candidates = [
+            os.path.join("assets/activity_cards", f"{vol_id}_split.png"),
+            f"local_builds/animals/assets/inset_{item['title'].lower()}_split.png",
+            "local_builds/animals/assets/inset_tiger_split.png" if vol_id == "vol_02" else None,
+        ]
+        for sc in split_candidates:
+            if sc and os.path.exists(sc):
+                inset_cand = sc
+                break
+
+        if not inset_cand:
             inset_cand = hero_candidate
 
         front_img = render_single_front_cover(
@@ -648,13 +666,18 @@ def build_kdp_cover(
 
     # Override active volume's front cover if high-res hero/inset paths are explicitly supplied
     if resolved_hero or resolved_inset:
+        active_inset = (
+            resolved_inset
+            or (f"assets/activity_cards/{active_vol_id}_split.png" if os.path.exists(f"assets/activity_cards/{active_vol_id}_split.png") else None)
+            or ("local_builds/animals/assets/inset_tiger_split.png" if active_vol_id == "vol_02" else None)
+        )
         rendered_fronts[active_vol_id] = render_single_front_cover(
             vol_meta=active_meta,
             width_px=trim_w,
             height_px=trim_h,
             logo_path=resolved_logo,
             hero_path=resolved_hero,
-            inset_path=resolved_inset,
+            inset_path=active_inset,
         )
 
     print(f"[Pass 2] Assembling Full-Wrap Spread: {w}x{h} px | Spine: {specs['spine_in']:.3f} in ({spine_w} px)")
@@ -682,22 +705,28 @@ def build_kdp_cover(
         logo_back.thumbnail((230, 230), Image.Resampling.LANCZOS)
         cover.paste(logo_back, (bleed + int(0.35 * DPI), int(0.32 * DPI)), logo_back)
 
-    # 2. Top "★ TITLES IN THIS SERIES ★" curved ribbon banner
+    # 2. Top "TITLES IN THIS SERIES" curved ribbon banner
     banner_font = load_fancy_font("Fredoka-Bold.ttf", 46)
     ribbon_cx = bleed + trim_w // 2 + 30
     ribbon_cy = int(0.55 * DPI)
-    draw_curved_ribbon_header(cover, ribbon_cx, ribbon_cy, "★ TITLES IN THIS SERIES ★", banner_font)
+    draw_curved_ribbon_header(cover, ribbon_cx, ribbon_cy, "TITLES IN THIS SERIES", banner_font)
 
-    # 3. "★ CAN YOU COLLECT THEM ALL? ★" banner pill + Boy Mascot with Star Wand
+    # 3. "CAN YOU COLLECT THEM ALL?" banner pill + Boy Mascot with Star Wand
     pill_w = int(trim_w * 0.58)
     pill_h = 72
     px0 = bleed + int(0.08 * trim_w)
     py0 = int(0.85 * DPI)
     draw.rounded_rectangle([px0, py0, px0 + pill_w, py0 + pill_h], radius=24, fill=(254, 240, 138, 255), outline=(220, 38, 38, 255), width=5)
     collect_font = load_fancy_font("Fredoka-Bold.ttf", 30)
-    coll_txt = "★ CAN YOU COLLECT THEM ALL? ★"
+    coll_txt = "CAN YOU COLLECT THEM ALL?"
     cbb = draw.textbbox((0, 0), coll_txt, font=collect_font)
-    draw.text((px0 + (pill_w - (cbb[2] - cbb[0])) // 2, py0 + (pill_h - (cbb[3] - cbb[1])) // 2 - 2), coll_txt, fill=(185, 28, 28, 255), font=collect_font)
+    tw = cbb[2] - cbb[0]
+    th = cbb[3] - cbb[1]
+    tx = px0 + (pill_w - tw) // 2
+    ty = py0 + (pill_h - th) // 2 - 2
+    draw.text((tx, ty), coll_txt, fill=(185, 28, 28, 255), font=collect_font)
+    draw_sparkle_star(draw, tx - 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
+    draw_sparkle_star(draw, tx + tw + 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
 
     # Mascot Boy waving star wand
     mascot_x = bleed + int(0.85 * trim_w)
@@ -716,9 +745,9 @@ def build_kdp_cover(
     cy0 = h - bleed - int(1.55 * DPI)
     draw.rounded_rectangle([cx0, cy0, cx0 + c_w, cy0 + c_h], radius=24, fill="#16A34A", outline="#15803D", width=4)
     coll_font = load_fancy_font("Fredoka-Bold.ttf", 28)
-    draw_sparkle_star(draw, cx0 + 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
-    draw_sparkle_star(draw, cx0 + c_w - 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
-    c_txt = "★ Collector's Series of 12 Interactive Titles ★"
+    draw_sparkle_star(draw, cx0 + 26, cy0 + c_h // 2, outer_r=14, inner_r=3, fill=(255, 255, 255, 255), outline=(255, 240, 130, 255))
+    draw_sparkle_star(draw, cx0 + c_w - 26, cy0 + c_h // 2, outer_r=14, inner_r=3, fill=(255, 255, 255, 255), outline=(255, 240, 130, 255))
+    c_txt = "Collector's Series of 12 Interactive Titles"
     c_bb = draw.textbbox((0, 0), c_txt, font=coll_font)
     draw.text((cx0 + (c_w - (c_bb[2] - c_bb[0])) // 2, cy0 + 22), c_txt, fill="white", font=coll_font)
 
@@ -850,9 +879,13 @@ if __name__ == "__main__":
         )
     else:
         hero_default = "local_builds/animals/assets/tiger_monkey_transparent.png"
-        inset_default = "local_builds/animals/assets/inset_tiger_split.png"
+        inset_default = (
+            f"assets/activity_cards/{args.vol_id}_split.png"
+            if os.path.exists(f"assets/activity_cards/{args.vol_id}_split.png")
+            else "local_builds/animals/assets/inset_tiger_split.png"
+        )
         hero_p = args.hero or (hero_default if os.path.exists(hero_default) and args.vol_id == "vol_02" else None)
-        inset_p = args.inset or (inset_default if os.path.exists(inset_default) and args.vol_id == "vol_02" else None)
+        inset_p = args.inset or (inset_default if os.path.exists(inset_default) else None)
         out_p = args.output or f"local_builds/animals/v1.0-core/animals-cover-spread-{args.page_count}p.pdf"
 
         build_kdp_cover(
