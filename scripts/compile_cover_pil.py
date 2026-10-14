@@ -278,7 +278,7 @@ if __name__ == "__main__":
         logo_path = None
         
     build_kdp_cover(
-        page_count=74,
+        page_count=80,
         output_path="local_builds/animals_cover_fullwrap.pdf",
         hero_image_path=hero_path,
         logo_path=logo_path

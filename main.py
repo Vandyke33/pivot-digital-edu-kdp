@@ -195,7 +195,7 @@ def cmd_build_cover(args: argparse.Namespace) -> None:
 
 def cmd_build_animals_cover(args: argparse.Namespace) -> None:
     out_pdf = getattr(args, "output", None) or (REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / "animals-cover-spread.pdf")
-    page_count = getattr(args, "page_count", 74)
+    page_count = getattr(args, "page_count", 80)
     run_cmd([
         PYTHON,
         str(REPO_ROOT / "scripts" / "compile_animals_cover.py"),
@@ -258,7 +258,7 @@ def main() -> int:
     # build-animals-cover
     p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'Copy to Color: Animals' full-wrap cover spread")
     p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
-    p_animals.add_argument("--page-count", type=int, default=74, help="Book page count for spine calculation (default 74)")
+    p_animals.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
 
 
     # build-all

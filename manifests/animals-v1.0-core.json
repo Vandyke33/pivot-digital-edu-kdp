@@ -4,7 +4,7 @@
   "series_id": "copy_to_color_animals",
   "edition_id": "v1.0-core",
   "title": "My First Copy to Color: Animals",
-  "subtitle": "35 Adorable Animal Coloring Pages for Early Learners Ages 4-6",
+  "subtitle": "38 Adorable Animal Coloring Pages for Early Learners Ages 4-6",
   "publisher": "The Pivot Digital Publications",
   "trim": {
     "width_in": 8.5,
@@ -17,7 +17,7 @@
   "minimum_dpi": 300,
   "minimum_safe_margin_in": 0.5,
   "asset_registry": "../catalogs/asset_registry.json",
-  "expected_page_count": 74,
+  "expected_page_count": 80,
   "expected_subjects": [
     "tiger",
     "monkey",
@@ -53,7 +53,10 @@
     "seal",
     "hedgehog",
     "raccoon",
-    "chameleon"
+    "chameleon",
+    "sloth",
+    "meerkat",
+    "platypus"
   ],
   "asset_root": "../local_builds/animals/v1.0-core/approved-line-art",
   "pages": [
@@ -129,7 +132,14 @@
     {"number": 70, "type": "reverse", "design": "black"},
     {"number": 71, "type": "illustration", "subject_id": "chameleon", "asset_id": "copy_to_color_animals.chameleon.v1", "asset": "chameleon.png", "qa_status": "PENDING_QA"},
     {"number": 72, "type": "reverse", "design": "black"},
-    {"number": 73, "type": "title"},
-    {"number": 74, "type": "reverse", "design": "black"}
+    {"number": 73, "type": "illustration", "subject_id": "sloth", "asset_id": "copy_to_color_animals.sloth.v1", "asset": "sloth.png", "qa_status": "PENDING_QA"},
+    {"number": 74, "type": "reverse", "design": "black"},
+    {"number": 75, "type": "illustration", "subject_id": "meerkat", "asset_id": "copy_to_color_animals.meerkat.v1", "asset": "meerkat.png", "qa_status": "PENDING_QA"},
+    {"number": 76, "type": "reverse", "design": "black"},
+    {"number": 77, "type": "illustration", "subject_id": "platypus", "asset_id": "copy_to_color_animals.platypus.v1", "asset": "platypus.png", "qa_status": "PENDING_QA"},
+    {"number": 78, "type": "reverse", "design": "black"},
+    {"number": 79, "type": "title"},
+    {"number": 80, "type": "reverse", "design": "black"}
   ]
 }
+

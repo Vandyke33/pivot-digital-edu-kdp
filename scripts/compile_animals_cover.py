@@ -15,20 +15,20 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen import canvas
 import resvg_py
 
-# 12 distinct miniature titles for the back cover 4x3 grid
+# 12 distinct miniature titles for the back cover 4x3 grid (matches manifests/series_thumbnails_batch.json 1-to-1)
 SERIES_TITLES_12 = [
-    {"title": "Alphabet", "color": "#EA580C", "accent": "#FDE047", "vol": 1},
-    {"title": "Birds", "color": "#059669", "accent": "#FDE047", "vol": 2},
-    {"title": "Sports", "color": "#65A30D", "accent": "#FEF08A", "vol": 3},
-    {"title": "Monsters", "color": "#DB2777", "accent": "#FDE047", "vol": 4},
-    {"title": "Numbers", "color": "#881337", "accent": "#FACC15", "vol": 5},
-    {"title": "Fruits", "color": "#0D9488", "accent": "#FEF08A", "vol": 6},
-    {"title": "Shapes", "color": "#E11D48", "accent": "#FDE047", "vol": 7},
-    {"title": "Toys", "color": "#0284C7", "accent": "#FEF08A", "vol": 8},
-    {"title": "Flowers", "color": "#78350F", "accent": "#FDE047", "vol": 9},
-    {"title": "Transport", "color": "#1D4ED8", "accent": "#FBBF24", "vol": 10},
-    {"title": "Vegetables", "color": "#6B21A8", "accent": "#FDE047", "vol": 11},
-    {"title": "Cartoons", "color": "#D97706", "accent": "#FFFFFF", "vol": 12},
+    {"title": "Alphabet", "color": "#FF6B35", "accent": "#FDE047", "vol": 1},
+    {"title": "Animals", "color": "#FF4D4D", "accent": "#FDE047", "vol": 2},
+    {"title": "Birds", "color": "#2EC4B6", "accent": "#FEF08A", "vol": 3},
+    {"title": "Sports", "color": "#80ED99", "accent": "#1E293B", "vol": 4},
+    {"title": "Monsters", "color": "#E056FD", "accent": "#FDE047", "vol": 5},
+    {"title": "Numbers", "color": "#9B5DE5", "accent": "#FACC15", "vol": 6},
+    {"title": "Fruits", "color": "#00BBF9", "accent": "#FEF08A", "vol": 7},
+    {"title": "Shapes", "color": "#F15BB5", "accent": "#FDE047", "vol": 8},
+    {"title": "Toys", "color": "#0077B6", "accent": "#FEF08A", "vol": 9},
+    {"title": "Flowers", "color": "#6B4226", "accent": "#FDE047", "vol": 10},
+    {"title": "Transport", "color": "#1D3557", "accent": "#FBBF24", "vol": 11},
+    {"title": "Vegetables", "color": "#5A189A", "accent": "#FDE047", "vol": 12},
 ]
 
 # Paper thickness: 55# white paper (0.002252 in per page)
@@ -240,18 +240,27 @@ def draw_outlined_text(
         c.drawText(ts)
         c.restoreState()
 
-    # 2. Main text with native vector stroke & fill
+    # 2. Outer outline stroke (behind fill)
     c.saveState()
     c.setLineWidth(outline_width)
     c.setLineJoin(1)
     c.setLineCap(1)
-    t = c.beginText(ox, y)
-    t.setFont(font_name, font_size)
-    t.setTextRenderMode(2)
-    t.setFillColor(HexColor(fill_color))
-    t.setStrokeColor(HexColor(outline_color))
-    t.textOut(text)
-    c.drawText(t)
+    t_out = c.beginText(ox, y)
+    t_out.setFont(font_name, font_size)
+    t_out.setTextRenderMode(1)  # Stroke only
+    t_out.setStrokeColor(HexColor(outline_color))
+    t_out.textOut(text)
+    c.drawText(t_out)
+    c.restoreState()
+
+    # 3. Clean vibrant fill on top
+    c.saveState()
+    t_fill = c.beginText(ox, y)
+    t_fill.setFont(font_name, font_size)
+    t_fill.setTextRenderMode(0)  # Fill only
+    t_fill.setFillColor(HexColor(fill_color))
+    t_fill.textOut(text)
+    c.drawText(t_fill)
     c.restoreState()
 
 
@@ -330,11 +339,11 @@ def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) 
     p2.close()
     c.drawPath(p2, fill=1, stroke=0)
 
-    # Tiny Daisies
-    flower_xs = [0.8, 2.2, 3.8, 5.5, 7.0, 9.2, 11.5, 13.0, 14.8, 16.2]
+    # Tiny Daisies (Cleanly positioned on rolling hills away from text and barcode)
+    flower_xs = [0.35, 9.2, 10.6, 12.0, 13.4, 14.8, 16.2]
     for fx_in in flower_xs:
         fx = fx_in * inch
-        fy = 0.5 * inch + rng.uniform(0.1, 0.6) * inch
+        fy = 0.45 * inch + rng.uniform(0.1, 0.5) * inch
         c.setFillColor(white)
         for ang in range(0, 360, 60):
             rad = math.radians(ang)
@@ -342,11 +351,11 @@ def draw_global_background(c: canvas.Canvas, width_pt: float, height_pt: float) 
         c.setFillColor(HexColor("#FACC15"))
         c.circle(fx, fy, 2.5, fill=1, stroke=0)
 
-    # Cute Ladybugs
-    ladybug_xs = [1.5, 6.2, 10.5, 15.5]
+    # Cute Ladybugs (Positioned on front cover hills)
+    ladybug_xs = [9.8, 12.6, 15.4]
     for lx_in in ladybug_xs:
         lx = lx_in * inch
-        ly = 0.45 * inch + rng.uniform(0.1, 0.4) * inch
+        ly = 0.40 * inch + rng.uniform(0.1, 0.35) * inch
         c.setFillColor(HexColor("#EF4444"))
         c.circle(lx, ly, 4.0, fill=1, stroke=0)
         c.setFillColor(HexColor("#000000"))
@@ -371,7 +380,27 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.roundRect(cx - 6.5, cy + 3, 13, 13, 2, fill=1, stroke=0)
         c.setFillColor(HexColor("#1E293B")); c.setFont("Helvetica-Bold", 9); c.drawCentredString(cx, cy + 5, "C")
 
-    elif subject_idx == 1:  # Birds: Cute parrot
+    elif subject_idx == 1:  # Animals: Cute baby tiger face & ears
+        c.setFillColor(HexColor("#F97316"))
+        c.circle(cx, cy, 11, fill=1, stroke=0)
+        # Ears
+        c.circle(cx - 9, cy + 9, 4.5, fill=1, stroke=0)
+        c.circle(cx + 9, cy + 9, 4.5, fill=1, stroke=0)
+        c.setFillColor(HexColor("#FED7AA"))
+        c.circle(cx - 9, cy + 9, 2.5, fill=1, stroke=0)
+        c.circle(cx + 9, cy + 9, 2.5, fill=1, stroke=0)
+        # Eyes
+        c.setFillColor(white)
+        c.circle(cx - 4.5, cy + 2, 3.2, fill=1, stroke=0); c.circle(cx + 4.5, cy + 2, 3.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A"))
+        c.circle(cx - 4.0, cy + 2, 1.8, fill=1, stroke=0); c.circle(cx + 4.0, cy + 2, 1.8, fill=1, stroke=0)
+        # Nose & stripes
+        c.setFillColor(HexColor("#EA580C"))
+        c.circle(cx, cy - 2, 2.2, fill=1, stroke=0)
+        c.setFillColor(HexColor("#0F172A"))
+        c.rect(cx - 1.5, cy + 7, 3, 4, fill=1, stroke=0)
+
+    elif subject_idx == 2:  # Birds: Cute parrot
         c.setFillColor(HexColor("#10B981"))
         c.ellipse(cx - 9, cy - 13, cx + 7, cy + 9, fill=1, stroke=0)
         c.setFillColor(HexColor("#EF4444"))
@@ -385,7 +414,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         p_w = c.beginPath(); p_w.moveTo(cx - 2, cy + 1); p_w.curveTo(cx + 7, cy + 3, cx + 11, cy - 8, cx + 3, cy - 10); p_w.close()
         c.drawPath(p_w, fill=1, stroke=0)
 
-    elif subject_idx == 2:  # Sports: Soccer & basketball
+    elif subject_idx == 3:  # Sports: Soccer & basketball
         c.setFillColor(white); c.setStrokeColor(HexColor("#0F172A")); c.setLineWidth(1)
         c.circle(cx - 6, cy, 10.5, fill=1, stroke=1)
         c.setFillColor(HexColor("#0F172A"))
@@ -398,7 +427,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.setStrokeColor(HexColor("#7C2D12")); c.setLineWidth(0.8)
         c.line(cx + 1, cy - 4, cx + 15, cy - 4)
 
-    elif subject_idx == 3:  # Monsters: Fuzzy blue monster
+    elif subject_idx == 4:  # Monsters: Fuzzy blue monster
         c.setFillColor(HexColor("#38BDF8"))
         c.roundRect(cx - 11, cy - 11, 22, 22, 7, fill=1, stroke=0)
         c.setFillColor(HexColor("#FDE047"))
@@ -410,7 +439,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.arc(cx - 5, cy - 8, cx + 5, cy - 2, 190, 160)
         c.setFillColor(white); c.rect(cx - 1.8, cy - 5.5, 2.8, 2.8, fill=1, stroke=0)
 
-    elif subject_idx == 4:  # Numbers: Giraffe & 1 2 3
+    elif subject_idx == 5:  # Numbers: Giraffe & 1 2 3
         c.setFillColor(HexColor("#FACC15"))
         c.circle(cx - 6, cy + 5, 7.5, fill=1, stroke=0)
         c.rect(cx - 8, cy - 11, 5.5, 14, fill=1, stroke=0)
@@ -422,7 +451,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.setFillColor(HexColor("#2563EB")); c.drawString(cx + 6, cy - 4, "2")
         c.setFillColor(HexColor("#16A34A")); c.drawString(cx + 4, cy - 12, "3")
 
-    elif subject_idx == 5:  # Fruits: Pineapple & banana
+    elif subject_idx == 6:  # Fruits: Pineapple & banana
         c.setFillColor(HexColor("#F59E0B"))
         c.ellipse(cx - 11, cy - 11, cx + 1, cy + 7, fill=1, stroke=0)
         c.setFillColor(HexColor("#16A34A"))
@@ -432,7 +461,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         p_b = c.beginPath(); p_b.moveTo(cx + 2, cy + 4); p_b.curveTo(cx + 13, cy + 5, cx + 15, cy - 8, cx + 4, cy - 11); p_b.curveTo(cx + 11, cy - 6, cx + 9, cy + 1, cx + 2, cy + 4); p_b.close()
         c.drawPath(p_b, fill=1, stroke=0)
 
-    elif subject_idx == 6:  # Shapes: Star with kawaii face
+    elif subject_idx == 7:  # Shapes: Star with kawaii face
         c.setFillColor(HexColor("#FACC15"))
         p_s = c.beginPath()
         for i in range(10):
@@ -446,7 +475,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.circle(cx - 3.5, cy, 1.4, fill=1, stroke=0); c.circle(cx + 3.5, cy, 1.4, fill=1, stroke=0)
         c.arc(cx - 2.5, cy - 4.5, cx + 2.5, cy - 0.5, 190, 160)
 
-    elif subject_idx == 7:  # Toys: Teddy bear
+    elif subject_idx == 8:  # Toys: Teddy bear
         c.setFillColor(HexColor("#92400E"))
         c.circle(cx - 7.5, cy + 7.5, 3.8, fill=1, stroke=0); c.circle(cx + 7.5, cy + 7.5, 3.8, fill=1, stroke=0)
         c.circle(cx, cy + 2.5, 8.5, fill=1, stroke=0)
@@ -458,7 +487,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.circle(cx - 2.8, cy + 3.5, 1.1, fill=1, stroke=0); c.circle(cx + 2.8, cy + 3.5, 1.1, fill=1, stroke=0)
         c.circle(cx, cy + 1.5, 1.4, fill=1, stroke=0)
 
-    elif subject_idx == 8:  # Flowers: Cheerful sunflower
+    elif subject_idx == 9:  # Flowers: Cheerful sunflower
         c.setFillColor(HexColor("#FACC15"))
         for ang in range(0, 360, 30):
             rad = math.radians(ang)
@@ -468,8 +497,8 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.setStrokeColor(HexColor("#16A34A")); c.setLineWidth(2.2)
         c.line(cx, cy - 5.5, cx, cy - 15)
 
-    elif subject_idx == 9:  # Transport: Cute red car
-        c.setFillColor(HexColor("#EF4444"))
+    elif subject_idx == 10:  # Transport: Cute blue car
+        c.setFillColor(HexColor("#1D4ED8"))
         p_car = c.beginPath()
         p_car.moveTo(cx - 14, cy - 5.5)
         p_car.lineTo(cx - 14, cy - 1)
@@ -487,7 +516,7 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.setFillColor(HexColor("#CBD5E1"))
         c.circle(cx - 8.5, cy - 5.5, 1.8, fill=1, stroke=0); c.circle(cx + 8.5, cy - 5.5, 1.8, fill=1, stroke=0)
 
-    elif subject_idx == 10:  # Vegetables: Carrot & eggplant
+    elif subject_idx == 11:  # Vegetables: Carrot & eggplant
         c.setFillColor(HexColor("#EA580C"))
         p_crt = c.beginPath(); p_crt.moveTo(cx - 11, cy + 5); p_crt.lineTo(cx - 4, cy + 7); p_crt.lineTo(cx - 7, cy - 13); p_crt.close()
         c.drawPath(p_crt, fill=1, stroke=0)
@@ -497,20 +526,6 @@ def draw_thumb_art(c: canvas.Canvas, subject_idx: int, cx: float, cy: float, sz:
         c.ellipse(cx + 2, cy - 11, cx + 13, cy + 3.5, fill=1, stroke=0)
         c.setFillColor(HexColor("#16A34A"))
         c.rect(cx + 5.5, cy + 1.5, 3.8, 5.5, fill=1, stroke=0)
-
-    elif subject_idx == 11:  # Cartoons: Police officer
-        c.setFillColor(HexColor("#FED7AA"))
-        c.circle(cx, cy, 7.5, fill=1, stroke=0)
-        c.setFillColor(HexColor("#1E3A8A"))
-        c.rect(cx - 7.5, cy - 11, 15, 6.5, fill=1, stroke=0)
-        p_cap = c.beginPath(); p_cap.moveTo(cx - 9.5, cy + 4.5); p_cap.lineTo(cx - 8.5, cy + 12); p_cap.lineTo(cx + 8.5, cy + 12); p_cap.lineTo(cx + 9.5, cy + 4.5); p_cap.close()
-        c.drawPath(p_cap, fill=1, stroke=0)
-        c.setFillColor(HexColor("#FACC15"))
-        c.circle(cx, cy + 10, 2.2, fill=1, stroke=0)
-        c.setFillColor(HexColor("#0F172A"))
-        c.circle(cx - 2.8, cy + 1, 1.1, fill=1, stroke=0); c.circle(cx + 2.8, cy + 1, 1.1, fill=1, stroke=0)
-        c.setStrokeColor(HexColor("#0F172A")); c.setLineWidth(0.8)
-        c.arc(cx - 2.8, cy - 3.8, cx + 2.8, cy, 190, 160)
 
     c.restoreState()
 
@@ -579,21 +594,23 @@ def draw_mini_book_cover(
     c.setFont("Helvetica-Bold", 7.2)
     c.drawCentredString(x + w / 2.0, y + h - 23.0, title)
 
-    # 3 tiny crayons on left edge (Yellow, Red, Blue)
-    crayon_colors = ["#FBBF24", "#EF4444", "#38BDF8"]
-    for idx, col in enumerate(crayon_colors):
-        cy_y = y + h * 0.45 - idx * 5.0
-        draw_crayon(c, x + 2, cy_y, length=12, width=2.2, angle_deg=25, color_hex=col)
+    # Tiny green grass hill at base of book
+    c.setFillColor(HexColor("#4ADE80"))
+    p_base = c.beginPath()
+    p_base.moveTo(x, y)
+    p_base.lineTo(x, y + 4)
+    p_base.curveTo(x + w * 0.5, y + 7, x + w * 0.8, y + 3, x + w, y + 5)
+    p_base.lineTo(x + w, y)
+    p_base.close()
+    c.drawPath(p_base, fill=1, stroke=0)
 
-    # Miniature sample card in center-right with recognizable cartoon artwork
-    card_w = w * 0.44
-    card_h = h * 0.42
-    card_x = x + w * 0.50
-    card_y = y + 8
-    c.setFillColor(HexColor("#FFFFFF"))
-    c.setStrokeColor(HexColor("#E2E8F0"))
-    c.setLineWidth(0.6)
-    c.roundRect(card_x, card_y, card_w, card_h, 3, fill=1, stroke=1)
+    # Centered character illustration filling 75%-85% of the card body
+    body_y = y + 5.0
+    body_h = (h - banner_h) - 5.0
+    illus_w = w * 0.78
+    illus_h = body_h * 0.88
+    illus_x = x + (w - illus_w) / 2.0
+    illus_y = body_y + (body_h - illus_h) / 2.0
 
     # Check for generated high-res thumbnail icon PNG
     thumb_dir = Path("local_builds/animals/assets/thumbnails")
@@ -604,30 +621,19 @@ def draw_mini_book_cover(
             thumb_file = candidates[0]
 
     if thumb_file and thumb_file.exists():
-        pad = 1.5
         c.drawImage(
             str(thumb_file),
-            card_x + pad,
-            card_y + pad,
-            width=card_w - 2 * pad,
-            height=card_h - 2 * pad,
+            illus_x,
+            illus_y,
+            width=illus_w,
+            height=illus_h,
             preserveAspectRatio=True,
+            anchor="c",
             mask="auto",
         )
     else:
-        # Recognizable cartoon vector art inside the card!
-        draw_thumb_art(c, subject_idx=subject_idx, cx=card_x + card_w * 0.5, cy=card_y + card_h * 0.5, sz=card_w * 0.7)
-
-
-    # Tiny green grass hill at base of book
-    c.setFillColor(HexColor("#4ADE80"))
-    p_base = c.beginPath()
-    p_base.moveTo(x, y)
-    p_base.lineTo(x, y + 4)
-    p_base.curveTo(x + w * 0.5, y + 7, x + w * 0.8, y + 3, x + w, y + 5)
-    p_base.lineTo(x + w, y)
-    p_base.close()
-    c.drawPath(p_base, fill=1, stroke=0)
+        # Recognizable cartoon vector art fallback inside the card
+        draw_thumb_art(c, subject_idx=subject_idx, cx=x + w / 2.0, cy=illus_y + illus_h / 2.0, sz=illus_w)
 
     c.restoreState()
 
@@ -758,6 +764,11 @@ def draw_spine(c: canvas.Canvas, dims: dict[str, float], logo_path: Path | None 
     c.setFillColor(HexColor("#FF4949"))
     c.rect(spine_left_pt, 0, spine_w_pt, height_pt, fill=1, stroke=0)
 
+    # Amazon KDP Pre-Flight Guard: strictly omit spine text if under 79 pages
+    if dims["page_count"] < 79:
+        c.restoreState()
+        return
+
     # Vertical text rotated 90 degrees (running from top to bottom)
     c.translate(spine_left_pt + spine_w_pt / 2.0, height_pt / 2.0)
     c.rotate(-90)
@@ -825,26 +836,23 @@ def draw_front_cover(
         logo_y = height_pt - 2.16 * inch
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
 
-    # 3. TOP TITLE: Slightly curved white banner reading "My First"
-    banner_w = 2.35 * inch
-    banner_h = 0.40 * inch
-    banner_x = center_x - banner_w / 2.0
-    banner_y = height_pt - 2.58 * inch
-
-    c.saveState()
-    # Soft drop shadow
-    c.setFillColor(HexColor("#991B1B"))
-    c.roundRect(banner_x, banner_y - 2, banner_w, banner_h, 10, fill=1, stroke=0)
-    # White banner body
-    c.setFillColor(HexColor("#FFFFFF"))
-    c.setStrokeColor(HexColor("#FDE047"))
-    c.setLineWidth(1.4)
-    c.roundRect(banner_x, banner_y, banner_w, banner_h, 10, fill=1, stroke=1)
-    # Banner text
-    c.setFillColor(HexColor("#1E3A8A"))
-    c.setFont("Helvetica-Bold", 15)
-    c.drawCentredString(center_x, banner_y + 0.09 * inch, "My First")
-    c.restoreState()
+    # 3. TOP TITLE: Floating 3D vector bubble text "My First" (NO white pill box!)
+    # Warm yellow fill (#FFE66D), dark navy outline (#0F294A), and deep drop shadow floating directly on gradient
+    my_first_y = height_pt - 2.50 * inch
+    draw_outlined_text(
+        c,
+        text="My First",
+        x=center_x,
+        y=my_first_y,
+        font_name="Helvetica-Bold",
+        font_size=24,
+        fill_color="#FFE66D",
+        outline_color="#0F294A",
+        outline_width=4.0,
+        shadow_color="#991B1B",
+        shadow_offset=(0.0, -2.5),
+        centered=True,
+    )
 
     # 4. MAIN TITLE: Heavy, bouncing, 3D bubble fonts "Copy to Color"
     title1_y = height_pt - 3.16 * inch
@@ -979,7 +987,7 @@ def draw_front_cover(
 
 def draw_animals_cover_spread(
     output_pdf_path: Path,
-    page_count: int = 32,
+    page_count: int = 80,
     logo_path: Path | None = None,
     hero_art_path: Path | None = None,
     card_color_thumb: Path | None = None,
@@ -1019,7 +1027,7 @@ def draw_animals_cover_spread(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
-    parser.add_argument("--page-count", type=int, default=74, help="Book page count for spine calculation (default 74)")
+    parser.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=Path("local_builds/animals/assets/tiger_color_thumb.png"), help="Activity card color guide")
