@@ -4,7 +4,8 @@
 
 Produce original, age-appropriate children's coloring and activity books for Amazon KDP paperback. Treat `prompts.yaml` as the authoritative prompt registry and `catalogs/catalog_master.json` as the authoritative catalog record. Git contains code, prompts, agent instructions, skills, and metadata. Store source generations, cleaned artwork, page images, and print PDFs in approved local work areas and GCS, not in Git.
 
-Never claim that generated art is print-ready until it passes visual and technical QA. Do not fabricate sales estimates, customer-review evidence, ISBNs, ASINs, legal or tax advice, or scientific facts. Do not scrape Amazon in ways that violate its terms or access controls. Use public, licensed, or user-provided research inputs and record source/date. Escalate legal, tax, child-safety, and rights questions for qualified human review.
+- **Component-First Rule:** Never ask an AI image generation model to generate a monolithic, finished book cover containing typography, barcodes, spine text, and back-cover thumbnail grids simultaneously. Monolithic cover generations result in warped fonts, illegible series grids, clunky white text boxes, and misaligned spines. AI models generate isolated visual components only; headless Python engines programmatically assemble the mechanical layout.
+- Never claim that generated art is print-ready until it passes visual and technical QA. Do not fabricate sales estimates, customer-review evidence, ISBNs, ASINs, legal or tax advice, or scientific facts. Do not scrape Amazon in ways that violate its terms or access controls. Use public, licensed, or user-provided research inputs and record source/date. Escalate legal, tax, child-safety, and rights questions for qualified human review.
 
 ## Shared production contract
 
@@ -12,6 +13,7 @@ Never claim that generated art is print-ready until it passes visual and technic
 - Raster page output is at least 2550 x 3300 pixels at 300 DPI. Artwork remains inside the 0.5 inch safe area.
 - Coloring pages are single-sided. The reverse page is black or another approved bleed-stop design, as explicitly specified in the project manifest. Confirm that dark reverse printing is compatible with the chosen KDP paper and ink coverage before release.
 - Generated art must have crisp black contours on a white background, with broad closed colorable regions and age-appropriate scene density. Never use gray shading, gradients, crosshatching, photographic texture, or generated text.
+- Full-wrap paperback cover spreads encompass Back Cover, Spine, and Front Cover with 0.125 inch bleed on all outer edges. Cover width is $17.25 + (\text{Page Count} \times 0.002252)\text{ inches}$ at 300 DPI. Cover height is $11.25\text{ inches}$. An unobstructed $2.0 \times 1.2\text{ inch}$ barcode safe area is strictly preserved at the bottom right of the back cover.
 - Record each asset's series, edition, subject ID, source prompt, provider/model/version, seed, generation timestamp, review status, and GCS URI.
 - Preserve source files and never silently overwrite approved or released assets. Use a new versioned object path for revisions.
 - Keep SVG masters outside Git under `assets/svg/<category>/<asset-id>/v1.svg`; store stable IDs, source and preview hashes, visual fingerprints, QA, lineage, and edition usage in `catalogs/asset_registry.json`.
@@ -37,7 +39,12 @@ Return a dated evidence table, a concise opportunity hypothesis, the unmet needs
 ## Art_Director_Agent
 
 ### Objective
-Generate a consistent batch of original line-art assets from the versioned prompt registry.
+Generate a consistent batch of original line-art and isolated cover character assets from the versioned prompt registry.
+
+### Operational Rules
+1. Generate **isolated visual components**, never full-page finished covers with embedded text.
+2. For interior coloring pages: strictly enforce pure black line work on a white background, closed boundaries, and age-calibrated line weights (4–6 pt for toddlers, 2–3 pt for preschool, 1.5–2.5 pt for elementary).
+3. For cover hero art: generate dynamic, expressive, high-contrast character art with clean boundaries against transparent or easily isolated solid backgrounds, avoiding baked-in banners, text boxes, or titles.
 
 ### Procedure
 1. Parse `prompts.yaml` and select a `book_series_blueprints` entry, an age profile, and an edition modifier. Reject a subject request that has no matching record instead of inventing untracked prompt content.
@@ -55,10 +62,29 @@ For Google Gemini Enterprise Agent Platform, use `scripts/generate_images_google
 
 Prepare one record per rendered subject with `scripts/prepare_generation_batch.py`. Records begin as `PENDING_GENERATION`; do not fill `generated_at_utc` or `source_uri` until they are returned by the provider, and do not set `review_status: PASS` without completed visual and technical QA.
 
+## Cover_Designer_Agent
+
+### Objective
+Programmatically assemble print-ready full-wrap covers (Back Cover + Spine + Front Cover) using the headless Python cover engine.
+
+### Operational Rules
+1. Compute precise spine dimensions dynamically based on page count and paper type:
+   $$\text{Spine Width (in)} = \text{Page Count} \times 0.002252\text{ in (White Paper)}$$
+2. Typeset titles, subtitles, and badges using true vector Google Fonts (*Fredoka*, *Bungee*, *Baloo 2*) or native ReportLab vector text. Render arched banners and layered drop shadows programmatically without rectangular white borders.
+3. Sizing and typography:
+   - Front brand logo placed cleanly with smooth sticker contours and no white rectangular boxes.
+   - Arched "Copy to Color" and chunky volumetric 3D "Animals" bubble text with crisp vector outlines.
+   - Paws and hero art naturally overlapping bottom rolling hills.
+4. Render the back-cover "Titles in this Series" 4x3 grid by dynamically pulling thumbnail cover assets from the series catalog, stamping each with its respective `Vol. #` badge.
+5. Guarantee an unobstructed $2.0 \times 1.2\text{ inch}$ barcode safe zone at the bottom-right of the back cover (0.5 inch clearance from trim margins).
+6. Compilation entry points:
+   - Animals Cover Spread: `python main.py build-animals-cover` or `scripts/compile_animals_cover.py`
+   - Solar System Cover: `python main.py cover` or `scripts/compile_cover.py`
+
 ## QA_Validator_Agent
 
 ### Objective
-Issue an auditable PASS or FAIL decision for each asset before page assembly.
+Issue an auditable PASS or FAIL decision for each asset and cover spread before release.
 
 ### Visual inspection
 - Verify one clear subject, age-appropriate complexity, safe margins, and sufficient blank space for the selected edition overlay.
@@ -67,11 +93,13 @@ Issue an auditable PASS or FAIL decision for each asset before page assembly.
 - Reject accidental grayscale, gray fill, shading, gradients, crosshatching, textured backgrounds, stray marks, incomplete shapes, malformed anatomy, and details too small to print or color.
 - Reject text, pseudo-text, signatures, watermarks, logos, identifiable copyrighted characters, and trademarked vehicle/company marks. Generic emergency-service vehicles must not carry agency insignia.
 - Check that tracing or STEM reserved space is actually clear and that objects requested for a search-and-find activity are present, countable, and not confused with visual clutter.
+- For covers: audit that hero art has no embedded AI text or clip art boxes, verify font drop shadows are crisp vector paths, confirm spine text is properly centered, and check that the barcode zone ($2.0 \times 1.2\text{ in}$) has zero visual interference.
 
 ### Technical inspection
 - Verify file opens and is not corrupted; record pixel dimensions, color mode, alpha/transparency status, and effective DPI at placed size.
 - Require at least 2550 x 3300 px for a full-page raster page, or equivalent vector output with adequate page geometry and successful raster proofing at 300 DPI.
-- Confirm pure black line work on white. If thresholding is used, retain the original, document parameters, and re-inspect contour closures and line weight after conversion.
+- For full-wrap covers, verify total dimensions equal $17.25 + (\text{Page Count} \times 0.002252)\text{ inches} \times 11.25\text{ inches}$ at 300 DPI.
+- Confirm pure black line work on white for interiors. If thresholding is used, retain the original, document parameters, and re-inspect contour closures and line weight after conversion.
 - Verify composition fits inside a 0.5 inch no-bleed safe area without stretching. Escalate any full-bleed composition for a separately specified layout and KDP preflight.
 - Record `PASS` or `FAIL`, asset ID, reviewer, date, evidence/notes, measurements, and remediation. Never convert a subjective concern into a pass without documenting the decision.
 

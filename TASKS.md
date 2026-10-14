@@ -52,3 +52,12 @@ Implementation tracking for the flat, print-ready full paperback cover spread fo
   - [x] Compile full-spread PDF to `local_builds/animals/v1.0-core/animals-cover-spread.pdf`
   - [x] Visual verification of front, spine, and back cover
   - [x] Document final release artifacts and walkthrough
+
+- [x] **Phase 6: Component-Based Architecture & Governance Integration**
+  - [x] Update [`AGENTS.md`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/AGENTS.md) with `Cover_Designer_Agent` & the Component-First Rule
+  - [x] Create [`skills/cover_engine.md`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/skills/cover_engine.md) defining mechanical dimensioning, spine math, and grid specifications
+  - [x] Update [`skills/prompt_generator.md`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/skills/prompt_generator.md) with isolated micro-asset prompt templates
+  - [x] Implement reference PIL cover compiler [`scripts/compile_cover_pil.py`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/scripts/compile_cover_pil.py)
+  - [x] Generate complete 12-subject prompt batch manifest [`manifests/series_thumbnails_batch.json`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/manifests/series_thumbnails_batch.json)
+  - [x] Execute test compilations for both ReportLab vector compiler and PIL compiler
+  - [x] Validate all 35 test cases pass
