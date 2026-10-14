@@ -105,6 +105,28 @@ def load_fancy_font(font_name: str, size: int, fonts_dir: str = "assets/fonts") 
     return ImageFont.load_default()
 
 
+def pull_remote_asset(url_or_path: str | Path | None, dest_path: str | Path) -> str | None:
+    """
+    Downloads a presigned URL exported from Adobe Express MCP (or any remote image URL)
+    into the local workspace so external designs integrate seamlessly.
+    """
+    if not url_or_path:
+        return None
+    p_str = str(url_or_path)
+    if os.path.exists(p_str):
+        return p_str
+    if p_str.startswith(("http://", "https://")):
+        dest_p = Path(dest_path)
+        dest_p.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            urllib.request.urlretrieve(p_str, str(dest_p))
+            return str(dest_p)
+        except Exception as exc:
+            print(f"[Warning] Failed to pull remote asset {url_or_path}: {exc}")
+            return None
+    return None
+
+
 # ---------------------------------------------------------------------------
 # 3. ALPHA ISOLATION & STICKER CONTOUR ENGINE
 # ---------------------------------------------------------------------------
@@ -562,6 +584,7 @@ def build_kdp_cover(
     logo_path: str | None = None,
     thumbnails_dir: str = "assets/cover_thumbnails",
     force_fronts: bool = False,
+    rendered_fronts: dict[str, Image.Image] | None = None,
 ) -> Path:
     """Compiles print-ready Amazon KDP full-wrap paperback cover spread PDF & proof."""
     specs = calculate_cover_dimensions(page_count)
@@ -580,23 +603,28 @@ def build_kdp_cover(
             resolved_logo = str(cand)
             break
 
-    rendered_fronts = prebuild_all_series_front_covers(
-        trim_w_px=trim_w,
-        trim_h_px=trim_h,
-        logo_path=resolved_logo,
-        thumbnails_dir=thumbnails_dir,
-        force=force_fronts,
-    )
+    # Remote URL resolution for assets (e.g., from Adobe Express MCP presigned URLs)
+    resolved_hero = pull_remote_asset(hero_image_path, f"assets/adobe_exports/{active_vol_id}_hero.png")
+    resolved_inset = pull_remote_asset(inset_image_path, f"assets/adobe_exports/{active_vol_id}_inset.png")
+
+    if rendered_fronts is None:
+        rendered_fronts = prebuild_all_series_front_covers(
+            trim_w_px=trim_w,
+            trim_h_px=trim_h,
+            logo_path=resolved_logo,
+            thumbnails_dir=thumbnails_dir,
+            force=force_fronts,
+        )
 
     # Override active volume's front cover if high-res hero/inset paths are explicitly supplied
-    if hero_image_path or inset_image_path:
+    if resolved_hero or resolved_inset:
         rendered_fronts[active_vol_id] = render_single_front_cover(
             vol_meta=active_meta,
             width_px=trim_w,
             height_px=trim_h,
             logo_path=resolved_logo,
-            hero_path=hero_image_path,
-            inset_path=inset_image_path,
+            hero_path=resolved_hero,
+            inset_path=resolved_inset,
         )
 
     print(f"[Pass 2] Assembling Full-Wrap Spread: {w}x{h} px | Spine: {specs['spine_in']:.3f} in ({spine_w} px)")
@@ -642,7 +670,7 @@ def build_kdp_cover(
     coll_font = load_fancy_font("Fredoka-Bold.ttf", 28)
     draw_sparkle_star(draw, cx0 + 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
     draw_sparkle_star(draw, cx0 + c_w - 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
-    c_txt = "Collector's Series of 15 Interactive Titles"
+    c_txt = "Collector's Series of 12 Interactive Titles"
     c_bb = draw.textbbox((0, 0), c_txt, font=coll_font)
     draw.text((cx0 + (c_w - (c_bb[2] - c_bb[0])) // 2, cy0 + 22), c_txt, fill="white", font=coll_font)
 
@@ -667,7 +695,7 @@ def build_kdp_cover(
     # Amazon KDP rule: strictly suppress spine text if page count < 79
     if page_count >= 79 and specs["spine_in"] >= 0.18:
         spine_font = load_fancy_font("Fredoka-Bold.ttf", 36)
-        spine_text = "THE PIVOT KIDS   |   Copy to Color: Animals   |   Vol. 2"
+        spine_text = f"THE PIVOT KIDS   |   Copy to Color: {active_meta['title']}   |   {active_meta['vol']}"
         # Render vertical spine text
         text_im = Image.new("RGBA", (h, spine_w), (0, 0, 0, 0))
         t_d = ImageDraw.Draw(text_im)
@@ -677,16 +705,11 @@ def build_kdp_cover(
         t_d.text(((h - st_w) // 2, (spine_w - st_h) // 2 - 4), spine_text, fill="white", font=spine_font)
         rot_spine = text_im.rotate(270, expand=True)
         cover.paste(rot_spine, (spine_x_start, 0), rot_spine)
+    else:
+        print(f"[KDP Compliance] Page count ({page_count}) < 79: Spine text automatically omitted per Amazon KDP rules.")
 
     # ---------------- FRONT COVER SECTION ----------------
-    active_front = render_single_front_cover(
-        vol_meta=active_meta,
-        width_px=trim_w + bleed,
-        height_px=h,
-        logo_path=resolved_logo,
-        hero_path=hero_image_path,
-        inset_path=inset_image_path,
-    )
+    active_front = rendered_fronts[active_vol_id].resize((trim_w + bleed, h), Image.Resampling.LANCZOS)
     cover.paste(active_front, (front_x_start, 0), active_front)
 
     # Save Output PDF and PNG proof
@@ -701,15 +724,91 @@ def build_kdp_cover(
     return out_p
 
 
-if __name__ == "__main__":
-    hero_path = "local_builds/animals/assets/tiger_monkey_transparent.png"
-    inset_path = "local_builds/animals/assets/inset_tiger_split.png"
-    logo_path = "assets/logos/pivot_kids_sticker.png"
+def build_all_12_series_covers(
+    page_count: int = 32,
+    logo_path: str | Path | None = None,
+    thumbnails_dir: str = "assets/cover_thumbnails",
+    output_dir: str = "local_builds/series_covers_32p",
+    force_fronts: bool = False,
+) -> list[Path]:
+    """
+    Compiles all 12 standalone Front Covers (Pass 1) and all 12 Full-Wrap KDP Spreads (Pass 2)
+    for the entire 32-page series in a single automated batch.
+    """
+    specs = calculate_cover_dimensions(page_count)
+    out_d = Path(output_dir)
+    out_d.mkdir(parents=True, exist_ok=True)
 
-    build_kdp_cover(
-        page_count=80,
-        output_path="local_builds/animals/v1.0-core/animals-cover-spread.pdf",
-        hero_image_path=hero_path if os.path.exists(hero_path) else None,
-        inset_image_path=inset_path if os.path.exists(inset_path) else None,
-        logo_path=logo_path if os.path.exists(logo_path) else None,
+    resolved_logo = None
+    for cand in [logo_path, "assets/logos/pivot_kids_sticker.png", "assets/logos/pivot_kids.png"]:
+        if cand and os.path.exists(str(cand)):
+            resolved_logo = str(cand)
+            break
+
+    print(f"\n[Batch Cover Runner] Pre-rendering all 12 series front covers (Pass 1)...")
+    rendered_fronts = prebuild_all_series_front_covers(
+        trim_w_px=specs["trim_w_px"],
+        trim_h_px=specs["trim_h_px"],
+        logo_path=resolved_logo,
+        thumbnails_dir=thumbnails_dir,
+        force=force_fronts,
     )
+
+    generated: list[Path] = []
+    print(f"\n[Batch Cover Runner] Compiling all 12 full-wrap cover spreads (Pass 2)...")
+    for item in SERIES_TITLES:
+        vol_id = item["id"]
+        slug = item["title"].lower()
+        out_pdf = out_d / f"{vol_id}_{slug}_fullwrap_{page_count}p.pdf"
+        p = build_kdp_cover(
+            page_count=page_count,
+            output_path=str(out_pdf),
+            active_vol_id=vol_id,
+            logo_path=resolved_logo,
+            thumbnails_dir=thumbnails_dir,
+            force_fronts=False,
+            rendered_fronts=rendered_fronts,
+        )
+        generated.append(p)
+
+    print(f"\n[Batch Cover Runner] Successfully compiled {len(generated)} full-wrap cover spreads into {out_d}")
+    return generated
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Automated KDP Full-Wrap Cover Spread Generator")
+    parser.add_argument("--vol-id", default="vol_02", help="Active volume ID (e.g. vol_01 to vol_12)")
+    parser.add_argument("--page-count", type=int, default=80, help="Page count for spine calculation (32 or 80)")
+    parser.add_argument("--output", default=None, help="Output PDF path")
+    parser.add_argument("--hero", default=None, help="Path or remote URL to hero illustration")
+    parser.add_argument("--inset", default=None, help="Path or remote URL to inset illustration")
+    parser.add_argument("--logo", default=None, help="Path to brand logo")
+    parser.add_argument("--all", action="store_true", help="Compile full spreads for all 12 series volumes")
+    parser.add_argument("--force-fronts", action="store_true", help="Force re-rendering of all front covers")
+
+    args = parser.parse_args()
+
+    if args.all:
+        build_all_12_series_covers(
+            page_count=args.page_count,
+            logo_path=args.logo,
+            force_fronts=args.force_fronts,
+        )
+    else:
+        hero_default = "local_builds/animals/assets/tiger_monkey_transparent.png"
+        inset_default = "local_builds/animals/assets/inset_tiger_split.png"
+        hero_p = args.hero or (hero_default if os.path.exists(hero_default) and args.vol_id == "vol_02" else None)
+        inset_p = args.inset or (inset_default if os.path.exists(inset_default) and args.vol_id == "vol_02" else None)
+        out_p = args.output or f"local_builds/animals/v1.0-core/animals-cover-spread-{args.page_count}p.pdf"
+
+        build_kdp_cover(
+            page_count=args.page_count,
+            output_path=out_p,
+            active_vol_id=args.vol_id,
+            hero_image_path=hero_p,
+            inset_image_path=inset_p,
+            logo_path=args.logo,
+            force_fronts=args.force_fronts,
+        )

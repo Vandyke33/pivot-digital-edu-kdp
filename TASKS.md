@@ -72,3 +72,12 @@ Implementation tracking for the flat, print-ready full paperback cover spread an
   - [x] Add `copy_to_color_animals` blueprint to `prompts.yaml` with 35 calibrated animal subjects
   - [x] Prepare 74-page production interior manifest `manifests/animals-v1.0-core.json`
   - [x] Add unit tests for 74-page spine math, alpha extraction, and proof rendering (38/38 tests passing)
+
+- [x] **Phase 8: Strict Brand & Title Naming Policy, 32-Page Full-Wrap Spreads, & Zero-Credit Interior Compiler**
+  - [x] Enforce Strict Brand & Title Naming Policy across AGENTS.md, skills, tests, and code; permanently ban `"My First"` prefix
+  - [x] Implement [`scripts/compile_copy_to_color_interior.py`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/scripts/compile_copy_to_color_interior.py) replicating commercial retail layout with top brushstroke banner, 1:1 Color Guide thumbnail, and bottom wave footers
+  - [x] Implement zero-credit line art extraction engine (`color_image_to_clean_lineart`) deriving 300 DPI coloring outlines directly from color art with identical geometry
+  - [x] Add Page 1 Welcome & 'This Book Belongs To' page and Page 32 'Super Colorist Award' Completion Certificate
+  - [x] Harmonize [`scripts/compile_cover_pil.py`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/scripts/compile_cover_pil.py) with remote asset pulling (`pull_remote_asset`), KDP 79-page spine omission, and two-pass batch runner (`build_all_12_series_covers`)
+  - [x] Add `build-copy-to-color-interior` and `build-series-covers` subcommands to [`main.py`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/main.py)
+  - [x] Add unit tests in [`tests/test_copy_to_color_interior.py`](file:///d:/pivot-edu-kdp/pivot-digital-edu-kdp/tests/test_copy_to_color_interior.py) ensuring 46/46 tests pass across the repository

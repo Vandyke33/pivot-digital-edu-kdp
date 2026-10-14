@@ -216,6 +216,42 @@ def cmd_build_animals_cover(args: argparse.Namespace) -> None:
     print(f"[OK] High-resolution Cover Proof generated: {proof_png}")
 
 
+def cmd_build_copy_to_color_interior(args: argparse.Namespace) -> None:
+    vol_id = getattr(args, "vol_id", "vol_02")
+    vol_title = getattr(args, "vol_title", None)
+    assets_dir = getattr(args, "assets_dir", None)
+    out_pdf = getattr(args, "output", None) or (REPO_ROOT / f"local_builds/animals/v1.0-core/copy-to-color-{vol_id}-32p-interior.pdf")
+
+    cmd = [
+        PYTHON,
+        str(REPO_ROOT / "scripts" / "compile_copy_to_color_interior.py"),
+        "--vol-id", vol_id,
+        "--output", str(out_pdf),
+    ]
+    if vol_title:
+        cmd.extend(["--vol-title", vol_title])
+    if assets_dir:
+        cmd.extend(["--assets-dir", str(assets_dir)])
+
+    run_cmd(cmd)
+    print(f"\n[OK] 32-page Copy-to-Color Interior compiled: {out_pdf}")
+
+
+def cmd_build_series_covers(args: argparse.Namespace) -> None:
+    page_count = getattr(args, "page_count", 32)
+    cmd = [
+        PYTHON,
+        str(REPO_ROOT / "scripts" / "compile_cover_pil.py"),
+        "--all",
+        "--page-count", str(page_count),
+    ]
+    if getattr(args, "force_fronts", False):
+        cmd.append("--force-fronts")
+
+    run_cmd(cmd)
+    print(f"\n[OK] All 12 Series Covers compiled for {page_count} pages.")
+
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="KDP Publishing Operations Runner Suite")
@@ -260,6 +296,17 @@ def main() -> int:
     p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
     p_animals.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
 
+    # build-copy-to-color-interior
+    p_c2c = subparsers.add_parser("build-copy-to-color-interior", help="Compile 32-page 'Copy to Color' interior PDF")
+    p_c2c.add_argument("--vol-id", default="vol_02", help="Series volume ID (e.g. vol_01 to vol_12)")
+    p_c2c.add_argument("--vol-title", default=None, help="Volume title override")
+    p_c2c.add_argument("--output", type=Path, default=None, help="Destination PDF path")
+    p_c2c.add_argument("--assets-dir", type=Path, default=None, help="Directory containing subj_XX_color.png and subj_XX_bw.png")
+
+    # build-series-covers
+    p_sc = subparsers.add_parser("build-series-covers", help="Compile all 12 series full-wrap cover spreads")
+    p_sc.add_argument("--page-count", type=int, default=32, help="Page count for spine calculation (default 32)")
+    p_sc.add_argument("--force-fronts", action="store_true", help="Force re-rendering all front covers")
 
     # build-all
     p_all = subparsers.add_parser("build-all", help="Compile both interior and cover PDFs")
@@ -287,6 +334,10 @@ def main() -> int:
         cmd_build_cover(args)
     elif args.command == "build-animals-cover":
         cmd_build_animals_cover(args)
+    elif args.command == "build-copy-to-color-interior":
+        cmd_build_copy_to_color_interior(args)
+    elif args.command == "build-series-covers":
+        cmd_build_series_covers(args)
     elif args.command == "build-all":
         cmd_build_cover(args)
         cmd_build_interior(args)
