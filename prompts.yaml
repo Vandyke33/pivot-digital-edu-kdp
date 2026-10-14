@@ -433,7 +433,7 @@ book_series_blueprints:
         composition: "three-quarter view, all wing tips inside safe area, no airport scene"
 
   copy_to_color_animals:
-    series_title: "My First Copy to Color: Animals"
+    series_title: "Copy to Color: Animals"
     target_age_profile: "preschool_4_6"
     default_skill_level: "beginner"
     default_edition: "core_coloring"

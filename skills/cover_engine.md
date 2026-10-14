@@ -31,6 +31,19 @@ Amazon KDP requires a single flat PDF spread encompassing the front, spine, back
 
 ---
 
+## Strict Brand & Title Naming Policy (No "My First" Prefix)
+
+- **Official Brand:** `The Pivot Kids` (with tagline `Color & Play`).
+- **Official Series Title:** `Copy to Color`
+- **Canonical Book Title Format:** `Copy to Color: <Subject>` (e.g., `Copy to Color: Animals`, `Copy to Color: Alphabet`).
+- **Prohibited Phrase (`"My First"`):** NEVER include the words `"My First"` (nor any pill box, ribbon, or banner for it) on the Front Cover, Spine, Back Cover miniature grid, Interior Title Page, or KDP Metadata.
+- **Front Cover Title Stack (Top-to-Bottom):**
+  1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
+  2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
+  3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
+
+---
+
 ## 2. Front Cover Composition Hierarchy
 
 To match commercial bestsellers without rectangular AI artifacts:
@@ -38,9 +51,9 @@ To match commercial bestsellers without rectangular AI artifacts:
 1. **Background Canvas:** Procedural warm coral/orange gradient with rolling green vector hills along the bottom third and subtle starbursts/dotted paths.
 2. **Brand Header:** Transparent PNG of "The Pivot Kids (Color & Play)" logo with a smooth sticker-like drop shadow or white outer contour, anchored at the top-center.
 3. **Typography Stack (Programmatic Vector Layers):**
-   - **"My First"**: Arched or straight text rendered using a Google Font (*Baloo 2* or *Fredoka* Bold) in dark navy or deep red with a soft glowing border. **Never enclosed in a hard rectangular white box.**
-   - **"Copy to Color"**: Arched vector bubble lettering in bright white with a $4\text{ px}$ dark navy border and an extruded 3D drop-shadow.
-   - **"Animals"**: Giant golden-yellow/orange bubble letters with light-yellow highlight glares and dark-brown 3D depth shadows.
+   - **"Copy to Color"**: Arched or floating display bubble lettering in bright white with 3D block extrusion, neon outer glow aura, and vector diamond sparkles (`LuckiestGuy-Regular.ttf`).
+   - **"<SUBJECT>" (e.g., "Animals")**: Giant golden-yellow/orange bubble letters with light-yellow highlight glares, 3D depth extrusion, and sparkles (`LuckiestGuy-Regular.ttf`).
+   - **Prohibited:** NEVER render the words `"My First"` or any pill badge/ribbon for it.
 4. **Hero Artwork:** Isolated AI-generated character graphic (Baby Tiger & Monkey) scaled proportionally and layered so their paws naturally overlap the green rolling hills.
 5. **Interactive Preview Inset:** A rounded, white floating card displaying the color guide thumbnail and black-and-white coloring outline with drop-shadow styling.
 

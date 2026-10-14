@@ -337,28 +337,13 @@ def render_single_front_cover(
         front.paste(logo_img, (cx - logo_img.width // 2, 90), logo_img)
 
     # 2. Fancy Bundled Display Fonts (Neon + 3D + Sparkles)
-    font_sub = load_fancy_font("Fredoka-Bold.ttf", 88)
-    font_main = load_fancy_font("LuckiestGuy.ttf", 156)
-    font_subject = load_fancy_font("LuckiestGuy.ttf", 184)
+    font_main = load_fancy_font("LuckiestGuy.ttf", 168)
+    font_subject = load_fancy_font("LuckiestGuy.ttf", 195)
 
-    # "My First" — Floating Neon + 3D Bubble Typography (Zero background pill box)
+    # "Copy to Color" — Directly Below Logo: Fancy Extruded 3D Display Text with Sparkles
     draw_neon_sparkle_text(
         front,
-        (cx, 600),
-        "My First",
-        font_sub,
-        fill_color=YELLOW_TEXT,
-        outline_color=NAVY_TEXT,
-        neon_color=vol_meta["neon"],
-        outline_width=8,
-        extrusion_depth=8,
-        add_sparkles=False,
-    )
-
-    # "Copy to Color" — Fancy Extruded 3D Display Text with Sparkles
-    draw_neon_sparkle_text(
-        front,
-        (cx, 745),
+        (cx, 630),
         "Copy to Color",
         font_main,
         fill_color=(255, 255, 255, 255),
@@ -369,10 +354,10 @@ def render_single_front_cover(
         add_sparkles=True,
     )
 
-    # Subject Title (e.g., "ANIMALS", "ALPHABET", "BIRDS")
+    # Subject Title (e.g., "ANIMALS", "ALPHABET", "BIRDS") — Directly Below Series Title
     draw_neon_sparkle_text(
         front,
-        (cx, 930),
+        (cx, 840),
         vol_meta["title"].upper(),
         font_subject,
         fill_color=YELLOW_TEXT,
@@ -682,7 +667,7 @@ def build_kdp_cover(
     # Amazon KDP rule: strictly suppress spine text if page count < 79
     if page_count >= 79 and specs["spine_in"] >= 0.18:
         spine_font = load_fancy_font("Fredoka-Bold.ttf", 36)
-        spine_text = "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2"
+        spine_text = "THE PIVOT KIDS   |   Copy to Color: Animals   |   Vol. 2"
         # Render vertical spine text
         text_im = Image.new("RGBA", (h, spine_w), (0, 0, 0, 0))
         t_d = ImageDraw.Draw(text_im)

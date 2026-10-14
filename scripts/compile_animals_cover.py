@@ -1,4 +1,4 @@
-"""Compile a flat, print-ready full paperback cover spread for 'My First Copy to Color: Animals'."""
+"""Compile a flat, print-ready full paperback cover spread for 'Copy to Color: Animals'."""
 
 from __future__ import annotations
 
@@ -779,10 +779,10 @@ def draw_spine(c: canvas.Canvas, dims: dict[str, float], logo_path: Path | None 
     c.translate(spine_left_pt + spine_w_pt / 2.0, height_pt / 2.0)
     c.rotate(-90)
 
-    # Spine text: "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2"
+    # Spine text: "THE PIVOT KIDS   |   Copy to Color: Animals   |   Vol. 2"
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 5.8)
-    c.drawCentredString(0, -2, "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2")
+    c.drawCentredString(0, -2, "THE PIVOT KIDS   |   Copy to Color: Animals   |   Vol. 2")
 
     c.restoreState()
 
@@ -795,7 +795,7 @@ def draw_front_cover(
     card_color_thumb: Path | None = None,
     card_bw_outline: Path | None = None,
 ) -> None:
-    """Render the Front Cover (Right Third) with 3D bubble fonts, curved My First banner, and hero art."""
+    """Render the Front Cover (Right Third) with 3D bubble fonts, title stack, and hero art."""
     front_left_pt = dims["front_left_in"] * inch
     front_width_pt = dims["trim_width_in"] * inch
     center_x = front_left_pt + front_width_pt / 2.0
@@ -842,33 +842,15 @@ def draw_front_cover(
         logo_y = height_pt - 2.16 * inch
         c.drawImage(str(logo_path), logo_x, logo_y, width=logo_w, height=logo_h, preserveAspectRatio=True, mask="auto")
 
-    # 3. TOP TITLE: Floating 3D vector bubble text "My First" (NO white pill box!)
-    # Warm yellow fill (#FFE66D), dark navy outline (#0F294A), and deep drop shadow floating directly on gradient
-    my_first_y = height_pt - 2.50 * inch
-    draw_outlined_text(
-        c,
-        text="My First",
-        x=center_x,
-        y=my_first_y,
-        font_name="Helvetica-Bold",
-        font_size=24,
-        fill_color="#FFE66D",
-        outline_color="#0F294A",
-        outline_width=4.0,
-        shadow_color="#991B1B",
-        shadow_offset=(0.0, -2.5),
-        centered=True,
-    )
-
-    # 4. MAIN TITLE: Heavy, bouncing, 3D bubble fonts "Copy to Color"
-    title1_y = height_pt - 3.16 * inch
+    # 3. MAIN TITLE: Directly Below Logo: Heavy, bouncing, 3D bubble fonts "Copy to Color"
+    title1_y = height_pt - 2.80 * inch
     draw_3d_title(
         c,
         text="Copy to Color",
         x=center_x,
         y=title1_y,
         font_name="Helvetica-Bold",
-        font_size=44,
+        font_size=46,
         fill_hex="#FFFFFF",
         outline_hex="#0F294A",
         outline_width=4.5,
@@ -878,8 +860,8 @@ def draw_front_cover(
         secondary_width=1.5,
     )
 
-    # 5. BOOK SUBJECT: Giant, chunky, playful "Animals" bubble text with 3D volumetric extrusion
-    title2_y = height_pt - 3.84 * inch
+    # 4. BOOK SUBJECT: Directly Below Series Title: Giant, chunky, playful "Animals" bubble text with 3D volumetric extrusion
+    title2_y = height_pt - 3.55 * inch
     draw_3d_title(
         c,
         text="Animals",
@@ -1033,7 +1015,7 @@ def draw_animals_cover_spread(
         c.rotate(270)
         c.setFillAlpha(0.0)  # Alpha 0.0: invisible vector stream without visual double-strike
         c.setFont("Helvetica-Bold", 10.5)
-        c.drawCentredString(0, -3.5, "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2")
+        c.drawCentredString(0, -3.5, "THE PIVOT KIDS   |   Copy to Color: Animals   |   Vol. 2")
         c.restoreState()
 
     c.save()

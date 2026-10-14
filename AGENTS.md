@@ -19,6 +19,17 @@ Produce original, age-appropriate children's coloring and activity books for Ama
 - Keep SVG masters outside Git under `assets/svg/<category>/<asset-id>/v1.svg`; store stable IDs, source and preview hashes, visual fingerprints, QA, lineage, and edition usage in `catalogs/asset_registry.json`.
 - Block exact repeats of published assets. Flag visually similar previews (64-bit dHash distance <= 6) and require a target-specific `ACCEPT_DISTINCT` human review with reviewer, timestamp, and rationale before build. New derivatives need a new ID, parent ID, and meaningful change note.
 
+## Strict Brand & Title Naming Policy (No "My First" Prefix)
+
+- **Official Brand:** `The Pivot Kids` (with tagline `Color & Play`).
+- **Official Series Title:** `Copy to Color`
+- **Canonical Book Title Format:** `Copy to Color: <Subject>` (e.g., `Copy to Color: Animals`, `Copy to Color: Alphabet`).
+- **Prohibited Phrase (`"My First"`):** NEVER include the words `"My First"` (nor any pill box, ribbon, or banner for it) on the Front Cover, Spine, Back Cover miniature grid, Interior Title Page, or KDP Metadata.
+- **Front Cover Title Stack (Top-to-Bottom):**
+  1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
+  2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
+  3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
+
 ## Research_Agent
 
 ### Objective
@@ -80,6 +91,15 @@ Programmatically assemble print-ready full-wrap covers (Back Cover + Spine + Fro
 6. Compilation entry points:
    - Animals Cover Spread: `python main.py build-animals-cover` or `scripts/compile_animals_cover.py`
    - Solar System Cover: `python main.py cover` or `scripts/compile_cover.py`
+7. **Strict Brand & Title Naming Policy (No "My First" Prefix):**
+   - **Official Brand:** `The Pivot Kids` (with tagline `Color & Play`).
+   - **Official Series Title:** `Copy to Color`
+   - **Canonical Book Title Format:** `Copy to Color: <Subject>` (e.g., `Copy to Color: Animals`, `Copy to Color: Alphabet`).
+   - **Prohibited Phrase (`"My First"`):** NEVER include the words `"My First"` (nor any pill box, ribbon, or banner for it) on the Front Cover, Spine, Back Cover miniature grid, Interior Title Page, or KDP Metadata.
+   - **Front Cover Title Stack (Top-to-Bottom):**
+     1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
+     2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
+     3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
 
 ## QA_Validator_Agent
 

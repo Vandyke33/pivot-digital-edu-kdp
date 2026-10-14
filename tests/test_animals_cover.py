@@ -131,14 +131,16 @@ class AnimalsCoverSpreadTests(unittest.TestCase):
             reader_under = PdfReader(str(pdf_under))
             text_under = reader_under.pages[0].extract_text()
             # Under 79 pages: spine text should be suppressed
-            self.assertNotIn("My First Copy to Color: Animals", text_under)
+            self.assertNotIn("Copy to Color: Animals", text_under)
 
             pdf_80 = Path(tmp_dir) / "cover-80p.pdf"
             draw_animals_cover_spread(pdf_80, page_count=80)
             reader_80 = PdfReader(str(pdf_80))
             text_80 = reader_80.pages[0].extract_text()
-            # At 80 pages: spine text must be present
-            self.assertIn("My First Copy to Color: Animals", text_80)
+            # At 80 pages: canonical spine text must be present
+            self.assertIn("Copy to Color: Animals", text_80)
+            # Brand & Title Naming Policy: "My First" is permanently banned
+            self.assertNotIn("My First", text_80)
 
     def test_corner_floodfill_and_trapped_pocket_extraction(self) -> None:
         from PIL import Image, ImageDraw

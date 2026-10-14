@@ -32,6 +32,18 @@ def google_image_prompt(prompt: str) -> str:
 
 
 def extract_image_bytes(response: Any) -> bytes:
+    import base64
+    output_image = getattr(response, "output_image", None)
+    if output_image is not None:
+        data = getattr(output_image, "data", None)
+        if data:
+            if isinstance(data, str):
+                return base64.b64decode(data)
+            elif isinstance(data, bytes):
+                try:
+                    return base64.b64decode(data)
+                except Exception:
+                    return data
     for part in getattr(response, "parts", []) or []:
         inline_data = getattr(part, "inline_data", None)
         image_bytes = getattr(inline_data, "data", None) if inline_data else None
@@ -100,9 +112,16 @@ def create_google_client(
     location: str,
     credentials_file: Path | None = None,
     client_factory: Any = None,
+    api_key: str | None = None,
 ) -> tuple[Any, str]:
-    import google.auth
     from google import genai
+
+    resolved_api_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    if resolved_api_key:
+        factory = client_factory or genai.Client
+        return factory(api_key=resolved_api_key), project or "gemini-developer-api"
+
+    import google.auth
 
     if credentials_file is not None:
         credentials, credential_project = google.auth.load_credentials_from_file(
@@ -114,7 +133,7 @@ def create_google_client(
         )
     resolved_project = project or credential_project
     if not resolved_project:
-        raise ValueError("Set --project or provide credentials with a Google Cloud project")
+        raise ValueError("Set GEMINI_API_KEY, --project, or provide credentials with a Google Cloud project")
     factory = client_factory or genai.Client
     return factory(enterprise=True, project=resolved_project, location=location, credentials=credentials), resolved_project
 
@@ -177,15 +196,39 @@ def generate_batch(
             raise FileExistsError(f"Refusing to overwrite generated asset for {asset['subject_id']}")
 
         prompt = google_image_prompt(asset["prompt_text"])
-        response = image_client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config={
-                "response_modalities": ["IMAGE"],
-                "image_config": {"aspect_ratio": aspect_ratio},
-            },
-        )
-        raw_bytes = extract_image_bytes(response)
+        if hasattr(image_client, "interactions") and not hasattr(image_client, "models"):
+            response = image_client.interactions.create(
+                model=model,
+                input=prompt,
+            )
+            raw_bytes = extract_image_bytes(response)
+        elif hasattr(image_client, "interactions") and hasattr(image_client, "models"):
+            if any(m in model for m in ["nano-banana", "flash-lite-image", "pro-image"]):
+                response = image_client.interactions.create(
+                    model=model,
+                    input=prompt,
+                )
+                raw_bytes = extract_image_bytes(response)
+            else:
+                response = image_client.models.generate_content(
+                    model=model,
+                    contents=prompt,
+                    config={
+                        "response_modalities": ["IMAGE"],
+                        "image_config": {"aspect_ratio": aspect_ratio},
+                    },
+                )
+                raw_bytes = extract_image_bytes(response)
+        else:
+            response = image_client.models.generate_content(
+                model=model,
+                contents=prompt,
+                config={
+                    "response_modalities": ["IMAGE"],
+                    "image_config": {"aspect_ratio": aspect_ratio},
+                },
+            )
+            raw_bytes = extract_image_bytes(response)
         raw_path.parent.mkdir(parents=True, exist_ok=True)
         raw_path.write_bytes(raw_bytes)
         normalization_details = normalize_candidate(raw_bytes, candidate_path, threshold)
@@ -245,6 +288,7 @@ def main() -> int:
     parser.add_argument("--location", default=os.getenv("GOOGLE_CLOUD_LOCATION", "global"))
     parser.add_argument("--model", default=os.getenv("GOOGLE_IMAGE_MODEL", "gemini-3.1-flash-lite-image"))
     parser.add_argument("--credentials-file", type=Path, default=None)
+    parser.add_argument("--api-key", default=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"))
     parser.add_argument("--aspect-ratio", default=os.getenv("GOOGLE_IMAGE_ASPECT_RATIO", "3:4"))
     parser.add_argument("--threshold", type=int, default=int(os.getenv("GOOGLE_IMAGE_THRESHOLD", "200")))
     parser.add_argument("--max-assets", type=int, required=True, help="Explicit cost guard: generate at most this many images")
@@ -268,6 +312,7 @@ def main() -> int:
             args.project,
             args.location,
             credentials_file=credentials_file,
+            api_key=args.api_key,
         )
         completed = generate_batch(
             batch=batch,
