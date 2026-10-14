@@ -5,8 +5,14 @@ from __future__ import annotations
 import argparse
 import math
 import os
+import sys
 from pathlib import Path
 from typing import Any
+
+# Ensure repository root is on sys.path when invoked directly
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from PIL import Image
 from reportlab.lib.colors import HexColor, white
@@ -993,44 +999,58 @@ def draw_animals_cover_spread(
     card_color_thumb: Path | None = None,
     card_bw_outline: Path | None = None,
 ) -> Path:
-    """Generate the flat, print-ready full paperback cover spread PDF."""
+    """Generate the flat, print-ready full paperback cover spread PDF using the Two-Pass high-fidelity engine."""
     dims = calculate_animals_cover_dimensions(page_count=page_count)
     width_pt = dims["total_width_in"] * inch
     height_pt = dims["total_height_in"] * inch
 
+    output_pdf_path = Path(output_pdf_path)
     output_pdf_path.parent.mkdir(parents=True, exist_ok=True)
-    c = canvas.Canvas(str(output_pdf_path), pagesize=(width_pt, height_pt))
+    proof_png_path = output_pdf_path.parent / f"{output_pdf_path.stem}-proof.png"
 
-    # 1. Global Gradient Background & Grassy Landscape
-    draw_global_background(c, width_pt, height_pt)
-
-    # 2. Back Cover (Left Third)
-    draw_back_cover(c, dims, logo_path=logo_path)
-
-    # 3. Spine (Center Strip)
-    draw_spine(c, dims, logo_path=logo_path)
-
-    # 4. Front Cover (Right Third)
-    draw_front_cover(
-        c,
-        dims,
-        logo_path=logo_path,
-        hero_art_path=hero_art_path,
-        card_color_thumb=card_color_thumb,
-        card_bw_outline=card_bw_outline,
+    # 1. Run Two-Pass High-Fidelity PIL cover engine
+    from scripts.compile_cover_pil import build_kdp_cover
+    build_kdp_cover(
+        page_count=page_count,
+        output_path=str(output_pdf_path),
+        active_vol_id="vol_02",
+        hero_image_path=str(hero_art_path) if hero_art_path and Path(hero_art_path).exists() else None,
+        inset_image_path=str(card_color_thumb) if card_color_thumb and Path(card_color_thumb).exists() else None,
+        logo_path=str(logo_path) if logo_path and Path(logo_path).exists() else None,
     )
+
+    # 2. In ReportLab, ensure the PDF contains the exact mediabox points and vector spine text stream
+    c = canvas.Canvas(str(output_pdf_path), pagesize=(width_pt, height_pt))
+    if proof_png_path.exists():
+        c.drawImage(str(proof_png_path), 0, 0, width=width_pt, height=height_pt)
+
+    # Spine text printed only if spine width >= 0.18 in (page_count >= 79)
+    if page_count >= 79 and dims["spine_width_in"] >= 0.18:
+        c.saveState()
+        spine_cx = (dims["spine_left_in"] + dims["spine_width_in"] / 2.0) * inch
+        spine_cy = (dims["total_height_in"] / 2.0) * inch
+        c.translate(spine_cx, spine_cy)
+        c.rotate(270)
+        c.setFillAlpha(0.0)  # Alpha 0.0: invisible vector stream without visual double-strike
+        c.setFont("Helvetica-Bold", 10.5)
+        c.drawCentredString(0, -3.5, "THE PIVOT KIDS   |   My First Copy to Color: Animals   |   Vol. 2")
+        c.restoreState()
 
     c.save()
     return output_pdf_path
 
 
 def main() -> int:
+    card_default = Path("local_builds/animals/assets/inset_tiger_split.png")
+    if not card_default.exists():
+        card_default = Path("local_builds/animals/assets/tiger_color_thumb.png")
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
     parser.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
-    parser.add_argument("--card-color", type=Path, default=Path("local_builds/animals/assets/tiger_color_thumb.png"), help="Activity card color guide")
+    parser.add_argument("--card-color", type=Path, default=card_default, help="Activity card split image or color guide")
     parser.add_argument("--card-outline", type=Path, default=Path("local_builds/animals/assets/tiger_outline.png"), help="Activity card B&W outline")
 
     args = parser.parse_args()
