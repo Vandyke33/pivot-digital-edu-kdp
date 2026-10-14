@@ -1,7 +1,7 @@
-# TASKS: 'My First Copy to Colour: Animals' Cover Spread & Volume 2 Edition
+# TASKS: 'Copy to Color: Animals' Cover Spread & Volume 2 Edition
 
 ## Overview
-Implementation tracking for the flat, print-ready full paperback cover spread and 74-page interior edition for **"My First Copy to Color: Animals"** (8.5 x 11 in trim, full-wrap KDP spread with bleed and spine).
+Implementation tracking for the flat, print-ready full paperback cover spread and 32-page interior edition for **"Copy to Color: Animals"** (8.5 x 11 in trim, full-wrap KDP spread with bleed and spine).
 
 ---
 
@@ -28,12 +28,12 @@ Implementation tracking for the flat, print-ready full paperback cover spread an
     - [x] Early-learner marketing blurb
     - [x] Amazon KDP Barcode zone ($2.0 \times 1.2\text{ in}$) with copyright
   - [x] Step 2.4: Spine layout:
-    - [x] Vertical white & yellow lettering: `"THE PIVOT KIDS"` | `"My First Copy to Colour: Animals"`
+    - [x] Vertical white & yellow lettering: `"THE PIVOT KIDS"` | `"Copy to Color: Animals"`
     - [x] Miniature brand "P" logo at base
   - [x] Step 2.5: Front cover layout:
     - [x] Arched stitched ribbon header with "The Pivot Kids" logo
-    - [x] Curved `"My First"` badge
-    - [x] Huge white rounded lettering with dark blue outline: `"Copy to Colour"`
+    - [x] Title stack with neon glow and 3D extrusion
+    - [x] Huge white rounded lettering with dark blue outline: `"Copy to Color"`
     - [x] Giant yellow bubble lettering with dark outline: `"Animals"`
     - [x] 3 angled large wax crayons (yellow, red, orange)
     - [x] Inset `"TIGER"` before-and-after card (color thumbnail + B&W line art)

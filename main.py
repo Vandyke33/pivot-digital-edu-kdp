@@ -112,11 +112,13 @@ def cmd_prepare(args: argparse.Namespace) -> None:
 
 
 def cmd_generate(args: argparse.Namespace) -> None:
-    batch_manifest = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "generation-manifest.json"
+    series = getattr(args, "series", "solar_system_explorers").replace("_", "-")
+    edition_id = getattr(args, "edition_id", "v1.0-core")
+    batch_manifest = REPO_ROOT / "local_builds" / series / edition_id / "generation-manifest.json"
     if not batch_manifest.exists():
         cmd_prepare(args)
 
-    candidate_dir = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "pilot-candidates"
+    candidate_dir = REPO_ROOT / "local_builds" / series / edition_id / "pilot-candidates"
     run_cmd([
         PYTHON,
         str(REPO_ROOT / "scripts" / "generate_images_google.py"),
@@ -195,7 +197,7 @@ def cmd_build_cover(args: argparse.Namespace) -> None:
 
 def cmd_build_animals_cover(args: argparse.Namespace) -> None:
     out_pdf = getattr(args, "output", None) or (REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / "animals-cover-spread.pdf")
-    page_count = getattr(args, "page_count", 80)
+    page_count = getattr(args, "page_count", 32)
     run_cmd([
         PYTHON,
         str(REPO_ROOT / "scripts" / "compile_animals_cover.py"),
@@ -294,7 +296,7 @@ def main() -> int:
     # build-animals-cover
     p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'Copy to Color: Animals' full-wrap cover spread")
     p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
-    p_animals.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
+    p_animals.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation (default 32)")
 
     # build-copy-to-color-interior
     p_c2c = subparsers.add_parser("build-copy-to-color-interior", help="Compile 32-page 'Copy to Color' interior PDF")
@@ -310,6 +312,7 @@ def main() -> int:
 
     # build-all
     p_all = subparsers.add_parser("build-all", help="Compile both interior and cover PDFs")
+    p_all.add_argument("--series", default="solar_system_explorers", choices=["solar_system_explorers", "copy_to_color_animals", "animals"], help="Series to build (default: solar_system_explorers)")
     p_all.add_argument("--author", default=None, help="Author name to display on cover")
 
     # test
@@ -339,8 +342,13 @@ def main() -> int:
     elif args.command == "build-series-covers":
         cmd_build_series_covers(args)
     elif args.command == "build-all":
-        cmd_build_cover(args)
-        cmd_build_interior(args)
+        series = getattr(args, "series", "solar_system_explorers")
+        if series in ["copy_to_color_animals", "animals"]:
+            cmd_build_animals_cover(args)
+            cmd_build_copy_to_color_interior(args)
+        else:
+            cmd_build_cover(args)
+            cmd_build_interior(args)
     elif args.command == "test":
         run_cmd([PYTHON, "-m", "unittest", "discover", "-s", "tests", "-v"])
 

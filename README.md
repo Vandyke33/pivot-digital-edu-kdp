@@ -1,64 +1,91 @@
-# pivot-digital-edu-kdp
-Amazon Kindle Direct Publishing books
+# The Pivot Kids — KDP Publishing Pipeline
 
-## Local pipeline
+Amazon Kindle Direct Publishing (KDP) automated pipeline for original, age-appropriate children's coloring and activity books.
 
-Install Python dependencies with `python -m pip install -r requirements.txt`.
+---
 
-Render the Solar System prompt batch without calling an image provider:
+## 📚 Book Series Portfolio
 
-```powershell
-python scripts/render_prompts.py --series solar_system_explorers --edition core_coloring --output .\local_builds\solar-system-explorers\v1.0-core\prompts.jsonl
-```
+### 1. Copy to Color Series (Flagship 12-Volume Series)
+- **Brand:** `The Pivot Kids` (with tagline `Color & Play`)
+- **Format:** 32 pages, $8.5 \times 11\text{ in}$ trim, full-wrap paperback cover with $0.125\text{ in}$ bleed
+- **Interior Layout:** Commercial retail layout featuring top brushstroke word banner, 1:1 color guide thumbnail, and bottom wave footer with crayon page badges.
+- **12 Titles in Series:**
+  1. `Copy to Color: Alphabet` (Warm Orange `#FF6B35`)
+  2. `Copy to Color: Animals` (Coral Red `#FF4D4D`)
+  3. `Copy to Color: Birds` (Teal `#2EC4B6`)
+  4. `Copy to Color: Sports` (Mint Green `#80ED99`)
+  5. `Copy to Color: Monsters` (Lavender Pink `#E056FD`)
+  6. `Copy to Color: Numbers` (Purple `#9B5DE5`)
+  7. `Copy to Color: Fruits` (Bright Cyan `#00BBF9`)
+  8. `Copy to Color: Shapes` (Rose Pink `#F15BB5`)
+  9. `Copy to Color: Toys` (Royal Blue `#0077B6`)
+  10. `Copy to Color: Flowers` (Warm Amber `#6B4226`)
+  11. `Copy to Color: Transport` (Deep Blue `#1D3557`)
+  12. `Copy to Color: Vegetables` (Deep Violet `#5A189A`)
 
-Prompt difficulty is selectable independently of age, for example `--skill-level advanced`. Age rules always take precedence over skill-level detail, and the selected skill level is written into prompt and generation provenance.
+### 2. Solar System Explorers
+- **Format:** 32-80 pages, $8.5 \times 11\text{ in}$ trim, black line art on white paper with bleed-stop reverse pages.
 
-Prepare auditable per-subject generation records for Google Gemini Enterprise Agent Platform (formerly Vertex AI):
+---
 
-```powershell
-python scripts/prepare_generation_batch.py --prompts .\local_builds\solar-system-explorers\v1.0-core\prompts.jsonl --provider google-gemini-agent-platform --model "$env:GOOGLE_IMAGE_MODEL" --model-version "$env:GOOGLE_IMAGE_MODEL" --asset-dir .\local_builds\solar-system-explorers\v1.0-core\raw --output .\local_builds\solar-system-explorers\v1.0-core\generation-manifest.json
-```
+## 🚀 Quick Start with `main.py`
 
-Generate a one-image pilot locally after `gcloud auth application-default login`, enabling the Gemini Enterprise Agent Platform API, and configuring billing and IAM:
-
-```powershell
-python scripts/generate_images_google.py --batch .\local_builds\solar-system-explorers\v1.0-core\generation-manifest.json --output-manifest .\local_builds\solar-system-explorers\v1.0-core\generation-manifest.json --candidate-dir .\local_builds\solar-system-explorers\v1.0-core\candidate-pages --max-assets 1
-```
-
-The command sends at most the explicit `--max-assets` count to the configured image model. It stores the provider image separately from a thresholded 2550 x 3300 candidate, records the transformation, and leaves the item `PENDING_QA`. It does not create approved artwork. Optional `--gcs-bucket` uploads provider originals, candidate pages, and the manifest to versioned GCS paths.
-
-For GitHub Actions, manually dispatch `.github/workflows/generate-first-art-batch.yml` from protected `main` with a small `max_images` value. Configure repository **Variables** `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, `GOOGLE_IMAGE_MODEL`, `GCP_WIF_PROVIDER`, `GCP_GENERATION_SERVICE_ACCOUNT`, and `GCS_ASSET_BUCKET`. Set up Google Workload Identity Federation with a provider condition restricted to your GitHub repository and `refs/heads/main`; grant the federated principal `roles/iam.workloadIdentityUser` on the dedicated service account. Give that service account `roles/aiplatform.user` on the project and `roles/storage.objectCreator` on the private asset bucket. Enable the Gemini Enterprise Agent Platform API and billing. No service-account JSON key or Google API secret is needed; the workflow requests short-lived credentials using GitHub OIDC. These project/provider/service-account identifiers belong in GitHub Variables, not Secrets; only long-lived secrets belong in GitHub Secrets. Keep output files in the GCS bucket and Actions artifact, never in Git.
-
-The pilot uses `gemini-3.1-flash-lite-image` on the `global` endpoint; Google currently lists the 1K image output at approximately $0.034 per image, plus small prompt input charges. Verify current project pricing before dispatch. Imagen 4 is not selected because Google's current model documentation lists its June 30, 2026 discontinuation date, which has passed.
-
-Vectorize raw AI generations into resolution-independent SVG masters and 300-DPI auto-framed previews:
-
-```powershell
-python scripts/vectorize_asset.py --input .\local_builds\solar-system-explorers\v1.0-core\raw\sun.png --category solar-system --subject-id sun --asset-id solar_system_explorers.sun.v1 --register --copy-to .\local_builds\solar-system-explorers\v1.0-core\approved-line-art\sun.png
-```
-
-The vectorizer auto-detects line-art bounds, crops empty whitespace, traces smooth vector paths via `vtracer`, scales and centers the drawing to fill the 0.5-inch printable safe area at 8.5 x 11 inches, renders a crisp 2550 x 3300 300-DPI preview via `resvg`, and registers hashes in `catalogs/asset_registry.json`.
-
-The tracked edition manifest is `manifests/solar-system-explorers-v1.0-core.json`. Put final-size, QA-approved monochrome artwork under its ignored local `asset_root`, change each corresponding `qa_status` to `PASS` only after review, then build with:
+The unified CLI runner `main.py` provides easy commands for all pipeline tasks:
 
 ```powershell
-python scripts/compile_interior.py --manifest .\manifests\solar-system-explorers-v1.0-core.json --output .\local_builds\solar-system-explorers\v1.0-core\interior-proof.pdf --trim 8.5x11 --bleed all --reverse-page black
+# 1. Check pipeline and asset status
+python main.py status
+
+# 2. Run full unit test suite (46+ tests)
+python main.py test
+
+# 3. Compile 'Copy to Color: Animals' 32-page full-wrap cover spread
+python main.py build-animals-cover --page-count 32
+
+# 4. Compile 'Copy to Color: Animals' 32-page interior PDF + proof sheet
+python main.py build-copy-to-color-interior --vol-id vol_02
+
+# 5. Compile full spreads or standalone front covers for all 12 series volumes
+python main.py build-series-covers --page-count 32
+
+# 6. Build both cover and interior in a single command
+python main.py build-all --series copy_to_color_animals
 ```
 
-The builder rejects absent or unapproved art, non-binary grayscale, transparency, insufficient raster dimensions, and visible contours outside the safe margin. It creates a proof PDF, not a publication approval; confirm page geometry and every page in the current KDP Previewer before release. Run unit tests with `python -m unittest discover -s tests`.
+---
 
-Flexible activity layouts use `page_plan_mode: flexible_activity`; an example is in `manifests/activity-layouts-v1-example.json`. Supported page types are single illustrations, 2-4-panel pages, paired color-reference pages, connect-the-dots, and trace paths. Each raster panel must be independently QA-approved. Color-reference pages require `interior_color_mode: color`; connect-the-dots and tracing geometry is stored as ordered normalized vector points. The builder validates composition geometry, age gates, minimum sizes, safe margins, and QA status before PDF creation.
+## 🎨 Cover Engine Architecture
 
-## Asset library and reuse control
+- **Component-First Rule:** AI models generate isolated visual components only; headless Python engines programmatically assemble typography, spine, barcode zone, and back-cover thumbnail grid.
+- **Strict Brand & Naming Policy:**
+  - Official Brand: `The Pivot Kids`
+  - Canonical Title Format: `Copy to Color: <Subject>`
+  - **Permanently Banned:** The phrase `"My First"` is strictly prohibited across all front covers, spines, back cover grids, interiors, and metadata.
+- **Display Typography Stack:**
+  | Usage | Font Family | Font Asset File |
+  |---|---|---|
+  | Series Title ("Copy to Color") | Luckiest Guy | `LuckiestGuy-Regular.ttf` |
+  | Subject Title ("Animals", etc.) | Luckiest Guy | `LuckiestGuy-Regular.ttf` |
+  | Brand Header & Subtitles | Fredoka Bold | `Fredoka-Bold.ttf` |
+  | Ribbon Banners & Badges | Bungee Regular | `Bungee-Regular.ttf` |
+- **Spine Omission Guard:** Per Amazon KDP rules, books with fewer than 79 pages cannot have printed spine text. Spines are automatically left clean of text when `page_count < 79`.
+- **Barcode Safe Zone:** Strictly reserves an unobstructed $2.0 \times 1.2\text{ in}$ white box at the bottom right of the back cover spread ($0.5\text{ in}$ clearance from trim margins).
 
-Keep editable SVG masters outside Git under `assets/svg/<category>/<asset-id>/v1.svg`; keep the corresponding 2550 x 3300-or-larger QA preview under `assets/previews/<category>/<asset-id>/v1.png`. Categories are `animals`, `flowers`, `trees`, `cartoons`, `solar-system`, `vehicles`, and `other`. The tracked `catalogs/asset_registry.json` stores stable IDs, exact and normalized SVG hashes, preview hashes, a 64-bit visual fingerprint, parent lineage, QA decisions, and published-edition history.
+---
 
-Register only rights-cleared candidate artwork after creating its SVG master and final-size preview. Local paths and hashes are sufficient while the project is local; add the optional versioned GCS URIs when migrating the asset library:
+## 🧪 Testing & Verification
+
+Run the comprehensive unit test suite:
 
 ```powershell
-python scripts/asset_registry.py register --asset-id solar.sun.v1 --category solar-system --subject-id sun --svg .\assets\svg\solar-system\solar.sun.v1\v1.svg --preview .\assets\previews\solar-system\solar.sun.v1\v1.png
+python -m unittest discover -s tests -v
 ```
 
-After visual and technical QA, record a named reviewer and timestamp with `python scripts/asset_registry.py approve --asset-id solar.sun.v1 --reviewer "Reviewer Name" --reviewed-at-utc 2026-10-13T12:00:00Z`. The production PDF builder checks registered IDs and verifies the supplied page preview hash. It blocks exact reuse from a published edition. It flags dHash distance 6 or less for documented human review; similarity approval identifies the specific prior asset, reviewer, date, and rationale. After KDP publication, record only the assets actually present in the released book with `python scripts/asset_registry.py publish --edition-id v1.0-core --book-id PIVOT-SOLAR-001 --published-at YYYY-MM-DD --asset-id solar.sun.v1` (repeat `--asset-id` for each illustration).
-
-For a derivative, create a new `asset_id`, set `--parent-asset-id`, and provide a concrete `--change-note`; a trivial recolor or resize is not a meaningful new asset. Never overwrite an approved SVG master: create a new versioned object and asset ID. Registration checks exact duplicates; similarity checks compare only assets with published usage.
+Tests cover:
+- KDP mechanical dimensions (32-page and 80-page cover spreads)
+- Spine text suppression below 79 pages
+- 12-volume series catalog integrity and naming policy compliance
+- Zero-credit 1:1 binary lineart extraction engine
+- Asset reuse and visual fingerprinting (64-bit dHash)
+- Prompt rendering and seed management

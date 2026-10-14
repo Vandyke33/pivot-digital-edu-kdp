@@ -71,6 +71,7 @@ def calculate_animals_cover_dimensions(
         "spine_width_in": spine_width_in,
         "total_width_in": total_width_in,
         "total_height_in": total_height_in,
+        "safe_margin_in": 0.5,
         "back_left_in": back_left_in,
         "back_right_in": back_right_in,
         "spine_left_in": spine_left_in,
@@ -755,7 +756,7 @@ def draw_back_cover(
     # Copyright below barcode box
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 7.8)
-    c.drawCentredString(barcode_x + barcode_w / 2.0, (dims["bleed_in"] + 0.20) * inch, "© The Pivot Digital Publications. All rights reserved.")
+    c.drawCentredString(barcode_x + barcode_w / 2.0, (dims["bleed_in"] + 0.20) * inch, "© The Pivot Digital Publication. All rights reserved.")
     c.restoreState()
 
 
@@ -975,7 +976,7 @@ def draw_front_cover(
 
 def draw_animals_cover_spread(
     output_pdf_path: Path,
-    page_count: int = 80,
+    page_count: int = 32,
     logo_path: Path | None = None,
     hero_art_path: Path | None = None,
     card_color_thumb: Path | None = None,
@@ -1029,7 +1030,7 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
-    parser.add_argument("--page-count", type=int, default=80, help="Book page count for spine calculation (default 80)")
+    parser.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation (default 32)")
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=card_default, help="Activity card split image or color guide")

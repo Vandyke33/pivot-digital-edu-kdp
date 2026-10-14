@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-FLOWERS-010-32P",
+  "series_id": "copy_to_color_flowers",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Flowers",
+  "subtitle": "Interactive Early Learning Flowers Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "sunflower",
+    "rose",
+    "tulip",
+    "daisy",
+    "lily",
+    "orchid",
+    "lotus",
+    "marigold",
+    "hibiscus",
+    "carnation",
+    "jasmine",
+    "lavender",
+    "daffodil",
+    "poppy",
+    "cherry_blossom",
+    "bluebell",
+    "pansy",
+    "violet",
+    "peony",
+    "chrysanthemum",
+    "magnolia",
+    "iris",
+    "gardenia",
+    "clover",
+    "dandelion",
+    "water_lily",
+    "snapdragon",
+    "morning_glory",
+    "camellia",
+    "flower_bouquet"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Flowers"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "sunflower",
+      "letter": "S",
+      "banner": "S is for SUNFLOWER"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "rose",
+      "letter": "R",
+      "banner": "R is for ROSE"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "tulip",
+      "letter": "T",
+      "banner": "T is for TULIP"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "daisy",
+      "letter": "D",
+      "banner": "D is for DAISY"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "lily",
+      "letter": "L",
+      "banner": "L is for LILY"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "orchid",
+      "letter": "O",
+      "banner": "O is for ORCHID"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "lotus",
+      "letter": "L",
+      "banner": "L is for LOTUS"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "marigold",
+      "letter": "M",
+      "banner": "M is for MARIGOLD"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "hibiscus",
+      "letter": "H",
+      "banner": "H is for HIBISCUS"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "carnation",
+      "letter": "C",
+      "banner": "C is for CARNATION"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "jasmine",
+      "letter": "J",
+      "banner": "J is for JASMINE"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "lavender",
+      "letter": "L",
+      "banner": "L is for LAVENDER"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "daffodil",
+      "letter": "D",
+      "banner": "D is for DAFFODIL"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "poppy",
+      "letter": "P",
+      "banner": "P is for POPPY"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "cherry_blossom",
+      "letter": "C",
+      "banner": "C is for CHERRY BLOSSOM"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "bluebell",
+      "letter": "B",
+      "banner": "B is for BLUEBELL"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "pansy",
+      "letter": "P",
+      "banner": "P is for PANSY"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "violet",
+      "letter": "V",
+      "banner": "V is for VIOLET"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "peony",
+      "letter": "P",
+      "banner": "P is for PEONY"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "chrysanthemum",
+      "letter": "C",
+      "banner": "C is for CHRYSANTHEMUM"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "magnolia",
+      "letter": "M",
+      "banner": "M is for MAGNOLIA"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "iris",
+      "letter": "I",
+      "banner": "I is for IRIS"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "gardenia",
+      "letter": "G",
+      "banner": "G is for GARDENIA"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "clover",
+      "letter": "C",
+      "banner": "C is for CLOVER"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "dandelion",
+      "letter": "D",
+      "banner": "D is for DANDELION"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "water_lily",
+      "letter": "W",
+      "banner": "W is for WATER LILY"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "snapdragon",
+      "letter": "S",
+      "banner": "S is for SNAPDRAGON"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "morning_glory",
+      "letter": "M",
+      "banner": "M is for MORNING GLORY"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "camellia",
+      "letter": "C",
+      "banner": "C is for CAMELLIA"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "flower_bouquet",
+      "letter": "F",
+      "banner": "F is for FLOWER BOUQUET"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

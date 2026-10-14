@@ -24,10 +24,13 @@ def _utc_now() -> str:
 def google_image_prompt(prompt: str) -> str:
     """Convert the registry's provider-neutral negative suffix to natural language."""
     marker = "\n\n--no "
-    if marker not in prompt:
+    if marker in prompt:
+        positive, negative = prompt.rsplit(marker, 1)
+    elif "--no " in prompt:
+        positive, negative = prompt.split("--no ", 1)
+    else:
         return prompt
-    positive, negative = prompt.rsplit(marker, 1)
-    exclusions = ", ".join(item.strip() for item in negative.replace("\n", " ").split(","))
+    exclusions = ", ".join(item.strip() for item in negative.replace("\n", " ").split(",") if item.strip())
     return f"{positive.strip()}\n\nAvoid including: {exclusions}."
 
 
@@ -229,6 +232,11 @@ def generate_batch(
                 },
             )
             raw_bytes = extract_image_bytes(response)
+        # Detect if model returned text alongside or instead of pure image (e.g. prompt rewrite notes)
+        for part in (getattr(response, "parts", None) or []):
+            part_text = getattr(part, "text", None)
+            if part_text:
+                print(f"  [NOTICE] Provider returned textual note for {asset['subject_id']}: {part_text.strip()[:100]}")
         raw_path.parent.mkdir(parents=True, exist_ok=True)
         raw_path.write_bytes(raw_bytes)
         normalization_details = normalize_candidate(raw_bytes, candidate_path, threshold)

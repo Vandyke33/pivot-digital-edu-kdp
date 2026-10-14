@@ -41,6 +41,7 @@ Amazon KDP requires a single flat PDF spread encompassing the front, spine, back
   1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
   2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
   3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
+- **Kid Avatar & Activity Standard (Cover Hero Art):** Front cover hero artwork MUST feature cheerful, playful kid characters / avatars actively engaged in fun activities with the theme items (e.g., kid hugging a baby tiger, kid chef with giant fruit, kid on ABC blocks with giant crayon). NEVER use isolated, inanimate object clipart alone without expressive child avatars.
 
 ---
 
@@ -54,7 +55,7 @@ To match commercial bestsellers without rectangular AI artifacts:
    - **"Copy to Color"**: Arched or floating display bubble lettering in bright white with 3D block extrusion, neon outer glow aura, and vector diamond sparkles (`LuckiestGuy-Regular.ttf`).
    - **"<SUBJECT>" (e.g., "Animals")**: Giant golden-yellow/orange bubble letters with light-yellow highlight glares, 3D depth extrusion, and sparkles (`LuckiestGuy-Regular.ttf`).
    - **Prohibited:** NEVER render the words `"My First"` or any pill badge/ribbon for it.
-4. **Hero Artwork:** Isolated AI-generated character graphic (Baby Tiger & Monkey) scaled proportionally and layered so their paws naturally overlap the green rolling hills.
+4. **Hero Artwork:** Isolated AI-generated character graphic (volume-specific cheerful kid avatar actively interacting with theme objects) scaled proportionally and layered so their feet/paws naturally overlap the green rolling hills.
 5. **Interactive Preview Inset:** A rounded, white floating card displaying the color guide thumbnail and black-and-white coloring outline with drop-shadow styling.
 
 ---
@@ -66,10 +67,10 @@ The back cover acts as an automated cross-selling engine:
 1. **Series Header:** Pill-shaped blue ribbon centered near the top: `★ TITLES IN THIS SERIES ★`.
 2. **Automated $4 \times 3$ Thumbnail Grid:**
    - 12 equal-sized rounded-corner rectangles.
-   - Each card displays the volume's specific theme color header, the title name, a `Vol. #` badge, and the miniature icon art.
-   - Grid layout coordinates are mathematically computed by the Python engine, guaranteeing sub-millimeter alignment across all 15 editions.
+   - Each card displays the volume's specific theme color header, the title name, a `Vol. #` badge, and the miniature icon art (or miniature front cover replica).
+   - Grid layout coordinates are mathematically computed by the Python engine, guaranteeing sub-millimeter alignment across all 12 series volumes.
 3. **Marketing Hook Box:** Green rounded pill at bottom-left:
-   - `★ Collector's Series of 15 Interactive Titles ★`
+   - `★ Collector's Series of 12 Interactive Titles ★`
    - Blurb: *"A playful, easy coloring series designed for early learners to copy, color, and play!"*
 4. **KDP Barcode Exclusion Zone:**
    - Leave an unobstructed white rectangular area of exactly $2.0\text{ inches wide} \times 1.2\text{ inches high}$ located at the bottom right corner ($0.5\text{ inches}$ from the bottom and right trim margins).

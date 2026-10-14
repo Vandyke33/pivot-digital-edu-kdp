@@ -33,12 +33,18 @@ def render_registry(
     skill_level = registry["skill_levels"][skill_level_id]
     edition = registry["edition_modifiers"][edition_id]
     settings = registry["global_settings"]
-    base_seed = int(settings["seed_management"]["base_seed"])
+    base_seed = int(blueprint.get("base_seed", settings["seed_management"]["base_seed"]))
     order = settings["prompt_assembly_order"]
 
     rendered: list[dict[str, Any]] = []
     for subject in blueprint.get("subjects", []):
-        template = blueprint["prompt_template"].format(**subject)
+        try:
+            template = blueprint["prompt_template"].format(**subject)
+        except (KeyError, ValueError, IndexError) as e:
+            raise ValueError(
+                f"Template interpolation failed for subject '{subject.get('name', subject.get('id', '?'))}': {e}. "
+                f"Check prompt_template placeholders match subject fields."
+            ) from e
         sections = {
             "global_style": settings["global_style"],
             "age_profiles[blueprint.age_profile].modifier": age_profile["modifier"],

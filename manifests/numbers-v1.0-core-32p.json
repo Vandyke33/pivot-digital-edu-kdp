@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-NUMBERS-006-32P",
+  "series_id": "copy_to_color_numbers",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Numbers",
+  "subtitle": "Interactive Early Learning Numbers Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "one_sun",
+    "two_birds",
+    "three_cats",
+    "four_apples",
+    "five_stars",
+    "six_bees",
+    "seven_fish",
+    "eight_cups",
+    "nine_cars",
+    "ten_flowers",
+    "eleven_balls",
+    "twelve_hats",
+    "thirteen_hearts",
+    "fourteen_leaves",
+    "fifteen_boats",
+    "sixteen_dots",
+    "seventeen_cakes",
+    "eighteen_trees",
+    "nineteen_ducks",
+    "twenty_eggs",
+    "count_cloud",
+    "count_pencil",
+    "count_clock",
+    "count_coin",
+    "count_crayon",
+    "plus_sign",
+    "minus_sign",
+    "equal_sign",
+    "number_tree",
+    "math_wizard"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Numbers"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "one_sun",
+      "letter": "O",
+      "banner": "O is for ONE SUN"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "two_birds",
+      "letter": "T",
+      "banner": "T is for TWO BIRDS"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "three_cats",
+      "letter": "T",
+      "banner": "T is for THREE CATS"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "four_apples",
+      "letter": "F",
+      "banner": "F is for FOUR APPLES"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "five_stars",
+      "letter": "F",
+      "banner": "F is for FIVE STARS"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "six_bees",
+      "letter": "S",
+      "banner": "S is for SIX BEES"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "seven_fish",
+      "letter": "S",
+      "banner": "S is for SEVEN FISH"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "eight_cups",
+      "letter": "E",
+      "banner": "E is for EIGHT CUPS"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "nine_cars",
+      "letter": "N",
+      "banner": "N is for NINE CARS"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "ten_flowers",
+      "letter": "T",
+      "banner": "T is for TEN FLOWERS"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "eleven_balls",
+      "letter": "E",
+      "banner": "E is for ELEVEN BALLS"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "twelve_hats",
+      "letter": "T",
+      "banner": "T is for TWELVE HATS"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "thirteen_hearts",
+      "letter": "T",
+      "banner": "T is for THIRTEEN HEARTS"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "fourteen_leaves",
+      "letter": "F",
+      "banner": "F is for FOURTEEN LEAVES"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "fifteen_boats",
+      "letter": "F",
+      "banner": "F is for FIFTEEN BOATS"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "sixteen_dots",
+      "letter": "S",
+      "banner": "S is for SIXTEEN DOTS"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "seventeen_cakes",
+      "letter": "S",
+      "banner": "S is for SEVENTEEN CAKES"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "eighteen_trees",
+      "letter": "E",
+      "banner": "E is for EIGHTEEN TREES"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "nineteen_ducks",
+      "letter": "N",
+      "banner": "N is for NINETEEN DUCKS"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "twenty_eggs",
+      "letter": "T",
+      "banner": "T is for TWENTY EGGS"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "count_cloud",
+      "letter": "C",
+      "banner": "C is for COUNT CLOUD"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "count_pencil",
+      "letter": "C",
+      "banner": "C is for COUNT PENCIL"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "count_clock",
+      "letter": "C",
+      "banner": "C is for COUNT CLOCK"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "count_coin",
+      "letter": "C",
+      "banner": "C is for COUNT COIN"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "count_crayon",
+      "letter": "C",
+      "banner": "C is for COUNT CRAYON"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "plus_sign",
+      "letter": "P",
+      "banner": "P is for PLUS SIGN"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "minus_sign",
+      "letter": "M",
+      "banner": "M is for MINUS SIGN"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "equal_sign",
+      "letter": "E",
+      "banner": "E is for EQUAL SIGN"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "number_tree",
+      "letter": "N",
+      "banner": "N is for NUMBER TREE"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "math_wizard",
+      "letter": "M",
+      "banner": "M is for MATH WIZARD"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

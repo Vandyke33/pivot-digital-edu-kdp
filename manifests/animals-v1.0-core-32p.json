@@ -4,7 +4,7 @@
   "series_id": "copy_to_color_animals",
   "edition_id": "v1.0-core-32p",
   "title": "Copy to Color: Animals",
-  "subtitle": "15 Adorable Animal Coloring Pages for Early Learners Ages 4-6",
+  "subtitle": "Interactive Early Learning Animals Coloring Activity Book for Ages 3-5",
   "publisher": "The Pivot Digital Publication",
   "trim": {
     "width_in": 8.5,
@@ -13,7 +13,7 @@
     "page_width_in_with_bleed": 8.625,
     "page_height_in_with_bleed": 11.25
   },
-  "reverse_page": "black",
+  "reverse_page": "activity_chrome",
   "minimum_dpi": 300,
   "minimum_safe_margin_in": 0.5,
   "asset_registry": "../catalogs/asset_registry.json",
@@ -21,54 +21,255 @@
   "expected_subjects": [
     "tiger",
     "monkey",
-    "lion",
     "elephant",
     "giraffe",
+    "lion",
     "zebra",
-    "panda",
+    "hippo",
     "koala",
+    "panda",
     "kangaroo",
-    "penguin",
-    "dolphin",
-    "bear",
     "rabbit",
+    "puppy",
+    "kitten",
+    "cow",
+    "horse",
+    "sheep",
+    "piglet",
+    "deer",
     "fox",
-    "hippo"
+    "bear",
+    "squirrel",
+    "hedgehog",
+    "sloth",
+    "camel",
+    "cheetah",
+    "rhino",
+    "otter",
+    "beaver",
+    "llama",
+    "raccoon"
   ],
-  "asset_root": "../local_builds/animals/v1.0-core/approved-line-art",
   "pages": [
-    {"number": 1, "type": "title"},
-    {"number": 2, "type": "reverse", "design": "black"},
-    {"number": 3, "type": "illustration", "subject_id": "tiger", "asset_id": "copy_to_color_animals.tiger.v1", "asset": "tiger.png", "qa_status": "PENDING_QA"},
-    {"number": 4, "type": "reverse", "design": "black"},
-    {"number": 5, "type": "illustration", "subject_id": "monkey", "asset_id": "copy_to_color_animals.monkey.v1", "asset": "monkey.png", "qa_status": "PENDING_QA"},
-    {"number": 6, "type": "reverse", "design": "black"},
-    {"number": 7, "type": "illustration", "subject_id": "lion", "asset_id": "copy_to_color_animals.lion.v1", "asset": "lion.png", "qa_status": "PENDING_QA"},
-    {"number": 8, "type": "reverse", "design": "black"},
-    {"number": 9, "type": "illustration", "subject_id": "elephant", "asset_id": "copy_to_color_animals.elephant.v1", "asset": "elephant.png", "qa_status": "PENDING_QA"},
-    {"number": 10, "type": "reverse", "design": "black"},
-    {"number": 11, "type": "illustration", "subject_id": "giraffe", "asset_id": "copy_to_color_animals.giraffe.v1", "asset": "giraffe.png", "qa_status": "PENDING_QA"},
-    {"number": 12, "type": "reverse", "design": "black"},
-    {"number": 13, "type": "illustration", "subject_id": "zebra", "asset_id": "copy_to_color_animals.zebra.v1", "asset": "zebra.png", "qa_status": "PENDING_QA"},
-    {"number": 14, "type": "reverse", "design": "black"},
-    {"number": 15, "type": "illustration", "subject_id": "panda", "asset_id": "copy_to_color_animals.panda.v1", "asset": "panda.png", "qa_status": "PENDING_QA"},
-    {"number": 16, "type": "reverse", "design": "black"},
-    {"number": 17, "type": "illustration", "subject_id": "koala", "asset_id": "copy_to_color_animals.koala.v1", "asset": "koala.png", "qa_status": "PENDING_QA"},
-    {"number": 18, "type": "reverse", "design": "black"},
-    {"number": 19, "type": "illustration", "subject_id": "kangaroo", "asset_id": "copy_to_color_animals.kangaroo.v1", "asset": "kangaroo.png", "qa_status": "PENDING_QA"},
-    {"number": 20, "type": "reverse", "design": "black"},
-    {"number": 21, "type": "illustration", "subject_id": "penguin", "asset_id": "copy_to_color_animals.penguin.v1", "asset": "penguin.png", "qa_status": "PENDING_QA"},
-    {"number": 22, "type": "reverse", "design": "black"},
-    {"number": 23, "type": "illustration", "subject_id": "dolphin", "asset_id": "copy_to_color_animals.dolphin.v1", "asset": "dolphin.png", "qa_status": "PENDING_QA"},
-    {"number": 24, "type": "reverse", "design": "black"},
-    {"number": 25, "type": "illustration", "subject_id": "bear", "asset_id": "copy_to_color_animals.bear.v1", "asset": "bear.png", "qa_status": "PENDING_QA"},
-    {"number": 26, "type": "reverse", "design": "black"},
-    {"number": 27, "type": "illustration", "subject_id": "rabbit", "asset_id": "copy_to_color_animals.rabbit.v1", "asset": "rabbit.png", "qa_status": "PENDING_QA"},
-    {"number": 28, "type": "reverse", "design": "black"},
-    {"number": 29, "type": "illustration", "subject_id": "fox", "asset_id": "copy_to_color_animals.fox.v1", "asset": "fox.png", "qa_status": "PENDING_QA"},
-    {"number": 30, "type": "reverse", "design": "black"},
-    {"number": 31, "type": "illustration", "subject_id": "hippo", "asset_id": "copy_to_color_animals.hippo.v1", "asset": "hippo.png", "qa_status": "PENDING_QA"},
-    {"number": 32, "type": "reverse", "design": "black"}
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Animals"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "tiger",
+      "letter": "T",
+      "banner": "T is for TIGER"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "monkey",
+      "letter": "M",
+      "banner": "M is for MONKEY"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "elephant",
+      "letter": "E",
+      "banner": "E is for ELEPHANT"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "giraffe",
+      "letter": "G",
+      "banner": "G is for GIRAFFE"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "lion",
+      "letter": "L",
+      "banner": "L is for LION"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "zebra",
+      "letter": "Z",
+      "banner": "Z is for ZEBRA"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "hippo",
+      "letter": "H",
+      "banner": "H is for HIPPO"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "koala",
+      "letter": "K",
+      "banner": "K is for KOALA"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "panda",
+      "letter": "P",
+      "banner": "P is for PANDA"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "kangaroo",
+      "letter": "K",
+      "banner": "K is for KANGAROO"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "rabbit",
+      "letter": "R",
+      "banner": "R is for RABBIT"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "puppy",
+      "letter": "P",
+      "banner": "P is for PUPPY"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "kitten",
+      "letter": "K",
+      "banner": "K is for KITTEN"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "cow",
+      "letter": "C",
+      "banner": "C is for COW"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "horse",
+      "letter": "H",
+      "banner": "H is for HORSE"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "sheep",
+      "letter": "S",
+      "banner": "S is for SHEEP"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "piglet",
+      "letter": "P",
+      "banner": "P is for PIGLET"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "deer",
+      "letter": "D",
+      "banner": "D is for DEER"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "fox",
+      "letter": "F",
+      "banner": "F is for FOX"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "bear",
+      "letter": "B",
+      "banner": "B is for BEAR"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "squirrel",
+      "letter": "S",
+      "banner": "S is for SQUIRREL"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "hedgehog",
+      "letter": "H",
+      "banner": "H is for HEDGEHOG"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "sloth",
+      "letter": "S",
+      "banner": "S is for SLOTH"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "camel",
+      "letter": "C",
+      "banner": "C is for CAMEL"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "cheetah",
+      "letter": "C",
+      "banner": "C is for CHEETAH"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "rhino",
+      "letter": "R",
+      "banner": "R is for RHINO"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "otter",
+      "letter": "O",
+      "banner": "O is for OTTER"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "beaver",
+      "letter": "B",
+      "banner": "B is for BEAVER"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "llama",
+      "letter": "L",
+      "banner": "L is for LLAMA"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "raccoon",
+      "letter": "R",
+      "banner": "R is for RACCOON"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
   ]
 }
-

@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-TOYS-009-32P",
+  "series_id": "copy_to_color_toys",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Toys",
+  "subtitle": "Interactive Early Learning Toys Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "teddy_bear",
+    "toy_car",
+    "building_blocks",
+    "doll",
+    "toy_train",
+    "drum",
+    "rocking_horse",
+    "yo-yo",
+    "kite",
+    "rubber_duck",
+    "spinning_top",
+    "balloon",
+    "robot_toy",
+    "water_pistol",
+    "puzzle",
+    "pinwheel",
+    "xylophone_toy",
+    "toy_plane",
+    "action_figure",
+    "jack_in_the_box",
+    "slinky",
+    "marbles",
+    "plush_bunny",
+    "toy_boat",
+    "wind-up_mouse",
+    "magic_wand",
+    "kaleidoscope",
+    "puppet",
+    "tea_set",
+    "toy_box"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Toys"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "teddy_bear",
+      "letter": "T",
+      "banner": "T is for TEDDY BEAR"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "toy_car",
+      "letter": "T",
+      "banner": "T is for TOY CAR"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "building_blocks",
+      "letter": "B",
+      "banner": "B is for BUILDING BLOCKS"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "doll",
+      "letter": "D",
+      "banner": "D is for DOLL"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "toy_train",
+      "letter": "T",
+      "banner": "T is for TOY TRAIN"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "drum",
+      "letter": "D",
+      "banner": "D is for DRUM"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "rocking_horse",
+      "letter": "R",
+      "banner": "R is for ROCKING HORSE"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "yo-yo",
+      "letter": "Y",
+      "banner": "Y is for YO-YO"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "kite",
+      "letter": "K",
+      "banner": "K is for KITE"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "rubber_duck",
+      "letter": "R",
+      "banner": "R is for RUBBER DUCK"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "spinning_top",
+      "letter": "S",
+      "banner": "S is for SPINNING TOP"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "balloon",
+      "letter": "B",
+      "banner": "B is for BALLOON"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "robot_toy",
+      "letter": "R",
+      "banner": "R is for ROBOT TOY"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "water_pistol",
+      "letter": "W",
+      "banner": "W is for WATER PISTOL"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "puzzle",
+      "letter": "P",
+      "banner": "P is for PUZZLE"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "pinwheel",
+      "letter": "P",
+      "banner": "P is for PINWHEEL"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "xylophone_toy",
+      "letter": "X",
+      "banner": "X is for XYLOPHONE TOY"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "toy_plane",
+      "letter": "T",
+      "banner": "T is for TOY PLANE"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "action_figure",
+      "letter": "A",
+      "banner": "A is for ACTION FIGURE"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "jack_in_the_box",
+      "letter": "J",
+      "banner": "J is for JACK IN THE BOX"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "slinky",
+      "letter": "S",
+      "banner": "S is for SLINKY"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "marbles",
+      "letter": "M",
+      "banner": "M is for MARBLES"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "plush_bunny",
+      "letter": "P",
+      "banner": "P is for PLUSH BUNNY"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "toy_boat",
+      "letter": "T",
+      "banner": "T is for TOY BOAT"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "wind-up_mouse",
+      "letter": "W",
+      "banner": "W is for WIND-UP MOUSE"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "magic_wand",
+      "letter": "M",
+      "banner": "M is for MAGIC WAND"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "kaleidoscope",
+      "letter": "K",
+      "banner": "K is for KALEIDOSCOPE"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "puppet",
+      "letter": "P",
+      "banner": "P is for PUPPET"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "tea_set",
+      "letter": "T",
+      "banner": "T is for TEA SET"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "toy_box",
+      "letter": "T",
+      "banner": "T is for TOY BOX"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

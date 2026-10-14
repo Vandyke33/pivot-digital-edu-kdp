@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-TRANSPORT-011-32P",
+  "series_id": "copy_to_color_transport",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Transport",
+  "subtitle": "Interactive Early Learning Transport Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "car",
+    "bus",
+    "bicycle",
+    "train",
+    "airplane",
+    "boat",
+    "helicopter",
+    "motorcycle",
+    "fire_truck",
+    "police_car",
+    "ambulance",
+    "scooter",
+    "submarine",
+    "hot_air_balloon",
+    "tractor",
+    "taxi",
+    "truck",
+    "rocket",
+    "ship",
+    "skateboard",
+    "cable_car",
+    "ferry",
+    "bulldozer",
+    "cement_mixer",
+    "crane",
+    "dirt_bike",
+    "hovercraft",
+    "monorail",
+    "tram",
+    "space_shuttle"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Transport"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "car",
+      "letter": "C",
+      "banner": "C is for CAR"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "bus",
+      "letter": "B",
+      "banner": "B is for BUS"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "bicycle",
+      "letter": "B",
+      "banner": "B is for BICYCLE"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "train",
+      "letter": "T",
+      "banner": "T is for TRAIN"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "airplane",
+      "letter": "A",
+      "banner": "A is for AIRPLANE"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "boat",
+      "letter": "B",
+      "banner": "B is for BOAT"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "helicopter",
+      "letter": "H",
+      "banner": "H is for HELICOPTER"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "motorcycle",
+      "letter": "M",
+      "banner": "M is for MOTORCYCLE"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "fire_truck",
+      "letter": "F",
+      "banner": "F is for FIRE TRUCK"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "police_car",
+      "letter": "P",
+      "banner": "P is for POLICE CAR"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "ambulance",
+      "letter": "A",
+      "banner": "A is for AMBULANCE"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "scooter",
+      "letter": "S",
+      "banner": "S is for SCOOTER"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "submarine",
+      "letter": "S",
+      "banner": "S is for SUBMARINE"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "hot_air_balloon",
+      "letter": "H",
+      "banner": "H is for HOT AIR BALLOON"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "tractor",
+      "letter": "T",
+      "banner": "T is for TRACTOR"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "taxi",
+      "letter": "T",
+      "banner": "T is for TAXI"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "truck",
+      "letter": "T",
+      "banner": "T is for TRUCK"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "rocket",
+      "letter": "R",
+      "banner": "R is for ROCKET"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "ship",
+      "letter": "S",
+      "banner": "S is for SHIP"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "skateboard",
+      "letter": "S",
+      "banner": "S is for SKATEBOARD"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "cable_car",
+      "letter": "C",
+      "banner": "C is for CABLE CAR"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "ferry",
+      "letter": "F",
+      "banner": "F is for FERRY"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "bulldozer",
+      "letter": "B",
+      "banner": "B is for BULLDOZER"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "cement_mixer",
+      "letter": "C",
+      "banner": "C is for CEMENT MIXER"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "crane",
+      "letter": "C",
+      "banner": "C is for CRANE"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "dirt_bike",
+      "letter": "D",
+      "banner": "D is for DIRT BIKE"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "hovercraft",
+      "letter": "H",
+      "banner": "H is for HOVERCRAFT"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "monorail",
+      "letter": "M",
+      "banner": "M is for MONORAIL"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "tram",
+      "letter": "T",
+      "banner": "T is for TRAM"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "space_shuttle",
+      "letter": "S",
+      "banner": "S is for SPACE SHUTTLE"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

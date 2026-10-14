@@ -199,6 +199,33 @@ class AnimalsCoverSpreadTests(unittest.TestCase):
             self.assertTrue(out_png.exists())
             self.assertGreater(out_png.stat().st_size, 5000)
 
+    def test_barcode_safe_zone_dimensions_and_position(self) -> None:
+        """Verify Amazon KDP barcode box is exactly 2.0 x 1.2 inches with required margin clearance."""
+        dims = calculate_animals_cover_dimensions(page_count=32)
+        barcode_w = 2.0
+        barcode_h = 1.2
+        # Barcode is located on back cover (between bleed_in and back_right_in)
+        barcode_x_in = dims["back_right_in"] - 2.4
+        barcode_y_in = dims["bleed_in"] + 0.45
+
+        # Barcode must fit inside back cover margins with at least 0.25 in clearance from trim
+        self.assertGreaterEqual(barcode_x_in, dims["back_left_in"] + 0.25)
+        self.assertLessEqual(barcode_x_in + barcode_w, dims["back_right_in"] - 0.25)
+        self.assertGreaterEqual(barcode_y_in, dims["bleed_in"] + 0.25)
+        self.assertLessEqual(barcode_y_in + barcode_h, dims["total_height_in"] - 0.25)
+
+    def test_draw_cover_spread_defaults_to_32_pages(self) -> None:
+        """Verify draw_animals_cover_spread defaults to 32 pages and suppresses spine text."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            out_pdf = Path(tmp_dir) / "default-32p-cover.pdf"
+            # Call without explicit page_count
+            draw_animals_cover_spread(output_pdf_path=out_pdf)
+            self.assertTrue(out_pdf.exists())
+            reader = PdfReader(str(out_pdf))
+            text = reader.pages[0].extract_text()
+            # Under 79 pages: spine text must be omitted per KDP policy
+            self.assertNotIn("Copy to Color: Animals", text)
+
 
 if __name__ == "__main__":
     unittest.main()

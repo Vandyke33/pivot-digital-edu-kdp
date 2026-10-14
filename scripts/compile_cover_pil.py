@@ -1,4 +1,9 @@
 """
+[DEPRECATION NOTICE]
+`compile_cover_pil.py` is the experimental PIL-based cover compiler.
+The canonical production cover engine is `compile_animals_cover.py` (ReportLab Two-Pass vector engine).
+This module is maintained for reference and thumbnail generation compatibility.
+
 Automated KDP Full-Wrap Cover Spread Generator (Two-Pass Series Architecture - PIL Engine)
 
 Pass 1: Generates all 12 standalone Front Covers with custom theme palettes, bundled fancy fonts,
@@ -25,6 +30,14 @@ if str(REPO_ROOT) not in sys.path:
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 from scripts.utils.alpha_extraction import extract_with_sticker_contour
+from scripts.utils.cover_environment import (
+    draw_checkered_border,
+    draw_curved_ribbon_header,
+    draw_jungalow_elements,
+    draw_mascot_boy_with_wand,
+    draw_pattern_collage,
+)
+
 
 # ---------------------------------------------------------------------------
 # 1. KDP MECHANICAL CONSTANTS & 12-VOLUME SERIES CONFIGURATION
@@ -339,7 +352,14 @@ def render_single_front_cover(
     cover thumbnail on the Back Cover of all volumes in the series.
     """
     front = draw_gradient_background(width_px, height_px, vol_meta["bg_top"], vol_meta["bg_bottom"])
+    # 1. Dense vector pattern collage (paint splatters, doodles, bubbles)
+    draw_pattern_collage(front, width_px, height_px, is_spread=False)
+    # 2. Layered green rolling hills
     draw_rolling_hills(front, height_px, width_px)
+    # 3. Lush jungalow nature accents (toadstool mushrooms, daisies, ladybugs, butterflies)
+    draw_jungalow_elements(front, width_px, height_px, is_spread=False)
+    # 4. Storybook checkered outer border
+    draw_checkered_border(front, width_px, height_px, tile_size=44, rows=2)
     draw = ImageDraw.Draw(front)
     cx = width_px // 2
 
@@ -525,22 +545,31 @@ def render_back_cover_grid(
 ) -> None:
     """
     PASS 2 BACK COVER GRID: Places the 12 actual rendered Front Covers into the 4x3
-    "Titles in this Series" grid so every miniature book on the back cover is a 100%
-    faithful replica of the corresponding volume's front cover.
+    "Titles in this Series" grid inside a warm ivory container so every miniature book
+    on the back cover is a 100% faithful replica of the corresponding volume's front cover.
     """
-    cols, rows = 3, 4
+    # Large light cream / pale ivory container card with drop shadow
+    draw.rounded_rectangle(
+        [start_x - 14, start_y - 14, start_x + grid_w + 14, start_y + grid_h + 14],
+        radius=28,
+        fill=(255, 252, 240, 245),
+        outline=(254, 215, 170, 255),
+        width=4,
+    )
+
+    cols, rows = 4, 3
     cell_w = grid_w // cols
     cell_h = grid_h // rows
-    badge_font = load_fancy_font("Fredoka-Bold.ttf", 26)
+    badge_font = load_fancy_font("Fredoka-Bold.ttf", 22)
 
     for idx, item in enumerate(SERIES_TITLES):
         col = idx % cols
         row = idx // cols
 
-        x0 = start_x + col * cell_w + 16
-        y0 = start_y + row * cell_h + 12
-        card_w = cell_w - 32
-        card_h = cell_h - 24
+        x0 = start_x + col * cell_w + 8
+        y0 = start_y + row * cell_h + 8
+        card_w = cell_w - 16
+        card_h = cell_h - 16
 
         front_thumb = rendered_fronts.get(item["id"])
         if front_thumb:
@@ -554,7 +583,7 @@ def render_back_cover_grid(
             draw.rounded_rectangle(
                 [tx + 6, ty + 8, tx + thumb_copy.width + 6, ty + thumb_copy.height + 8],
                 radius=10,
-                fill=(20, 10, 5, 90),
+                fill=(20, 10, 5, 80),
             )
             canvas.paste(thumb_copy, (tx, ty), thumb_copy)
             # Crisp white book frame
@@ -565,18 +594,19 @@ def render_back_cover_grid(
                 width=4,
             )
 
-            # High-contrast "Vol. #" collector pill badge at top-right of each mini cover
-            bw, bh = 94, 38
-            bx, by = tx + thumb_copy.width - bw - 8, ty + 8
-            draw.rounded_rectangle([bx, by, bx + bw, by + bh], radius=14, fill=NAVY_TEXT, outline="white", width=2)
-            draw.text((bx + 14, by + 5), item["vol"], fill=YELLOW_TEXT, font=badge_font)
+            # High-contrast "Vol. #" collector star pill badge at top-right
+            bw, bh = 84, 34
+            bx, by = tx + thumb_copy.width - bw - 6, ty + 6
+            draw.rounded_rectangle([bx, by, bx + bw, by + bh], radius=12, fill=NAVY_TEXT, outline="white", width=2)
+            draw.text((bx + 12, by + 4), item["vol"], fill=YELLOW_TEXT, font=badge_font)
+
 
 
 # ---------------------------------------------------------------------------
 # 6. MAIN COMPILER FUNCTION (TWO-PASS FULL-WRAP BUILDER)
 # ---------------------------------------------------------------------------
 def build_kdp_cover(
-    page_count: int = 80,
+    page_count: int = 32,
     output_path: str = "local_builds/animals/v1.0-core/animals-cover-spread.pdf",
     active_vol_id: str = "vol_02",
     hero_image_path: str | None = None,
@@ -629,7 +659,15 @@ def build_kdp_cover(
 
     print(f"[Pass 2] Assembling Full-Wrap Spread: {w}x{h} px | Spine: {specs['spine_in']:.3f} in ({spine_w} px)")
     cover = draw_gradient_background(w, h, active_meta["bg_top"], active_meta["bg_bottom"])
+    # 1. Overlay dense vector pattern collage across full spread
+    draw_pattern_collage(cover, w, h, is_spread=True)
+    # 2. Layered green rolling hills
     draw_rolling_hills(cover, h, w)
+    # 3. Lush jungalow nature accents (toadstool mushrooms, daisies, ladybugs, butterflies)
+    draw_jungalow_elements(cover, w, h, is_spread=True)
+    # 4. Checkered storybook frame around perimeter of spread
+    draw_checkered_border(cover, w, h, tile_size=44, rows=2)
+
     draw = ImageDraw.Draw(cover)
 
     back_x_end = bleed + trim_w
@@ -644,25 +682,35 @@ def build_kdp_cover(
         logo_back.thumbnail((230, 230), Image.Resampling.LANCZOS)
         cover.paste(logo_back, (bleed + int(0.35 * DPI), int(0.32 * DPI)), logo_back)
 
-    # 2. Top "TITLES IN THIS SERIES" blue ribbon banner
-    banner_w, banner_h = int(trim_w * 0.60), 88
-    bx0 = bleed + int(trim_w * 0.35)
-    by0 = int(0.6 * DPI)
-    draw.rounded_rectangle([bx0, by0, bx0 + banner_w, by0 + banner_h], radius=28, fill="#0077B6", outline="white", width=4)
-    banner_font = load_fancy_font("Fredoka-Bold.ttf", 44)
-    draw_sparkle_star(draw, bx0 + 36, by0 + banner_h // 2, outer_r=16, inner_r=4)
-    draw_sparkle_star(draw, bx0 + banner_w - 36, by0 + banner_h // 2, outer_r=16, inner_r=4)
-    b_txt = "TITLES IN THIS SERIES"
-    b_bb = draw.textbbox((0, 0), b_txt, font=banner_font)
-    draw.text((bx0 + (banner_w - (b_bb[2] - b_bb[0])) // 2, by0 + 16), b_txt, fill="white", font=banner_font)
+    # 2. Top "★ TITLES IN THIS SERIES ★" curved ribbon banner
+    banner_font = load_fancy_font("Fredoka-Bold.ttf", 46)
+    ribbon_cx = bleed + trim_w // 2 + 30
+    ribbon_cy = int(0.55 * DPI)
+    draw_curved_ribbon_header(cover, ribbon_cx, ribbon_cy, "★ TITLES IN THIS SERIES ★", banner_font)
 
-    # 3. 4x3 Grid of authentic Front Covers
-    grid_start_y = int(1.15 * DPI)
+    # 3. "★ CAN YOU COLLECT THEM ALL? ★" banner pill + Boy Mascot with Star Wand
+    pill_w = int(trim_w * 0.58)
+    pill_h = 72
+    px0 = bleed + int(0.08 * trim_w)
+    py0 = int(0.85 * DPI)
+    draw.rounded_rectangle([px0, py0, px0 + pill_w, py0 + pill_h], radius=24, fill=(254, 240, 138, 255), outline=(220, 38, 38, 255), width=5)
+    collect_font = load_fancy_font("Fredoka-Bold.ttf", 30)
+    coll_txt = "★ CAN YOU COLLECT THEM ALL? ★"
+    cbb = draw.textbbox((0, 0), coll_txt, font=collect_font)
+    draw.text((px0 + (pill_w - (cbb[2] - cbb[0])) // 2, py0 + (pill_h - (cbb[3] - cbb[1])) // 2 - 2), coll_txt, fill=(185, 28, 28, 255), font=collect_font)
+
+    # Mascot Boy waving star wand
+    mascot_x = bleed + int(0.85 * trim_w)
+    mascot_y = int(0.92 * DPI)
+    draw_mascot_boy_with_wand(cover, mascot_x, mascot_y)
+
+    # 4. 4x3 Grid of authentic Front Covers
+    grid_start_y = int(1.18 * DPI)
     grid_w = int(trim_w * 0.90)
-    grid_h = int(h * 0.64)
+    grid_h = int(h * 0.62)
     render_back_cover_grid(cover, draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h, rendered_fronts)
 
-    # 4. Collector's container (Bottom-left)
+    # 5. Collector's container (Bottom-left)
     c_w, c_h = int(trim_w * 0.54), 80
     cx0 = bleed + int(0.4 * DPI)
     cy0 = h - bleed - int(1.55 * DPI)
@@ -670,26 +718,30 @@ def build_kdp_cover(
     coll_font = load_fancy_font("Fredoka-Bold.ttf", 28)
     draw_sparkle_star(draw, cx0 + 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
     draw_sparkle_star(draw, cx0 + c_w - 26, cy0 + c_h // 2, outer_r=14, inner_r=3)
-    c_txt = "Collector's Series of 12 Interactive Titles"
+    c_txt = "★ Collector's Series of 12 Interactive Titles ★"
     c_bb = draw.textbbox((0, 0), c_txt, font=coll_font)
     draw.text((cx0 + (c_w - (c_bb[2] - c_bb[0])) // 2, cy0 + 22), c_txt, fill="white", font=coll_font)
 
-    # Marketing blurb below container (Collision-free)
+    # Marketing blurb below container
     blurb_f = load_fancy_font("Fredoka-Bold.ttf", 26)
     draw.text((cx0 + 8, cy0 + 95), "A playful, easy coloring series designed for early learners", fill="white", font=blurb_f)
     draw.text((cx0 + 8, cy0 + 130), "to copy, color, and play!", fill="white", font=blurb_f)
 
-    # 5. Barcode Safe Area (2.0 x 1.2 in = 600 x 360 px strictly preserved)
+    # 6. Barcode Safe Area (2.0 x 1.2 in = 600 x 360 px strictly preserved)
     bc_w, bc_h = int(2.0 * DPI), int(1.2 * DPI)
     bc_x = back_x_end - bc_w - int(0.5 * DPI)
     bc_y = h - bleed - bc_h - int(0.5 * DPI)
     draw.rounded_rectangle([bc_x, bc_y, bc_x + bc_w, bc_y + bc_h], radius=12, fill="white", outline="#CCCCCC", width=2)
     barcode_f = load_fancy_font("Fredoka-Bold.ttf", 24)
-    draw.text((bc_x + 130, bc_y + 160), "[ KDP Barcode Location ]", fill="#888888", font=barcode_f)
+    for bx in range(bc_x + 30, bc_x + bc_w - 30, 8):
+        bar_w = 4 if (bx % 16 == 0) else 2
+        draw.line([(bx, bc_y + 25), (bx, bc_y + bc_h - 65)], fill="black", width=bar_w)
+    draw.text((bc_x + 220, bc_y + bc_h - 45), "2.0 x 1.2 in", fill="#666666", font=barcode_f)
 
     # Copyright notice
     copy_f = load_fancy_font("Fredoka-Bold.ttf", 22)
-    draw.text((bc_x - 30, bc_y + bc_h + 30), "© The Pivot Digital Publications. All rights reserved.", fill="white", font=copy_f)
+    draw.text((bc_x - 30, bc_y + bc_h + 30), "© The Pivot Digital Publication. All rights reserved.", fill="white", font=copy_f)
+
 
     # ---------------- SPINE SECTION ----------------
     # Amazon KDP rule: strictly suppress spine text if page count < 79
@@ -780,7 +832,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Automated KDP Full-Wrap Cover Spread Generator")
     parser.add_argument("--vol-id", default="vol_02", help="Active volume ID (e.g. vol_01 to vol_12)")
-    parser.add_argument("--page-count", type=int, default=80, help="Page count for spine calculation (32 or 80)")
+    parser.add_argument("--page-count", type=int, default=32, help="Page count for spine calculation (32 or 80, default 32)")
     parser.add_argument("--output", default=None, help="Output PDF path")
     parser.add_argument("--hero", default=None, help="Path or remote URL to hero illustration")
     parser.add_argument("--inset", default=None, help="Path or remote URL to inset illustration")

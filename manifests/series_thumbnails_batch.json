@@ -3,7 +3,7 @@
   "series_id": "copy_to_color",
   "edition_id": "series_thumbnails_v1",
   "registry_version": "1.0.0",
-  "batch_purpose": "12 Back-Cover Series Grid Miniature Book Cover Icons",
+  "batch_purpose": "12 Back-Cover Series Grid Miniature Book Cover Icons and Front Cover Heroes (Kid Avatars & Activities)",
   "provider": "google_genai",
   "model": "imagen-3.0-generate-002",
   "aspect_ratio": "1:1",
@@ -17,13 +17,13 @@
       "title": "Alphabet",
       "theme_color": "#FF6B35",
       "theme_name": "Warm Orange",
-      "subject": "Alphabet wooden toy blocks with bright letters A, B, C",
-      "prompt": "Cute vibrant cartoon alphabet wooden toy blocks with cheerful letters A, B, C for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright warm orange #FF6B35 background, flat app-icon style",
-      "negative_prompt": "text outside of toy blocks, book cover mockup, 3D realistic rendering, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Playful toddler boy and girl with giant alphabet blocks A, B, C and giant crayon",
+      "prompt": "Cute cheerful toddler boy and girl laughing and sitting happily on giant colorful wooden alphabet blocks A, B, and C, holding a giant bright crayon, joyful laughing expressions, vibrant 2D vector children's book illustration, bold colors, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text outside of toy blocks, book cover mockup, 3D realistic rendering, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51001,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_01_alphabet.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_01_alphabet.png"
     },
     {
       "vol": "Vol. 2",
@@ -32,13 +32,13 @@
       "title": "Animals",
       "theme_color": "#FF4D4D",
       "theme_name": "Coral Red",
-      "subject": "Cute baby tiger sitting cheerfully beside a playful baby monkey",
-      "prompt": "Cute vibrant cartoon baby tiger and baby monkey for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright coral red #FF4D4D background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Cute explorer girl in safari hat hugging baby tiger cub and laughing with baby monkey",
+      "prompt": "Cute cheerful preschool girl wearing a little safari explorer hat happily sitting on green grass hugging a friendly baby tiger cub and laughing with a playful baby monkey, vibrant 2D vector children's book illustration, bright clean black outlines, joyful expressions, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51002,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_02_animals.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_02_animals.png"
     },
     {
       "vol": "Vol. 3",
@@ -47,13 +47,13 @@
       "title": "Birds",
       "theme_color": "#2EC4B6",
       "theme_name": "Teal",
-      "subject": "Cheerful colorful tropical parrot perched happily",
-      "prompt": "Cute vibrant cartoon colorful tropical parrot perched happily for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright teal #2EC4B6 background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, realistic feathers, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Curious boy with binoculars looking up at a cheerful colorful parrot",
+      "prompt": "Cute happy toddler boy holding toy binoculars pointing up excitedly at a colorful bright tropical parrot and singing songbird perched nearby, vibrant 2D vector children's book illustration, joyful expression, clean thick black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, realistic feathers, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51003,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_03_birds.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_03_birds.png"
     },
     {
       "vol": "Vol. 4",
@@ -62,13 +62,13 @@
       "title": "Sports",
       "theme_color": "#80ED99",
       "theme_name": "Mint Green",
-      "subject": "Playful soccer ball smiling beside a cute sports sneaker",
-      "prompt": "Cute vibrant cartoon soccer ball smiling beside a cute colorful sports sneaker for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright mint green #80ED99 background, flat app-icon style",
-      "negative_prompt": "text, brand logos, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Energetic sporty boy kicking a soccer ball and girl with basketball",
+      "prompt": "Energetic playful little boy in a sporty cap cheerfully kicking a soccer ball while a joyful little girl spins a basketball on her finger, bright joyful smiles, vibrant 2D vector children's book illustration, clean bold black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, brand logos, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51004,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_04_sports.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_04_sports.png"
     },
     {
       "vol": "Vol. 5",
@@ -77,13 +77,13 @@
       "title": "Monsters",
       "theme_color": "#E056FD",
       "theme_name": "Lavender Pink",
-      "subject": "Friendly smiling fuzzy blue little monster with tiny horns",
-      "prompt": "Cute vibrant cartoon friendly fuzzy little blue monster with tiny soft horns for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright lavender pink #E056FD background, flat app-icon style",
-      "negative_prompt": "scary, text, book cover mockup, photorealistic fur, borders, drop shadows, watermarks, frames",
+      "subject": "Laughing preschool girl giving a high-five to a friendly fuzzy blue monster",
+      "prompt": "Playful laughing little girl giving a cheerful high-five to a friendly fluffy blue little monster with tiny soft horns, cute joyful expressions, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "scary, creepy, dark, text, book cover mockup, photorealistic fur, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51005,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_05_monsters.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_05_monsters.png"
     },
     {
       "vol": "Vol. 6",
@@ -92,13 +92,13 @@
       "title": "Numbers",
       "theme_color": "#9B5DE5",
       "theme_name": "Purple",
-      "subject": "Happy cartoon baby giraffe sitting beside colorful number blocks 1, 2, 3",
-      "prompt": "Cute vibrant cartoon baby giraffe sitting beside colorful number blocks 1, 2, 3 for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright purple #9B5DE5 background, flat app-icon style",
-      "negative_prompt": "text outside of numbers, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Toddler boy and girl stacking giant colorful number blocks 1, 2, 3",
+      "prompt": "Cheerful toddler boy and girl enthusiastically stacking giant bright colorful numbered building blocks 1, 2, and 3, counting with huge smiles, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text outside of numbers, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51006,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_06_numbers.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_06_numbers.png"
     },
     {
       "vol": "Vol. 7",
@@ -107,13 +107,13 @@
       "title": "Fruits",
       "theme_color": "#00BBF9",
       "theme_name": "Bright Cyan",
-      "subject": "Smiling cartoon tropical pineapple and friendly yellow banana",
-      "prompt": "Cute vibrant cartoon tropical smiling pineapple and friendly yellow banana for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright cyan #00BBF9 background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, realistic fruit skin, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Little chef boy hugging a giant delicious strawberry with bananas and oranges",
+      "prompt": "Cute happy preschool boy wearing a little chef hat cheerfully hugging a giant delicious bright strawberry and smiling beside giant juicy oranges and bananas, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, realistic fruit skin, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51007,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_07_fruits.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_07_fruits.png"
     },
     {
       "vol": "Vol. 8",
@@ -122,13 +122,13 @@
       "title": "Shapes",
       "theme_color": "#F15BB5",
       "theme_name": "Rose Pink",
-      "subject": "Joyful smiling golden star character with friendly circle and square",
-      "prompt": "Cute vibrant cartoon joyful smiling golden star character with friendly geometric circle and square for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright rose pink #F15BB5 background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Creative girl holding a sparkling star and building a shape castle",
+      "prompt": "Creative little girl in colorful overalls proudly holding a sparkling golden star shape and building a shape castle with circle, square, and triangle blocks, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51008,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_08_shapes.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_08_shapes.png"
     },
     {
       "vol": "Vol. 9",
@@ -137,13 +137,13 @@
       "title": "Toys",
       "theme_color": "#0077B6",
       "theme_name": "Royal Blue",
-      "subject": "Cute classic cuddly brown teddy bear with a little red toy car",
-      "prompt": "Cute vibrant cartoon cuddly teddy bear sitting with a little red toy car for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid bright royal blue #0077B6 background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Joyful toddler boy hugging giant teddy bear and playing with toy train",
+      "prompt": "Joyful toddler boy happily hugging a giant cuddly teddy bear while racing a colorful toy train around wooden building blocks, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, realistic fur, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51009,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_09_toys.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_09_toys.png"
     },
     {
       "vol": "Vol. 10",
@@ -152,13 +152,13 @@
       "title": "Flowers",
       "theme_color": "#6B4226",
       "theme_name": "Warm Amber",
-      "subject": "Cheerful blooming smiling giant sunflower with friendly green leaves",
-      "prompt": "Cute vibrant cartoon blooming smiling giant sunflower with cheerful green leaves for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid warm amber #6B4226 background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Little gardener girl in overalls watering smiling sunflowers with yellow watering can",
+      "prompt": "Adorable little gardener girl in denim overalls holding a cute yellow watering can and happily watering giant smiling bright sunflowers and daisies, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51010,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_10_flowers.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_10_flowers.png"
     },
     {
       "vol": "Vol. 11",
@@ -167,13 +167,13 @@
       "title": "Transport",
       "theme_color": "#1D3557",
       "theme_name": "Deep Blue",
-      "subject": "Speedy cute little blue city car with round friendly headlights",
-      "prompt": "Cute vibrant cartoon speedy little blue city car with round friendly headlights for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid deep blue #1D3557 background, flat app-icon style",
-      "negative_prompt": "text, brand badges, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Little boy in pilot cap holding toy airplane inside bright red pedal car",
+      "prompt": "Excited little boy wearing a cute pilot cap holding a toy airplane and sitting inside a bright red cartoon pedal car, ready to zoom, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, brand badges, book cover mockup, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51011,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_11_transport.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_11_transport.png"
     },
     {
       "vol": "Vol. 12",
@@ -182,13 +182,13 @@
       "title": "Vegetables",
       "theme_color": "#5A189A",
       "theme_name": "Deep Violet",
-      "subject": "Friendly smiling orange carrot and happy purple eggplant",
-      "prompt": "Cute vibrant cartoon friendly smiling orange carrot and happy purple eggplant for children, bold colorful 2D vector art, bright cheerful colors, thick clean outlines, joyful expression, isolated on a solid deep violet #5A189A background, flat app-icon style",
-      "negative_prompt": "text, book cover mockup, realistic vegetable skin, photographic texture, borders, drop shadows, watermarks, frames",
+      "subject": "Little farm boy in boots pulling giant friendly cartoon carrot with smiling veggies",
+      "prompt": "Cheerful little farm boy wearing boots happily pulling a giant friendly cartoon carrot from a vegetable garden with smiling broccoli, vibrant 2D vector children's book illustration, thick clean black outlines, isolated on a solid pure white background, flat retail sticker style",
+      "negative_prompt": "text, book cover mockup, realistic vegetable skin, photographic texture, borders, drop shadows, watermarks, frames, complex background scenery",
       "seed": 51012,
       "review_status": "GENERATED_LOCAL",
       "source_uri": null,
-      "local_asset_path": "local_builds\\animals\\assets\\thumbnails\\vol_12_vegetables.png"
+      "local_asset_path": "local_builds/animals/assets/thumbnails/vol_12_vegetables.png"
     }
   ]
 }

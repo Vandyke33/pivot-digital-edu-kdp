@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-VEGETABLES-012-32P",
+  "series_id": "copy_to_color_vegetables",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Vegetables",
+  "subtitle": "Interactive Early Learning Vegetables Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "carrot",
+    "tomato",
+    "broccoli",
+    "potato",
+    "corn",
+    "eggplant",
+    "peas",
+    "pumpkin",
+    "cucumber",
+    "bell_pepper",
+    "onion",
+    "garlic",
+    "mushroom",
+    "cauliflower",
+    "cabbage",
+    "lettuce",
+    "spinach",
+    "radish",
+    "beetroot",
+    "zucchini",
+    "sweet_potato",
+    "asparagus",
+    "celery",
+    "ginger",
+    "artichoke",
+    "chili_pepper",
+    "turnip",
+    "green_beans",
+    "okra",
+    "vegetable_basket"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Vegetables"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "carrot",
+      "letter": "C",
+      "banner": "C is for CARROT"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "tomato",
+      "letter": "T",
+      "banner": "T is for TOMATO"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "broccoli",
+      "letter": "B",
+      "banner": "B is for BROCCOLI"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "potato",
+      "letter": "P",
+      "banner": "P is for POTATO"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "corn",
+      "letter": "C",
+      "banner": "C is for CORN"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "eggplant",
+      "letter": "E",
+      "banner": "E is for EGGPLANT"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "peas",
+      "letter": "P",
+      "banner": "P is for PEAS"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "pumpkin",
+      "letter": "P",
+      "banner": "P is for PUMPKIN"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "cucumber",
+      "letter": "C",
+      "banner": "C is for CUCUMBER"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "bell_pepper",
+      "letter": "B",
+      "banner": "B is for BELL PEPPER"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "onion",
+      "letter": "O",
+      "banner": "O is for ONION"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "garlic",
+      "letter": "G",
+      "banner": "G is for GARLIC"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "mushroom",
+      "letter": "M",
+      "banner": "M is for MUSHROOM"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "cauliflower",
+      "letter": "C",
+      "banner": "C is for CAULIFLOWER"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "cabbage",
+      "letter": "C",
+      "banner": "C is for CABBAGE"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "lettuce",
+      "letter": "L",
+      "banner": "L is for LETTUCE"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "spinach",
+      "letter": "S",
+      "banner": "S is for SPINACH"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "radish",
+      "letter": "R",
+      "banner": "R is for RADISH"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "beetroot",
+      "letter": "B",
+      "banner": "B is for BEETROOT"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "zucchini",
+      "letter": "Z",
+      "banner": "Z is for ZUCCHINI"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "sweet_potato",
+      "letter": "S",
+      "banner": "S is for SWEET POTATO"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "asparagus",
+      "letter": "A",
+      "banner": "A is for ASPARAGUS"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "celery",
+      "letter": "C",
+      "banner": "C is for CELERY"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "ginger",
+      "letter": "G",
+      "banner": "G is for GINGER"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "artichoke",
+      "letter": "A",
+      "banner": "A is for ARTICHOKE"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "chili_pepper",
+      "letter": "C",
+      "banner": "C is for CHILI PEPPER"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "turnip",
+      "letter": "T",
+      "banner": "T is for TURNIP"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "green_beans",
+      "letter": "G",
+      "banner": "G is for GREEN BEANS"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "okra",
+      "letter": "O",
+      "banner": "O is for OKRA"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "vegetable_basket",
+      "letter": "V",
+      "banner": "V is for VEGETABLE BASKET"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

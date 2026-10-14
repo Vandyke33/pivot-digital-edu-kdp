@@ -37,11 +37,12 @@ FRONT_COVER_ASSETS = [
         "output_raw": "local_builds/animals/assets/raw/hero_tiger_monkey_raw.png",
         "output_final": "local_builds/animals/assets/tiger_monkey_transparent.png",
         "prompt": (
-            "Adorable chibi baby tiger sitting playfully beside a cute baby monkey, "
+            "Cute cheerful preschool girl wearing a little safari explorer hat happily sitting on green grass "
+            "hugging a friendly baby tiger cub and laughing with a playful baby monkey, "
             "vibrant 2D vector children's book illustration style, warm inviting smiles, "
-            "sparkling cartoon eyes with white highlights, rich cel-shaded warm oranges, golden yellows, and soft browns, "
+            "sparkling cartoon eyes with white highlights, rich cel-shaded warm oranges, golden yellows, and soft greens, "
             "crisp bold outlines, high-contrast lighting, completely isolated on a pure solid white background, "
-            "character sheet art, 8k resolution, Pixar-inspired 2D storybook aesthetic\n\n"
+            "character sheet art, bright rounded 2D storybook aesthetic with soft cel shading\n\n"
             "--no text, typography, title, words, banners, frames, boxes, white borders, "
             "complex background, trees, sky, ground, realistic fur texture, 3d render, gloomy lighting, watermark, signature"
         ),
@@ -68,23 +69,25 @@ FRONT_COVER_ASSETS = [
 
 
 def load_gemini_client():
-    import google.auth
     from google import genai
 
-    creds_file = REPO_ROOT / "gcp_credentials.json"
-    if not creds_file.is_file():
-        raise FileNotFoundError(f"Missing {creds_file}")
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if api_key:
+        return genai.Client(api_key=api_key)
 
-    credentials, project = google.auth.load_credentials_from_file(
-        str(creds_file), scopes=["https://www.googleapis.com/auth/cloud-platform"]
-    )
-    client = genai.Client(
-        enterprise=True,
-        project=project,
-        location="global",
-        credentials=credentials,
-    )
-    return client
+    creds_file = REPO_ROOT / "gcp_credentials.json"
+    if creds_file.is_file():
+        import google.auth
+        credentials, project = google.auth.load_credentials_from_file(
+            str(creds_file), scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
+        return genai.Client(
+            enterprise=True,
+            project=project,
+            location="global",
+            credentials=credentials,
+        )
+    raise FileNotFoundError(f"Missing GEMINI_API_KEY or {creds_file}")
 
 
 def generate_single_image(
@@ -211,16 +214,23 @@ def run_generation_pipeline(
                     extracted.save(final_named_path, format="PNG")
                     extracted.save(final_short_path, format="PNG")
 
+                    global_thumb_dir = REPO_ROOT / "assets" / "cover_thumbnails"
+                    global_thumb_dir.mkdir(parents=True, exist_ok=True)
+                    extracted.save(global_thumb_dir / f"vol_{vol_num:02d}_{title_slug}.png", format="PNG")
+                    extracted.save(global_thumb_dir / f"vol_{vol_num:02d}.png", format="PNG")
+
                 item["review_status"] = "GENERATED_LOCAL"
-                item["local_asset_path"] = str(final_named_path.relative_to(REPO_ROOT))
+                item["local_asset_path"] = final_named_path.relative_to(REPO_ROOT).as_posix()
                 print(f"  -> Thumbnail saved: {final_named_path.name} & {final_short_path.name}")
                 generated_count += 1
                 time.sleep(15)
             except Exception as e:
                 print(f"  [ERROR] Failed to generate {subject_id}: {e}")
 
-        # Update batch manifest status
-        batch_file.write_text(json.dumps(batch_data, indent=2), encoding="utf-8")
+        # Update batch manifest status atomically
+        tmp_manifest = batch_file.with_suffix(".tmp")
+        tmp_manifest.write_text(json.dumps(batch_data, indent=2) + "\n", encoding="utf-8")
+        tmp_manifest.replace(batch_file)
 
     print(f"\n[DONE] Pipeline completed: {generated_count} asset(s) generated and extracted.")
 
@@ -230,7 +240,7 @@ def main():
     parser.add_argument("--force", action="store_true", help="Force overwrite existing assets")
     parser.add_argument("--front-only", action="store_true", help="Generate only front cover assets")
     parser.add_argument("--thumbnails-only", action="store_true", help="Generate only thumbnails")
-    parser.add_argument("--limit", type=int, default=None, help="Limit number of thumbnails to generate")
+    parser.add_argument("--limit", "--max-assets", dest="limit", type=int, default=4, help="Limit number of assets to generate (1-12, default 4)")
     args = parser.parse_args()
 
     run_generation_pipeline(

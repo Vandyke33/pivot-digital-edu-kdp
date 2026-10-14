@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-SHAPES-008-32P",
+  "series_id": "copy_to_color_shapes",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Shapes",
+  "subtitle": "Interactive Early Learning Shapes Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "circle",
+    "square",
+    "triangle",
+    "rectangle",
+    "star",
+    "heart",
+    "oval",
+    "diamond",
+    "pentagon",
+    "hexagon",
+    "crescent",
+    "octagon",
+    "cross",
+    "arrow",
+    "spiral",
+    "cylinder",
+    "cube",
+    "cone",
+    "sphere",
+    "pyramid",
+    "shape_train",
+    "shape_castle",
+    "shape_rocket",
+    "shape_robot",
+    "shape_clock",
+    "shape_house",
+    "shape_car",
+    "shape_flower",
+    "shape_sun",
+    "shape_caterpillar"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Shapes"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "circle",
+      "letter": "C",
+      "banner": "C is for CIRCLE"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "square",
+      "letter": "S",
+      "banner": "S is for SQUARE"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "triangle",
+      "letter": "T",
+      "banner": "T is for TRIANGLE"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "rectangle",
+      "letter": "R",
+      "banner": "R is for RECTANGLE"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "star",
+      "letter": "S",
+      "banner": "S is for STAR"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "heart",
+      "letter": "H",
+      "banner": "H is for HEART"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "oval",
+      "letter": "O",
+      "banner": "O is for OVAL"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "diamond",
+      "letter": "D",
+      "banner": "D is for DIAMOND"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "pentagon",
+      "letter": "P",
+      "banner": "P is for PENTAGON"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "hexagon",
+      "letter": "H",
+      "banner": "H is for HEXAGON"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "crescent",
+      "letter": "C",
+      "banner": "C is for CRESCENT"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "octagon",
+      "letter": "O",
+      "banner": "O is for OCTAGON"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "cross",
+      "letter": "C",
+      "banner": "C is for CROSS"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "arrow",
+      "letter": "A",
+      "banner": "A is for ARROW"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "spiral",
+      "letter": "S",
+      "banner": "S is for SPIRAL"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "cylinder",
+      "letter": "C",
+      "banner": "C is for CYLINDER"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "cube",
+      "letter": "C",
+      "banner": "C is for CUBE"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "cone",
+      "letter": "C",
+      "banner": "C is for CONE"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "sphere",
+      "letter": "S",
+      "banner": "S is for SPHERE"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "pyramid",
+      "letter": "P",
+      "banner": "P is for PYRAMID"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "shape_train",
+      "letter": "S",
+      "banner": "S is for SHAPE TRAIN"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "shape_castle",
+      "letter": "S",
+      "banner": "S is for SHAPE CASTLE"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "shape_rocket",
+      "letter": "S",
+      "banner": "S is for SHAPE ROCKET"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "shape_robot",
+      "letter": "S",
+      "banner": "S is for SHAPE ROBOT"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "shape_clock",
+      "letter": "S",
+      "banner": "S is for SHAPE CLOCK"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "shape_house",
+      "letter": "S",
+      "banner": "S is for SHAPE HOUSE"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "shape_car",
+      "letter": "S",
+      "banner": "S is for SHAPE CAR"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "shape_flower",
+      "letter": "S",
+      "banner": "S is for SHAPE FLOWER"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "shape_sun",
+      "letter": "S",
+      "banner": "S is for SHAPE SUN"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "shape_caterpillar",
+      "letter": "S",
+      "banner": "S is for SHAPE CATERPILLAR"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

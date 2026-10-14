@@ -29,6 +29,7 @@ Produce original, age-appropriate children's coloring and activity books for Ama
   1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
   2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
   3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
+- **Kid Avatar & Activity Standard (Cover Hero Art):** Front cover hero artwork MUST feature cheerful, playful kid characters / avatars actively engaged in fun activities with the theme items (e.g., kid hugging a baby tiger, kid chef with giant fruit, kid on ABC blocks with giant crayon). NEVER use isolated, inanimate object clipart alone without expressive child avatars.
 
 ## Research_Agent
 
@@ -81,7 +82,14 @@ Programmatically assemble print-ready full-wrap covers (Back Cover + Spine + Fro
 ### Operational Rules
 1. Compute precise spine dimensions dynamically based on page count and paper type:
    $$\text{Spine Width (in)} = \text{Page Count} \times 0.002252\text{ in (White Paper)}$$
-2. Typeset titles, subtitles, and badges using true vector Google Fonts (*Fredoka*, *Bungee*, *Baloo 2*) or native ReportLab vector text. Render arched banners and layered drop shadows programmatically without rectangular white borders.
+2. Typeset titles, subtitles, and badges using true vector Google Fonts (*Luckiest Guy*, *Fredoka*, *Bungee*) or native ReportLab vector text. Render arched banners and layered drop shadows programmatically without rectangular white borders.
+   - **Font Mapping Standard:**
+     | Usage | Font Family | Font Asset File |
+     |---|---|---|
+     | Series Title ("Copy to Color") | Luckiest Guy | `LuckiestGuy-Regular.ttf` |
+     | Subject Title ("Animals", etc.) | Luckiest Guy | `LuckiestGuy-Regular.ttf` |
+     | Brand Header & Subtitles | Fredoka Bold | `Fredoka-Bold.ttf` |
+     | Ribbon Banners & Badges | Bungee Regular | `Bungee-Regular.ttf` |
 3. Sizing and typography:
    - Front brand logo placed cleanly with smooth sticker contours and no white rectangular boxes.
    - Arched "Copy to Color" and chunky volumetric 3D "Animals" bubble text with crisp vector outlines.
@@ -100,6 +108,7 @@ Programmatically assemble print-ready full-wrap covers (Back Cover + Spine + Fro
      1. Top Center: `The Pivot Kids (Color & Play)` logo with a clean, organic white sticker contour (no rectangular box).
      2. Directly Below Logo: `"Copy to Color"` in large, 3D-extruded, neon-glow, sparkle display typography (`LuckiestGuy-Regular.ttf`).
      3. Directly Below Series Title: `"<SUBJECT>"` (e.g., `"Animals"`) in oversized golden-yellow 3D-extruded, neon-glow, sparkle display typography.
+   - **Kid Avatar & Activity Standard (Cover Hero Art):** Front cover hero artwork MUST feature cheerful, playful kid characters / avatars actively engaged in fun activities with the theme items (e.g., kid hugging a baby tiger, kid chef with giant fruit, kid on ABC blocks with giant crayon). NEVER use isolated, inanimate object clipart alone without expressive child avatars.
 
 ## QA_Validator_Agent
 

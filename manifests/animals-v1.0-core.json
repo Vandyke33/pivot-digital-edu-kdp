@@ -3,9 +3,11 @@
   "book_id": "PIVOT-ANIMALS-002",
   "series_id": "copy_to_color_animals",
   "edition_id": "v1.0-core",
+  "edition_status": "SUPERSEDED_BY_32P",
+  "superseded_by": "manifests/animals-v1.0-core-32p.json",
   "title": "Copy to Color: Animals",
   "subtitle": "38 Adorable Animal Coloring Pages for Early Learners Ages 4-6",
-  "publisher": "The Pivot Digital Publications",
+  "publisher": "The Pivot Digital Publication",
   "trim": {
     "width_in": 8.5,
     "height_in": 11.0,

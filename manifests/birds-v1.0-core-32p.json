@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-BIRDS-003-32P",
+  "series_id": "copy_to_color_birds",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Birds",
+  "subtitle": "Interactive Early Learning Birds Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "parrot",
+    "owl",
+    "peacock",
+    "flamingo",
+    "eagle",
+    "penguin",
+    "toucan",
+    "hummingbird",
+    "swan",
+    "duck",
+    "rooster",
+    "pigeon",
+    "woodpecker",
+    "robin",
+    "blue_jay",
+    "canary",
+    "seagull",
+    "sparrow",
+    "pelican",
+    "kingfisher",
+    "ostrich",
+    "heron",
+    "stork",
+    "falcon",
+    "swallow",
+    "goose",
+    "goldfinch",
+    "finch",
+    "dove",
+    "cardinal"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Birds"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "parrot",
+      "letter": "P",
+      "banner": "P is for PARROT"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "owl",
+      "letter": "O",
+      "banner": "O is for OWL"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "peacock",
+      "letter": "P",
+      "banner": "P is for PEACOCK"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "flamingo",
+      "letter": "F",
+      "banner": "F is for FLAMINGO"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "eagle",
+      "letter": "E",
+      "banner": "E is for EAGLE"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "penguin",
+      "letter": "P",
+      "banner": "P is for PENGUIN"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "toucan",
+      "letter": "T",
+      "banner": "T is for TOUCAN"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "hummingbird",
+      "letter": "H",
+      "banner": "H is for HUMMINGBIRD"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "swan",
+      "letter": "S",
+      "banner": "S is for SWAN"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "duck",
+      "letter": "D",
+      "banner": "D is for DUCK"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "rooster",
+      "letter": "R",
+      "banner": "R is for ROOSTER"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "pigeon",
+      "letter": "P",
+      "banner": "P is for PIGEON"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "woodpecker",
+      "letter": "W",
+      "banner": "W is for WOODPECKER"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "robin",
+      "letter": "R",
+      "banner": "R is for ROBIN"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "blue_jay",
+      "letter": "B",
+      "banner": "B is for BLUE JAY"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "canary",
+      "letter": "C",
+      "banner": "C is for CANARY"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "seagull",
+      "letter": "S",
+      "banner": "S is for SEAGULL"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "sparrow",
+      "letter": "S",
+      "banner": "S is for SPARROW"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "pelican",
+      "letter": "P",
+      "banner": "P is for PELICAN"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "kingfisher",
+      "letter": "K",
+      "banner": "K is for KINGFISHER"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "ostrich",
+      "letter": "O",
+      "banner": "O is for OSTRICH"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "heron",
+      "letter": "H",
+      "banner": "H is for HERON"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "stork",
+      "letter": "S",
+      "banner": "S is for STORK"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "falcon",
+      "letter": "F",
+      "banner": "F is for FALCON"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "swallow",
+      "letter": "S",
+      "banner": "S is for SWALLOW"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "goose",
+      "letter": "G",
+      "banner": "G is for GOOSE"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "goldfinch",
+      "letter": "G",
+      "banner": "G is for GOLDFINCH"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "finch",
+      "letter": "F",
+      "banner": "F is for FINCH"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "dove",
+      "letter": "D",
+      "banner": "D is for DOVE"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "cardinal",
+      "letter": "C",
+      "banner": "C is for CARDINAL"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

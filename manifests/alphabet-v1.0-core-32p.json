@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-ALPHABET-001-32P",
+  "series_id": "copy_to_color_alphabet",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Alphabet",
+  "subtitle": "Interactive Early Learning Alphabet Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "apple",
+    "ball",
+    "cake",
+    "deer",
+    "elephant",
+    "fish",
+    "giraffe",
+    "house",
+    "ice_cream",
+    "jeep",
+    "kite",
+    "lion",
+    "monkey",
+    "nest",
+    "owl",
+    "parrot",
+    "queen_bee",
+    "rabbit",
+    "sun",
+    "tiger",
+    "umbrella",
+    "van",
+    "whale",
+    "xylophone",
+    "yacht",
+    "zebra",
+    "star",
+    "bell",
+    "tree",
+    "boat"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Alphabet"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "apple",
+      "letter": "Aa",
+      "banner": "A is for APPLE"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "ball",
+      "letter": "Bb",
+      "banner": "B is for BALL"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "cake",
+      "letter": "Cc",
+      "banner": "C is for CAKE"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "deer",
+      "letter": "Dd",
+      "banner": "D is for DEER"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "elephant",
+      "letter": "Ee",
+      "banner": "E is for ELEPHANT"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "fish",
+      "letter": "Ff",
+      "banner": "F is for FISH"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "giraffe",
+      "letter": "Gg",
+      "banner": "G is for GIRAFFE"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "house",
+      "letter": "Hh",
+      "banner": "H is for HOUSE"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "ice_cream",
+      "letter": "Ii",
+      "banner": "I is for ICE CREAM"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "jeep",
+      "letter": "Jj",
+      "banner": "J is for JEEP"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "kite",
+      "letter": "Kk",
+      "banner": "K is for KITE"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "lion",
+      "letter": "Ll",
+      "banner": "L is for LION"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "monkey",
+      "letter": "Mm",
+      "banner": "M is for MONKEY"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "nest",
+      "letter": "Nn",
+      "banner": "N is for NEST"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "owl",
+      "letter": "Oo",
+      "banner": "O is for OWL"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "parrot",
+      "letter": "Pp",
+      "banner": "P is for PARROT"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "queen_bee",
+      "letter": "Qq",
+      "banner": "Q is for QUEEN BEE"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "rabbit",
+      "letter": "Rr",
+      "banner": "R is for RABBIT"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "sun",
+      "letter": "Ss",
+      "banner": "S is for SUN"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "tiger",
+      "letter": "Tt",
+      "banner": "T is for TIGER"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "umbrella",
+      "letter": "Uu",
+      "banner": "U is for UMBRELLA"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "van",
+      "letter": "Vv",
+      "banner": "V is for VAN"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "whale",
+      "letter": "Ww",
+      "banner": "W is for WHALE"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "xylophone",
+      "letter": "Xx",
+      "banner": "X is for XYLOPHONE"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "yacht",
+      "letter": "Yy",
+      "banner": "Y is for YACHT"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "zebra",
+      "letter": "Zz",
+      "banner": "Z is for ZEBRA"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "star",
+      "letter": "S",
+      "banner": "S is for STAR"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "bell",
+      "letter": "B",
+      "banner": "B is for BELL"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "tree",
+      "letter": "T",
+      "banner": "T is for TREE"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "boat",
+      "letter": "B",
+      "banner": "B is for BOAT"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

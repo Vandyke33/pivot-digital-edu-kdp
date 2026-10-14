@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-FRUITS-007-32P",
+  "series_id": "copy_to_color_fruits",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Fruits",
+  "subtitle": "Interactive Early Learning Fruits Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "apple",
+    "banana",
+    "orange",
+    "strawberry",
+    "grapes",
+    "watermelon",
+    "mango",
+    "pineapple",
+    "peach",
+    "cherry",
+    "blueberry",
+    "kiwi",
+    "lemon",
+    "pear",
+    "plum",
+    "papaya",
+    "avocado",
+    "coconut",
+    "pomegranate",
+    "raspberry",
+    "fig",
+    "lime",
+    "guava",
+    "apricot",
+    "blackberry",
+    "dragon_fruit",
+    "passion_fruit",
+    "cantaloupe",
+    "grapefruit",
+    "fruit_basket"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Fruits"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "apple",
+      "letter": "A",
+      "banner": "A is for APPLE"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "banana",
+      "letter": "B",
+      "banner": "B is for BANANA"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "orange",
+      "letter": "O",
+      "banner": "O is for ORANGE"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "strawberry",
+      "letter": "S",
+      "banner": "S is for STRAWBERRY"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "grapes",
+      "letter": "G",
+      "banner": "G is for GRAPES"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "watermelon",
+      "letter": "W",
+      "banner": "W is for WATERMELON"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "mango",
+      "letter": "M",
+      "banner": "M is for MANGO"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "pineapple",
+      "letter": "P",
+      "banner": "P is for PINEAPPLE"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "peach",
+      "letter": "P",
+      "banner": "P is for PEACH"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "cherry",
+      "letter": "C",
+      "banner": "C is for CHERRY"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "blueberry",
+      "letter": "B",
+      "banner": "B is for BLUEBERRY"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "kiwi",
+      "letter": "K",
+      "banner": "K is for KIWI"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "lemon",
+      "letter": "L",
+      "banner": "L is for LEMON"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "pear",
+      "letter": "P",
+      "banner": "P is for PEAR"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "plum",
+      "letter": "P",
+      "banner": "P is for PLUM"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "papaya",
+      "letter": "P",
+      "banner": "P is for PAPAYA"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "avocado",
+      "letter": "A",
+      "banner": "A is for AVOCADO"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "coconut",
+      "letter": "C",
+      "banner": "C is for COCONUT"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "pomegranate",
+      "letter": "P",
+      "banner": "P is for POMEGRANATE"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "raspberry",
+      "letter": "R",
+      "banner": "R is for RASPBERRY"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "fig",
+      "letter": "F",
+      "banner": "F is for FIG"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "lime",
+      "letter": "L",
+      "banner": "L is for LIME"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "guava",
+      "letter": "G",
+      "banner": "G is for GUAVA"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "apricot",
+      "letter": "A",
+      "banner": "A is for APRICOT"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "blackberry",
+      "letter": "B",
+      "banner": "B is for BLACKBERRY"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "dragon_fruit",
+      "letter": "D",
+      "banner": "D is for DRAGON FRUIT"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "passion_fruit",
+      "letter": "P",
+      "banner": "P is for PASSION FRUIT"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "cantaloupe",
+      "letter": "C",
+      "banner": "C is for CANTALOUPE"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "grapefruit",
+      "letter": "G",
+      "banner": "G is for GRAPEFRUIT"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "fruit_basket",
+      "letter": "F",
+      "banner": "F is for FRUIT BASKET"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

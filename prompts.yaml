@@ -34,7 +34,9 @@ global_settings:
     --no color, shading, grayscale, gradients, photorealism, crosshatching,
     complex texture, halftone, drop shadows, gray background, sketch marks,
     open broken contours, tiny isolated details, text, letters, numbers, logo,
-    watermark
+    watermark, signature, artist signature, 3D render, blurry, out of focus,
+    extra limbs, extra fingers, deformed hands, malformed anatomy,
+    realistic photograph, photorealistic, camera lens effects
   prompt_assembly_order:
     - "global_style"
     - "age_profiles[blueprint.age_profile].modifier"
@@ -48,6 +50,7 @@ global_settings:
     - "Keep all line work inside a 0.5 inch safe margin for no-bleed interiors."
     - "Use one focal subject per page unless the subject record explicitly calls for a simple supporting element."
     - "Generate black outlines on white only; reject gray antialiasing or remove it through documented thresholding before approval."
+    - "Every printable contour must have a minimum printed line weight of at least 2 pt at final 8.5 x 11 trim size; never generate faint, broken, or hairline contours."
 
 age_profiles:
   toddler_1_3:
@@ -187,6 +190,7 @@ book_series_blueprints:
     default_skill_level: "beginner"
     default_edition: "core_coloring"
     trim: "8.5x11"
+    base_seed: 41000
     prompt_template: >-
       Create a single portrait coloring-book page featuring {subject}. Subject
       parameters: {subject_parameters}. Action or expression: {action}. Include
@@ -195,7 +199,6 @@ book_series_blueprints:
       consistent black line art on pure white; make the subject friendly,
       scientifically recognizable, and suitable for children ages 4-6. Do not
       include facts, labels, lettering, numbers, logos, or other text.
-    age_specific_modifier: "{age_profiles.preschool_4_6.modifier}"
     subjects:
       - id: "sun"
         index: 1
@@ -309,6 +312,7 @@ book_series_blueprints:
     default_skill_level: "beginner"
     default_edition: "core_coloring"
     trim: "8.5x11"
+    base_seed: 43000
     prompt_template: >-
       Create one very simple portrait coloring-book page featuring {subject}.
       Subject parameters: {subject_parameters}. Action: {action}. Include only
@@ -318,7 +322,6 @@ book_series_blueprints:
       regions, rounded child-friendly shapes, no background, no ground clutter,
       and no small mechanical details. The vehicle must be recognizable by its
       silhouette and remain fully inside the safe area. No text or logos.
-    age_specific_modifier: "{age_profiles.toddler_1_3.modifier}"
     line_constraints:
       line_weight_pt_at_final_trim: "4-6"
       minimum_closed_region_mm: 12
@@ -438,16 +441,16 @@ book_series_blueprints:
     default_skill_level: "beginner"
     default_edition: "core_coloring"
     trim: "8.5x11"
+    base_seed: 42000
     prompt_template: >-
       Create a single portrait coloring-book page featuring {subject}. Subject
       parameters: {subject_parameters}. Action or expression: {action}. Include
       only these supporting elements: {supporting_elements}. Composition:
       {composition}. Keep every contour closed and clearly separated; use
       consistent bold black line art on pure white; make the animal adorable,
-      friendly, and developmentally calibrated for early learners ages 4-6. Do
+      friendly, and developmentally calibrated for early learners ages 3-5. Do
       not include shading, gray tones, gradients, color, text, words, labels,
       borders, or watermarks.
-    age_specific_modifier: "{age_profiles.preschool_4_6.modifier}"
     subjects:
       - id: "tiger"
         index: 1

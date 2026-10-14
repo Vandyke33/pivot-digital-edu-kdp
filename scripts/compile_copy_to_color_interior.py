@@ -35,6 +35,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+try:
+    from scripts.utils.animal_illustrations import draw_animal_character
+except ImportError:
+    try:
+        from utils.animal_illustrations import draw_animal_character
+    except ImportError:
+        draw_animal_character = None
+
+
 # ---------------------------------------------------------------------------
 # 1. KDP PHYSICAL & CANVAS CONSTANTS (8.5 x 11.0 in @ 300 DPI)
 # ---------------------------------------------------------------------------
@@ -289,52 +298,31 @@ def generate_procedural_subject_pair(code_label: str, word_label: str,
     """
     Generates a clean vector-style character/object pair (Color Reference + B&W Outline)
     when external source assets are pending, guaranteeing a print-ready build without crashing.
+    Uses multi-animal illustration drawer for all 30 animals in series volume 2.
     """
-    w, h = 1800, 1800
-    color_im = Image.new("RGBA", (w, h), (255, 255, 255, 255))
-    d_c = ImageDraw.Draw(color_im)
-
-    cx, cy = w // 2, h // 2
-
-    # Character body (friendly rounded shapes)
-    body_col = primary_color + (255,)
-    belly_col = (255, 245, 210, 255)
-    eye_col = (20, 20, 25, 255)
-
-    # Outer ears
-    d_c.ellipse([cx - 480, cy - 540, cx - 240, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
-    d_c.ellipse([cx + 240, cy - 540, cx + 480, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
-    d_c.ellipse([cx - 430, cy - 490, cx - 290, cy - 350], fill=(255, 180, 190, 255))
-    d_c.ellipse([cx + 290, cy - 490, cx + 430, cy - 350], fill=(255, 180, 190, 255))
-
-    # Main head
-    d_c.ellipse([cx - 420, cy - 420, cx + 420, cy + 420], fill=body_col, outline=(30, 30, 30, 255), width=24)
-
-    # Cheeks & snout
-    d_c.ellipse([cx - 240, cy - 40, cx + 240, cy + 320], fill=belly_col, outline=(30, 30, 30, 255), width=18)
-
-    # Big cheerful eyes with white specular catchlights
-    d_c.ellipse([cx - 220, cy - 160, cx - 80, cy - 20], fill=eye_col)
-    d_c.ellipse([cx - 180, cy - 150, cx - 120, cy - 90], fill=(255, 255, 255, 255))
-
-    d_c.ellipse([cx + 80, cy - 160, cx + 220, cy - 20], fill=eye_col)
-    d_c.ellipse([cx + 120, cy - 150, cx + 180, cy - 90], fill=(255, 255, 255, 255))
-
-    # Cute nose and smile
-    d_c.ellipse([cx - 60, cy + 40, cx + 60, cy + 130], fill=(240, 60, 90, 255), outline=(30, 30, 30, 255), width=14)
-    d_c.arc([cx - 120, cy + 120, cx + 120, cy + 260], start=20, end=160, fill=(30, 30, 30, 255), width=18)
-
-    # Rosy pink cheek circles
-    d_c.ellipse([cx - 340, cy + 60, cx - 220, cy + 180], fill=(255, 150, 170, 210))
-    d_c.ellipse([cx + 220, cy + 60, cx + 340, cy + 180], fill=(255, 150, 170, 210))
-
-    # Paws at bottom
-    d_c.ellipse([cx - 360, cy + 320, cx - 120, cy + 520], fill=body_col, outline=(30, 30, 30, 255), width=22)
-    d_c.ellipse([cx + 120, cy + 320, cx + 360, cy + 520], fill=body_col, outline=(30, 30, 30, 255), width=22)
+    if draw_animal_character is not None:
+        color_im = draw_animal_character(word_label, primary_color)
+    else:
+        w, h = 1800, 1800
+        color_im = Image.new("RGBA", (w, h), (255, 255, 255, 255))
+        d_c = ImageDraw.Draw(color_im)
+        cx, cy = w // 2, h // 2
+        body_col = primary_color + (255,)
+        belly_col = (255, 245, 210, 255)
+        eye_col = (20, 20, 25, 255)
+        d_c.ellipse([cx - 480, cy - 540, cx - 240, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
+        d_c.ellipse([cx + 240, cy - 540, cx + 480, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
+        d_c.ellipse([cx - 420, cy - 420, cx + 420, cy + 420], fill=body_col, outline=(30, 30, 30, 255), width=24)
+        d_c.ellipse([cx - 240, cy - 40, cx + 240, cy + 320], fill=belly_col, outline=(30, 30, 30, 255), width=18)
+        d_c.ellipse([cx - 220, cy - 160, cx - 80, cy - 20], fill=eye_col)
+        d_c.ellipse([cx - 180, cy - 150, cx - 120, cy - 90], fill=(255, 255, 255, 255))
+        d_c.ellipse([cx + 80, cy - 160, cx + 220, cy - 20], fill=eye_col)
+        d_c.ellipse([cx + 120, cy - 150, cx + 180, cy - 90], fill=(255, 255, 255, 255))
+        d_c.ellipse([cx - 60, cy + 40, cx + 60, cy + 130], fill=(240, 60, 90, 255), outline=(30, 30, 30, 255), width=14)
+        d_c.arc([cx - 120, cy + 120, cx + 120, cy + 260], start=20, end=160, fill=(30, 30, 30, 255), width=18)
 
     # Derive pure B&W lineart with 100% matching geometry
     bw_im = color_image_to_clean_lineart(color_im, stroke_boost=3)
-
     return color_im, bw_im
 
 # ---------------------------------------------------------------------------
@@ -356,16 +344,18 @@ def draw_copy_to_color_chrome(
     draw = ImageDraw.Draw(canvas)
 
     font_code = load_font("Fredoka-Bold.ttf", 200)
-    font_word = load_font("LuckiestGuy-Regular.ttf", 68)
     font_footer = load_font("Fredoka-Bold.ttf", 38)
     font_guide_lbl = load_font("Fredoka-Bold.ttf", 28)
     font_color_me = load_font("Fredoka-Bold.ttf", 36)
 
-    # 1. Top-Left Giant Letter / Number Index (e.g., '01', '02', 'Aa', 'Bb')
-    draw.text((SAFE_MARGIN + 35, SAFE_MARGIN + 15), header_code, fill=(28, 36, 52, 255), font=font_code)
+    # 1. Top-Left Giant Letter / Code (e.g., 'T', 'M', 'E', or 'Aa', 'Bb')
+    display_code = header_code
+    if header_code.isdigit() and subject_word:
+        display_code = subject_word[0].upper()
+    draw.text((SAFE_MARGIN + 35, SAFE_MARGIN + 15), display_code, fill=(28, 36, 52, 255), font=font_code)
 
-    # 2. Top-Right Peach/Gold Brushstroke Banner + Subject Word (e.g., 'TIGER', 'MONKEY')
-    bw = 780
+    # 2. Top-Right Peach/Gold Brushstroke Banner + Educational Name Banner (e.g., 'T is for TIGER')
+    bw = 820
     bh = 110
     bx0 = PAGE_W - SAFE_MARGIN - bw - 20
     by0 = SAFE_MARGIN + 60
@@ -377,11 +367,29 @@ def draw_copy_to_color_chrome(
     # Inner layered pill
     draw.rounded_rectangle([bx0 + 10, by0 + 8, bx1 - 10, by1 - 8], radius=24, fill=(254, 215, 170, 255))
 
-    # Center text inside banner
-    bbox = draw.textbbox((0, 0), subject_word, font=font_word)
+    # Form educational name phrase (e.g., "T is for TIGER")
+    clean_subj = subject_word.strip()
+    initial_char = display_code[0] if display_code else (clean_subj[0] if clean_subj else "")
+    if clean_subj.startswith(f"{initial_char} is for"):
+        banner_phrase = clean_subj
+    elif initial_char and initial_char.isalpha():
+        banner_phrase = f"{initial_char.upper()} is for {clean_subj.upper()}"
+    else:
+        banner_phrase = clean_subj.upper()
+
+    # Dynamic font sizing to ensure clean fit inside banner
+    word_font_size = 60
+    font_word = load_font("LuckiestGuy-Regular.ttf", word_font_size)
+    bbox = draw.textbbox((0, 0), banner_phrase, font=font_word)
     tw = bbox[2] - bbox[0]
+    while tw > (bw - 50) and word_font_size > 36:
+        word_font_size -= 4
+        font_word = load_font("LuckiestGuy-Regular.ttf", word_font_size)
+        bbox = draw.textbbox((0, 0), banner_phrase, font=font_word)
+        tw = bbox[2] - bbox[0]
+
     th = bbox[3] - bbox[1]
-    draw.text((bx0 + (bw - tw) // 2, by0 + (bh - th) // 2 - 4), subject_word, fill=(45, 25, 15, 255), font=font_word)
+    draw.text((bx0 + (bw - tw) // 2, by0 + (bh - th) // 2 - 4), banner_phrase, fill=(45, 25, 15, 255), font=font_word)
 
     # 3. Framing Container for Top-Right 'Color Guide' Thumbnail
     guide_w, guide_h = 680, 680
@@ -401,8 +409,8 @@ def draw_copy_to_color_chrome(
     g_bb = draw.textbbox((0, 0), g_txt, font=font_guide_lbl)
     draw.text((g_px + (g_pill_w - (g_bb[2] - g_bb[0])) // 2, g_py + 8), g_txt, fill="white", font=font_guide_lbl)
 
-    # 4. '★ COLOR ME!' cheerful instruction badge over main canvas
-    draw.text((SAFE_MARGIN + 50, SAFE_MARGIN + 280), "★ COLOR ME!", fill=primary_color, font=font_color_me)
+    # 4. 'COLOR ME!' cheerful instruction badge over main canvas
+    draw.text((SAFE_MARGIN + 50, SAFE_MARGIN + 280), "COLOR ME!", fill=primary_color, font=font_color_me)
 
     # 5. Bottom Double-Layered Colorful Wave Footer
     wave_top = PAGE_H - 220
@@ -438,6 +446,7 @@ def draw_copy_to_color_chrome(
 
     series_label = f"Copy to Color: {vol_title}"
     draw.text((badge_cx + 70, badge_cy - 20), series_label, fill="white", font=font_footer)
+
 
 # ---------------------------------------------------------------------------
 # 7. SPECIAL PAGES (PAGE 1 WELCOME & PAGE 32 COMPLETION CERTIFICATE)
@@ -510,7 +519,7 @@ def render_page_01_welcome(vol_title: str, primary_color: tuple, secondary_color
     draw.text((box_x + 80, box_y + 300), "(Your Name / Little Artist)", fill=(100, 116, 139), font=font_tagline)
 
     # Bottom notes
-    copy_str = "© The Pivot Digital Publications. All rights reserved. • Amazon KDP Edition"
+    copy_str = "© The Pivot Digital Publication. All rights reserved. • Amazon KDP Edition"
     c_bb = draw.textbbox((0, 0), copy_str, font=font_tagline)
     draw.text((cx - (c_bb[2] - c_bb[0]) // 2, PAGE_H - SAFE_MARGIN - 100), copy_str, fill=(156, 163, 175), font=font_tagline)
 
@@ -713,15 +722,18 @@ def build_32_page_copy_to_color_book(
         append_images=pages[1:],
     )
 
-    # Render proof contact sheet of sample pages (P1, P2, P3, P32)
+    # Render proof contact sheet of sample pages (P1 Welcome, P2 Tiger, P3 Monkey, P4 Elephant, P5 Giraffe, P6 Lion, P7 Zebra, P32 Certificate)
     proof_path = out_pdf.parent / f"{out_pdf.stem}_proof.png"
     proof_w = 400
     proof_h = int(proof_w * (PAGE_H / PAGE_W))
-    sheet = Image.new("RGB", (proof_w * 4 + 50, proof_h + 20), (240, 240, 245))
-    sample_indices = [0, 1, 2, 31]
+    cols, rows = 4, 2
+    sheet = Image.new("RGB", (cols * (proof_w + 15) + 15, rows * (proof_h + 15) + 15), (240, 240, 245))
+    sample_indices = [0, 1, 2, 3, 4, 5, 6, 31]
     for s_i, page_idx in enumerate(sample_indices):
+        col = s_i % cols
+        row = s_i // cols
         thumb = pages[page_idx].copy().resize((proof_w, proof_h), Image.Resampling.LANCZOS)
-        sheet.paste(thumb, (10 + s_i * (proof_w + 10), 10))
+        sheet.paste(thumb, (15 + col * (proof_w + 15), 15 + row * (proof_h + 15)))
     sheet.save(str(proof_path), "PNG")
 
     print(f"[OK] 32-page interior PDF compiled successfully: {out_pdf} ({len(pages)} pages)")

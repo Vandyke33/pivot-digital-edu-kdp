@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-SPORTS-004-32P",
+  "series_id": "copy_to_color_sports",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Sports",
+  "subtitle": "Interactive Early Learning Sports Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "soccer",
+    "basketball",
+    "baseball",
+    "tennis",
+    "swimming",
+    "cycling",
+    "skateboard",
+    "running",
+    "gymnastics",
+    "volleyball",
+    "hockey",
+    "golf",
+    "rugby",
+    "badminton",
+    "boxing",
+    "surfing",
+    "skiing",
+    "karate",
+    "archery",
+    "rowing",
+    "bowling",
+    "horse_riding",
+    "fencing",
+    "diving",
+    "sailing",
+    "roller_skating",
+    "canoeing",
+    "ice_skating",
+    "cricket",
+    "table_tennis"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Sports"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "soccer",
+      "letter": "S",
+      "banner": "S is for SOCCER"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "basketball",
+      "letter": "B",
+      "banner": "B is for BASKETBALL"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "baseball",
+      "letter": "B",
+      "banner": "B is for BASEBALL"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "tennis",
+      "letter": "T",
+      "banner": "T is for TENNIS"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "swimming",
+      "letter": "S",
+      "banner": "S is for SWIMMING"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "cycling",
+      "letter": "C",
+      "banner": "C is for CYCLING"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "skateboard",
+      "letter": "S",
+      "banner": "S is for SKATEBOARD"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "running",
+      "letter": "R",
+      "banner": "R is for RUNNING"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "gymnastics",
+      "letter": "G",
+      "banner": "G is for GYMNASTICS"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "volleyball",
+      "letter": "V",
+      "banner": "V is for VOLLEYBALL"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "hockey",
+      "letter": "H",
+      "banner": "H is for HOCKEY"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "golf",
+      "letter": "G",
+      "banner": "G is for GOLF"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "rugby",
+      "letter": "R",
+      "banner": "R is for RUGBY"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "badminton",
+      "letter": "B",
+      "banner": "B is for BADMINTON"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "boxing",
+      "letter": "B",
+      "banner": "B is for BOXING"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "surfing",
+      "letter": "S",
+      "banner": "S is for SURFING"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "skiing",
+      "letter": "S",
+      "banner": "S is for SKIING"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "karate",
+      "letter": "K",
+      "banner": "K is for KARATE"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "archery",
+      "letter": "A",
+      "banner": "A is for ARCHERY"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "rowing",
+      "letter": "R",
+      "banner": "R is for ROWING"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "bowling",
+      "letter": "B",
+      "banner": "B is for BOWLING"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "horse_riding",
+      "letter": "H",
+      "banner": "H is for HORSE RIDING"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "fencing",
+      "letter": "F",
+      "banner": "F is for FENCING"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "diving",
+      "letter": "D",
+      "banner": "D is for DIVING"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "sailing",
+      "letter": "S",
+      "banner": "S is for SAILING"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "roller_skating",
+      "letter": "R",
+      "banner": "R is for ROLLER SKATING"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "canoeing",
+      "letter": "C",
+      "banner": "C is for CANOEING"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "ice_skating",
+      "letter": "I",
+      "banner": "I is for ICE SKATING"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "cricket",
+      "letter": "C",
+      "banner": "C is for CRICKET"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "table_tennis",
+      "letter": "T",
+      "banner": "T is for TABLE TENNIS"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}

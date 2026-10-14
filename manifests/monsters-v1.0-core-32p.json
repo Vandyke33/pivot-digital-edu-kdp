@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_id": "PIVOT-MONSTERS-005-32P",
+  "series_id": "copy_to_color_monsters",
+  "edition_id": "v1.0-core-32p",
+  "title": "Copy to Color: Monsters",
+  "subtitle": "Interactive Early Learning Monsters Coloring Activity Book for Ages 3-5",
+  "publisher": "The Pivot Digital Publication",
+  "trim": {
+    "width_in": 8.5,
+    "height_in": 11.0,
+    "bleed": "all",
+    "page_width_in_with_bleed": 8.625,
+    "page_height_in_with_bleed": 11.25
+  },
+  "reverse_page": "activity_chrome",
+  "minimum_dpi": 300,
+  "minimum_safe_margin_in": 0.5,
+  "asset_registry": "../catalogs/asset_registry.json",
+  "expected_page_count": 32,
+  "expected_subjects": [
+    "glowy",
+    "fuzzy",
+    "sparky",
+    "bubble",
+    "spike",
+    "toothy",
+    "chubby",
+    "giggles",
+    "cyclops",
+    "tentacles",
+    "stripey",
+    "dotty",
+    "wingy",
+    "horned",
+    "blobby",
+    "fluffy",
+    "snuggle",
+    "bouncy",
+    "chomper",
+    "zoomy",
+    "spooky",
+    "happy",
+    "peekaboo",
+    "wobbly",
+    "whiskers",
+    "starburst",
+    "tiny",
+    "giant",
+    "friendly",
+    "sleepy"
+  ],
+  "pages": [
+    {
+      "number": 1,
+      "type": "welcome",
+      "title": "Copy to Color: Monsters"
+    },
+    {
+      "number": 2,
+      "type": "copy_to_color",
+      "subject_id": "glowy",
+      "letter": "G",
+      "banner": "G is for GLOWY"
+    },
+    {
+      "number": 3,
+      "type": "copy_to_color",
+      "subject_id": "fuzzy",
+      "letter": "F",
+      "banner": "F is for FUZZY"
+    },
+    {
+      "number": 4,
+      "type": "copy_to_color",
+      "subject_id": "sparky",
+      "letter": "S",
+      "banner": "S is for SPARKY"
+    },
+    {
+      "number": 5,
+      "type": "copy_to_color",
+      "subject_id": "bubble",
+      "letter": "B",
+      "banner": "B is for BUBBLE"
+    },
+    {
+      "number": 6,
+      "type": "copy_to_color",
+      "subject_id": "spike",
+      "letter": "S",
+      "banner": "S is for SPIKE"
+    },
+    {
+      "number": 7,
+      "type": "copy_to_color",
+      "subject_id": "toothy",
+      "letter": "T",
+      "banner": "T is for TOOTHY"
+    },
+    {
+      "number": 8,
+      "type": "copy_to_color",
+      "subject_id": "chubby",
+      "letter": "C",
+      "banner": "C is for CHUBBY"
+    },
+    {
+      "number": 9,
+      "type": "copy_to_color",
+      "subject_id": "giggles",
+      "letter": "G",
+      "banner": "G is for GIGGLES"
+    },
+    {
+      "number": 10,
+      "type": "copy_to_color",
+      "subject_id": "cyclops",
+      "letter": "C",
+      "banner": "C is for CYCLOPS"
+    },
+    {
+      "number": 11,
+      "type": "copy_to_color",
+      "subject_id": "tentacles",
+      "letter": "T",
+      "banner": "T is for TENTACLES"
+    },
+    {
+      "number": 12,
+      "type": "copy_to_color",
+      "subject_id": "stripey",
+      "letter": "S",
+      "banner": "S is for STRIPEY"
+    },
+    {
+      "number": 13,
+      "type": "copy_to_color",
+      "subject_id": "dotty",
+      "letter": "D",
+      "banner": "D is for DOTTY"
+    },
+    {
+      "number": 14,
+      "type": "copy_to_color",
+      "subject_id": "wingy",
+      "letter": "W",
+      "banner": "W is for WINGY"
+    },
+    {
+      "number": 15,
+      "type": "copy_to_color",
+      "subject_id": "horned",
+      "letter": "H",
+      "banner": "H is for HORNED"
+    },
+    {
+      "number": 16,
+      "type": "copy_to_color",
+      "subject_id": "blobby",
+      "letter": "B",
+      "banner": "B is for BLOBBY"
+    },
+    {
+      "number": 17,
+      "type": "copy_to_color",
+      "subject_id": "fluffy",
+      "letter": "F",
+      "banner": "F is for FLUFFY"
+    },
+    {
+      "number": 18,
+      "type": "copy_to_color",
+      "subject_id": "snuggle",
+      "letter": "S",
+      "banner": "S is for SNUGGLE"
+    },
+    {
+      "number": 19,
+      "type": "copy_to_color",
+      "subject_id": "bouncy",
+      "letter": "B",
+      "banner": "B is for BOUNCY"
+    },
+    {
+      "number": 20,
+      "type": "copy_to_color",
+      "subject_id": "chomper",
+      "letter": "C",
+      "banner": "C is for CHOMPER"
+    },
+    {
+      "number": 21,
+      "type": "copy_to_color",
+      "subject_id": "zoomy",
+      "letter": "Z",
+      "banner": "Z is for ZOOMY"
+    },
+    {
+      "number": 22,
+      "type": "copy_to_color",
+      "subject_id": "spooky",
+      "letter": "S",
+      "banner": "S is for SPOOKY"
+    },
+    {
+      "number": 23,
+      "type": "copy_to_color",
+      "subject_id": "happy",
+      "letter": "H",
+      "banner": "H is for HAPPY"
+    },
+    {
+      "number": 24,
+      "type": "copy_to_color",
+      "subject_id": "peekaboo",
+      "letter": "P",
+      "banner": "P is for PEEKABOO"
+    },
+    {
+      "number": 25,
+      "type": "copy_to_color",
+      "subject_id": "wobbly",
+      "letter": "W",
+      "banner": "W is for WOBBLY"
+    },
+    {
+      "number": 26,
+      "type": "copy_to_color",
+      "subject_id": "whiskers",
+      "letter": "W",
+      "banner": "W is for WHISKERS"
+    },
+    {
+      "number": 27,
+      "type": "copy_to_color",
+      "subject_id": "starburst",
+      "letter": "S",
+      "banner": "S is for STARBURST"
+    },
+    {
+      "number": 28,
+      "type": "copy_to_color",
+      "subject_id": "tiny",
+      "letter": "T",
+      "banner": "T is for TINY"
+    },
+    {
+      "number": 29,
+      "type": "copy_to_color",
+      "subject_id": "giant",
+      "letter": "G",
+      "banner": "G is for GIANT"
+    },
+    {
+      "number": 30,
+      "type": "copy_to_color",
+      "subject_id": "friendly",
+      "letter": "F",
+      "banner": "F is for FRIENDLY"
+    },
+    {
+      "number": 31,
+      "type": "copy_to_color",
+      "subject_id": "sleepy",
+      "letter": "S",
+      "banner": "S is for SLEEPY"
+    },
+    {
+      "number": 32,
+      "type": "certificate",
+      "title": "Super Colorist Award"
+    }
+  ]
+}
