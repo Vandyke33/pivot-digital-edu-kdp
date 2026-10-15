@@ -346,8 +346,13 @@ def preflight_volume(vol_id: str, repo_root: Path | str | None = None) -> dict[s
     # 11. Imprint Exactness: Publisher imprint strictly "The Pivot Digital Publication"
     imprint_ok = True
     if cat_edition:
-        imprint_ok = (cat_edition.get("publisher_imprint") == CANONICAL_IMPRINT or
-                      cat_edition.get("publisher") == CANONICAL_IMPRINT)
+        meta_dict = cat_edition.get("metadata", {})
+        imprint_ok = (
+            cat_edition.get("publisher_imprint") == CANONICAL_IMPRINT or
+            cat_edition.get("publisher") == CANONICAL_IMPRINT or
+            meta_dict.get("publisher_imprint") == CANONICAL_IMPRINT or
+            meta_dict.get("publisher") == CANONICAL_IMPRINT
+        )
     if manifest_data and imprint_ok:
         imprint_ok = (manifest_data.get("publisher") == CANONICAL_IMPRINT)
     results["imprint_exactness"] = imprint_ok

@@ -1024,7 +1024,7 @@ def draw_animals_cover_spread(
 
 
 def main() -> int:
-    card_default = Path("local_builds/animals/assets/inset_tiger_split.png")
+    card_default = Path("assets/series_ai/vol_02/subj_01_color.png")
     if not card_default.exists():
         card_default = Path("local_builds/animals/assets/tiger_color_thumb.png")
 
@@ -1034,7 +1034,7 @@ def main() -> int:
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=card_default, help="Activity card split image or color guide")
-    parser.add_argument("--card-outline", type=Path, default=Path("local_builds/animals/assets/tiger_outline.png"), help="Activity card B&W outline")
+    parser.add_argument("--card-outline", type=Path, default=Path("assets/series_ai/vol_02/subj_01_lineart.png"), help="Activity card B&W outline")
 
     args = parser.parse_args()
 

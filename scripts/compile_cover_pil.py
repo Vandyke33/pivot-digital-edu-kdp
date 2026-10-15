@@ -780,18 +780,19 @@ def build_kdp_cover(
 
     # Override active volume's front cover if high-res hero/inset paths are explicitly supplied
     if resolved_hero or resolved_inset:
-        active_inset = (
-            resolved_inset
-            or (f"assets/activity_cards/{active_vol_id}_split.png" if os.path.exists(f"assets/activity_cards/{active_vol_id}_split.png") else None)
-            or ("local_builds/animals/assets/inset_tiger_split.png" if active_vol_id == "vol_02" else None)
-        )
+        color_cand = Path(f"assets/series_ai/{active_vol_id}/subj_01_color.png")
+        lineart_cand = Path(f"assets/series_ai/{active_vol_id}/subj_01_lineart.png")
+        active_color = str(color_cand) if color_cand.exists() else resolved_inset
+        active_lineart = str(lineart_cand) if lineart_cand.exists() else None
         rendered_fronts[active_vol_id] = render_single_front_cover(
             vol_meta=active_meta,
             width_px=trim_w,
             height_px=trim_h,
             logo_path=resolved_logo,
             hero_path=resolved_hero,
-            inset_path=active_inset,
+            color_guide_path=active_color,
+            lineart_path=active_lineart,
+            inset_path=resolved_inset if not color_cand.exists() else None,
         )
 
     print(f"[Pass 2] Assembling Full-Wrap Spread: {w}x{h} px | Spine: {specs['spine_in']:.3f} in ({spine_w} px)")
@@ -823,7 +824,7 @@ def build_kdp_cover(
     ribbon_cy = int(0.52 * DPI)
     draw_curved_ribbon_header(cover, ribbon_cx, ribbon_cy, "TITLES IN THIS SERIES", banner_font)
 
-    # 3. "CAN YOU COLLECT THEM ALL?" banner pill + AI Mascot with Star Wand
+    # 3. "CAN YOU COLLECT THEM ALL?" banner pill
     pill_w = int(trim_w * 0.52)
     pill_h = 72
     px0 = bleed + int(0.18 * trim_w)
@@ -840,7 +841,13 @@ def build_kdp_cover(
     draw_sparkle_star(draw, tx - 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
     draw_sparkle_star(draw, tx + tw + 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
 
-    # Mascot Boy waving star wand (Placed comfortably below top border with hat fully visible)
+    # 4. 4x3 Grid of authentic Front Covers
+    grid_start_y = int(1.22 * DPI)
+    grid_w = int(trim_w * 0.90)
+    grid_h = int(h * 0.60)
+    render_back_cover_grid(cover, draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h, rendered_fronts)
+
+    # Mascot Boy waving star wand (Layered ON TOP of grid corner, placed comfortably below top border with hat fully visible)
     mascot_path = Path("assets/cover/mascot_kid_wand.png")
     if mascot_path.exists():
         try:
@@ -854,12 +861,6 @@ def build_kdp_cover(
                 cover.paste(m_res, (mx, my), m_res)
         except Exception as e:
             print(f"[Warning] Failed to render back-cover mascot: {e}")
-
-    # 4. 4x3 Grid of authentic Front Covers
-    grid_start_y = int(1.22 * DPI)
-    grid_w = int(trim_w * 0.90)
-    grid_h = int(h * 0.60)
-    render_back_cover_grid(cover, draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h, rendered_fronts)
 
     # 5. Collector's container (Bottom-left)
     c_w, c_h = int(trim_w * 0.54), 80
@@ -1001,13 +1002,10 @@ if __name__ == "__main__":
         )
     else:
         hero_default = "local_builds/animals/assets/tiger_monkey_transparent.png"
-        inset_default = (
-            f"assets/activity_cards/{args.vol_id}_split.png"
-            if os.path.exists(f"assets/activity_cards/{args.vol_id}_split.png")
-            else "local_builds/animals/assets/inset_tiger_split.png"
-        )
+        color_ai = f"assets/series_ai/{args.vol_id}/subj_01_color.png"
+        inset_default = color_ai if os.path.exists(color_ai) else None
         hero_p = args.hero or (hero_default if os.path.exists(hero_default) and args.vol_id == "vol_02" else None)
-        inset_p = args.inset or (inset_default if os.path.exists(inset_default) else None)
+        inset_p = args.inset or inset_default
         out_p = args.output or f"local_builds/animals/v1.0-core/animals-cover-spread-{args.page_count}p.pdf"
 
         build_kdp_cover(
