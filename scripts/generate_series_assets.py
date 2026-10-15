@@ -69,7 +69,7 @@ SERIES_SUBJECTS: dict[str, list[tuple[str, str]]] = {
                ("21", "SLEEPY MONSTER"), ("22", "CHEF MONSTER"), ("23", "DANCING MONSTER"), ("24", "FLYING MONSTER"),
                ("25", "WATER MONSTER"), ("26", "FOREST MONSTER"), ("27", "MAGIC MONSTER"), ("28", "FUNNY MONSTER"),
                ("29", "SPACE MONSTER"), ("30", "SUPER MONSTER")],
-    "vol_06": [("01", "ONE GIRAFFE"), ("02", "TWO ELEPHANTS"), ("03", "THREE LIONS"), ("04", "FOUR ZEBRAS"),
+    "vol_06": [("01", "ONE SMILING SUN"), ("02", "TWO BIRDS"), ("03", "THREE CATS"), ("04", "FOUR APPLES"),
                ("05", "FIVE MONKEYS"), ("06", "SIX FROGS"), ("07", "SEVEN BIRDS"), ("08", "EIGHT BUTTERFLIES"),
                ("09", "NINE FISH"), ("10", "TEN STARS"), ("11", "ELEVEN APPLES"), ("12", "TWELVE DUCKS"),
                ("13", "THIRTEEN BALLOONS"), ("14", "FOURTEEN FLOWERS"), ("15", "FIFTEEN HEARTS"),

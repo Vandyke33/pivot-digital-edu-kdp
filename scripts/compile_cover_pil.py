@@ -50,7 +50,7 @@ YELLOW_TEXT = (255, 230, 80, 255)
 
 SERIES_TITLES = [
     {"id": "vol_01", "vol": "Vol. 1",  "title": "Alphabet",   "pill": "ABC",       "bg_top": (255, 107, 53),  "bg_bottom": (255, 159, 28),  "neon": (255, 230, 109)},
-    {"id": "vol_02", "vol": "Vol. 2",  "title": "Animals",    "pill": "TIGER",     "bg_top": (255, 73, 73),   "bg_bottom": (255, 126, 71),  "neon": (255, 235, 120)},
+    {"id": "vol_02", "vol": "Vol. 2",  "title": "Animals",    "pill": "TIGER",     "bg_top": (255, 73, 73),   "bg_bottom": (255, 126, 71),  "neon": (255, 235, 120), "theme_environment": "jungle"},
     {"id": "vol_03", "vol": "Vol. 3",  "title": "Birds",      "pill": "PARROT",    "bg_top": (16, 185, 129),  "bg_bottom": (52, 211, 153),  "neon": (167, 243, 208)},
     {"id": "vol_04", "vol": "Vol. 4",  "title": "Sports",     "pill": "SOCCER",    "bg_top": (101, 163, 13),  "bg_bottom": (132, 204, 22),  "neon": (217, 249, 157)},
     {"id": "vol_05", "vol": "Vol. 5",  "title": "Monsters",   "pill": "MONSTER",   "bg_top": (217, 70, 239),  "bg_bottom": (244, 114, 182), "neon": (251, 207, 232)},
@@ -554,7 +554,22 @@ def render_single_front_cover(
     cy0 = int(height_px * 0.34)
     front.paste(activity_card, (cx0, cy0), activity_card)
 
-    # 5. Hero Character Illustration (Isolated with trapped white pockets removed)
+    # 5. Optional Thematic Foreground Framing (ONLY for Volume 2: Animals)
+    # Layered BEFORE hero so the hero character is never occluded!
+    if vol_meta.get("theme_environment") == "jungle" or vol_meta.get("id") == "vol_02":
+        jungle_frame = Path("assets/cover/jungle_foreground_frame.png")
+        if jungle_frame.exists():
+            try:
+                with Image.open(str(jungle_frame)) as j_im:
+                    j_rgba = j_im.convert("RGBA")
+                    jw = width_px
+                    jh = int(j_rgba.height * (jw / j_rgba.width))
+                    j_res = j_rgba.resize((jw, jh), Image.Resampling.LANCZOS)
+                    front.paste(j_res, (0, height_px - jh), j_res)
+            except Exception as e:
+                print(f"[Warning] Failed to render jungle foreground frame: {e}")
+
+    # 6. Hero Character Illustration (Layered on top of background & framing, 100% visible!)
     if hero_path and os.path.exists(str(hero_path)):
         hero = isolate_with_sticker_border(str(hero_path), stroke_size=15, remove_trapped_pockets=True)
         # Proportionally scale up to prominently fill the bottom-left area (~60% of trim width)
@@ -565,21 +580,8 @@ def render_single_front_cover(
         new_hh = int(hero.height * hero_sc)
         hero = hero.resize((new_hw, new_hh), Image.Resampling.LANCZOS)
         hx = int(width_px * 0.04)
-        hy = height_px - new_hh - 90
+        hy = height_px - new_hh - 80
         front.paste(hero, (hx, hy), hero)
-
-    # 6. Lush Jungle Foreground Frame (Layered across bottom edge)
-    jungle_frame = Path("assets/cover/jungle_foreground_frame.png")
-    if jungle_frame.exists():
-        try:
-            with Image.open(str(jungle_frame)) as j_im:
-                j_rgba = j_im.convert("RGBA")
-                jw = width_px
-                jh = int(j_rgba.height * (jw / j_rgba.width))
-                j_res = j_rgba.resize((jw, jh), Image.Resampling.LANCZOS)
-                front.paste(j_res, (0, height_px - jh), j_res)
-        except Exception as e:
-            print(f"[Warning] Failed to render jungle foreground frame: {e}")
 
     return front
 
@@ -630,25 +632,18 @@ def prebuild_all_series_front_covers(
         color_cand = Path(f"assets/series_ai/{vol_id}/subj_01_color.png")
         lineart_cand = Path(f"assets/series_ai/{vol_id}/subj_01_lineart.png")
 
-        if vol_id == "vol_02":
-            # For animals, use high-res tiger & monkey
-            for cand in [
-                "assets/cover/hero_tiger_monkey.png",
-                "local_builds/animals/assets/tiger_monkey_transparent.png",
-                os.path.join(thumbnails_dir, f"{vol_id}.png"),
-            ]:
-                if os.path.exists(cand):
-                    hero_candidate = cand
-                    break
-        else:
-            # For other volumes, use subject #1 color illustration if available, or thumbnail
-            if color_cand.exists():
-                hero_candidate = str(color_cand)
-            else:
-                cand = os.path.join(thumbnails_dir, f"{vol_id}.png")
-                if not os.path.exists(cand):
-                    cand = f"local_builds/animals/assets/thumbnails/{vol_id}.png"
-                hero_candidate = cand if os.path.exists(cand) else None
+        # Resolve dedicated Kid Avatar Hero artwork (prioritizing high-res 1024x1024 sticker)
+        for cand in [
+            f"assets/cover_heroes/{vol_id}_hero.png",
+            f"assets/cover_heroes/{vol_id}.png",
+            "assets/cover/hero_tiger_monkey.png" if vol_id == "vol_02" else None,
+            "local_builds/animals/assets/tiger_monkey_transparent.png" if vol_id == "vol_02" else None,
+            os.path.join(thumbnails_dir, f"{vol_id}.png"),
+            f"local_builds/animals/assets/thumbnails/{vol_id}.png",
+        ]:
+            if cand and os.path.exists(cand):
+                hero_candidate = cand
+                break
 
         front_img = render_single_front_cover(
             vol_meta=item,
@@ -1001,7 +996,11 @@ if __name__ == "__main__":
             force_fronts=args.force_fronts,
         )
     else:
-        hero_default = "local_builds/animals/assets/tiger_monkey_transparent.png"
+        hero_default = (
+            f"assets/cover_heroes/{args.vol_id}_hero.png"
+            if os.path.exists(f"assets/cover_heroes/{args.vol_id}_hero.png")
+            else "local_builds/animals/assets/tiger_monkey_transparent.png"
+        )
         color_ai = f"assets/series_ai/{args.vol_id}/subj_01_color.png"
         inset_default = color_ai if os.path.exists(color_ai) else None
         hero_p = args.hero or (hero_default if os.path.exists(hero_default) and args.vol_id == "vol_02" else None)
