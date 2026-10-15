@@ -10,6 +10,8 @@ service_account.json
 gcp_credentials.json
 gha-creds-*.json
 secrets/
+*-token.txt
+adobe-token.txt
 
 # Heavy source and print assets managed in GCS
 *.png
