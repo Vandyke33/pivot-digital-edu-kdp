@@ -289,10 +289,24 @@ def cmd_preflight(args: argparse.Namespace) -> None:
         cmd.extend(["--vol", str(args.vol)])
     if getattr(args, "json", False):
         cmd.append("--json")
-
     run_cmd(cmd)
 
 
+def cmd_canva_pipeline(args: argparse.Namespace) -> None:
+    cmd = [
+        PYTHON,
+        str(REPO_ROOT / "scripts" / "canva_pipeline.py"),
+    ]
+    if getattr(args, "action", None):
+        cmd.append(args.action)
+    if args.action in ["build", "ingest-hero"] and getattr(args, "vol", None):
+        cmd.extend(["--vol", str(args.vol)])
+    if args.action == "ingest-hero" and getattr(args, "source", None):
+        cmd.extend(["--source", str(args.source)])
+    if args.action in ["build", "build-all"] and getattr(args, "page_count", None):
+        cmd.extend(["--page-count", str(args.page_count)])
+
+    run_cmd(cmd)
 
 
 def main() -> int:
@@ -368,6 +382,13 @@ def main() -> int:
     # test
     subparsers.add_parser("test", help="Run full pipeline test suite")
 
+    # canva-pipeline
+    p_canva = subparsers.add_parser("canva-pipeline", help="Manage Canva 3D character hero briefs, ingestion, and unified build")
+    p_canva.add_argument("action", choices=["list-briefs", "ingest-hero", "build", "build-all"], help="Action to run")
+    p_canva.add_argument("--vol", default="vol_02", help="Volume ID (default: vol_02)")
+    p_canva.add_argument("--source", default=None, help="Source path or URL for hero ingestion")
+    p_canva.add_argument("--page-count", type=int, default=32, help="Page count (default: 32)")
+
     args = parser.parse_args()
 
     if not args.command or args.command == "status":
@@ -391,6 +412,8 @@ def main() -> int:
         cmd_build_copy_to_color_interior(args)
     elif args.command == "build-series-covers":
         cmd_build_series_covers(args)
+    elif args.command == "canva-pipeline":
+        cmd_canva_pipeline(args)
     elif args.command == "preflight":
         cmd_preflight(args)
     elif args.command == "build-all":

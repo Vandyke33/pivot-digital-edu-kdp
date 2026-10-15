@@ -1,13 +1,16 @@
 """
 scripts/canva_pipeline.py
 =========================
-Canva MCP Cover Pipeline Manager & Dispatcher for "The Pivot Kids: Copy to Color"
+Unified Brand-Governed Cover Production Pipeline & Canva Manager
+for "The Pivot Kids: Copy to Color" (12 Volumes)
 
-Automates:
-1. Standardized Canva prompt briefs for all 12 series volumes.
-2. Ingestion of exported Canva front covers into assets/external_fronts/
-3. Mechanical compilation of KDP full-wrap paperback cover spreads (300 DPI, dynamic spine, barcode safe zone).
-4. Automated KDP preflight verification.
+Enforces:
+1. Component-First Architecture: Isolated 3D character hero briefs for Canva generation.
+2. 100% Brand Mark Consistency: Official 'The Pivot Kids (Color & Play)' vector logo.
+3. 100% Typography Consistency: Native 300 DPI 3D neon sparkle display fonts ('Copy to Color' + '<SUBJECT>').
+4. Exact Series Palettes & Mechanical Alignment: Strict volume hex codes and locked coordinates.
+5. Non-Destructive Scaling: Native 300 DPI layout with zero pixel corruption or fuzzy upscale.
+6. KDP Compliance: Dynamic spine width formula, barcode safe zone (2.0 x 1.2 in), 4x3 series back grid.
 """
 
 from __future__ import annotations
@@ -15,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -22,167 +26,220 @@ from PIL import Image
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EXTERNAL_FRONTS_DIR = REPO_ROOT / "assets" / "external_fronts"
+HERO_ASSETS_DIR = REPO_ROOT / "assets" / "cover_heroes"
+SERIES_FRONTS_DIR = REPO_ROOT / "local_builds" / "series_fronts"
 EXTERNAL_FRONTS_DIR.mkdir(parents=True, exist_ok=True)
+HERO_ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+SERIES_FRONTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Series Volumes & Optimized Canva Generation Briefs
-CANVA_SERIES_BRIEFS = {
+# Standardized Isolated 3D Character Hero Briefs (Component-First Standard)
+# Strict negative prompt: no text, no letters, no words, no banners, clean solid white background
+CANVA_HERO_BRIEFS = {
     "vol_01": {
         "title": "Alphabet",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Alphabet'. A cheerful cartoon kid avatar joyfully sitting on colorful "
-            "oversized 3D ABC letter blocks with a giant crayon in a bright sunny playroom. 3D extruded colorful "
-            "typography, coral and sunny yellow palette, playful stickers, sparkles, professional book cover."
+            "A cheerful cartoon toddler kid avatar joyfully sitting on oversized colorful 3D ABC alphabet blocks "
+            "holding a giant colorful crayon, 3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters on background, no words, no frame"
         ),
     },
     "vol_02": {
         "title": "Animals",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Animals'. A cheerful cartoon kid avatar joyfully playing with an "
-            "adorable friendly baby tiger in a colorful lush tropical meadow. 3D extruded colorful bubbly typography, "
-            "warm coral and sunny yellow palette, playful stickers, sparkles, professional and eye-catching children's book cover."
+            "A cheerful cartoon kid avatar joyfully hugging an adorable friendly baby tiger cub, "
+            "3D Pixar Disney animation style, isolated on a clean pure solid white background, "
+            "full body view, vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_03": {
         "title": "Birds",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Birds'. A cheerful cartoon kid avatar with colorful friendly tropical parakeets "
-            "and toucans perched nearby in an enchanted treehouse. 3D extruded colorful bubbly typography, warm palette, "
-            "playful stickers, sparkles, professional children's book cover."
+            "A cheerful cartoon kid avatar with a colorful friendly tropical parrot perched gently on their hand, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "full body, playful, vibrant colors, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_04": {
         "title": "Sports",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Sports'. A cheerful cartoon kid athlete avatar holding a gleaming gold trophy "
-            "surrounded by soccer, basketball, and tennis balls on a sunny green field. 3D extruded typography, professional cover."
+            "A cheerful sporty cartoon kid athlete avatar holding a gleaming gold winner trophy and a colorful soccer ball, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_05": {
         "title": "Monsters",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Monsters'. A cheerful cartoon kid avatar joyfully hugging friendly, cute, "
-            "fluffy pastel monsters in a whimsical dreamland. 3D extruded bubbly typography, sparkling stars, vibrant cover."
+            "A cheerful cartoon kid avatar hugging an adorable fluffy pastel friendly mini monster with tiny horns, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_06": {
         "title": "Numbers",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Numbers'. A cheerful cartoon kid avatar joyfully stacking giant glowing "
-            "1-2-3 number blocks with confetti and stars in a sunny room. 3D extruded typography, playful stickers, bright cover."
+            "A cheerful cartoon kid avatar joyfully stacking giant colorful 1-2-3 number blocks, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "full body, vibrant colors, playful, high detail, no text, no words, no frame"
         ),
     },
     "vol_07": {
         "title": "Fruits",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Fruits'. A cheerful little kid chef avatar surrounded by smiling giant juicy "
-            "strawberries, oranges, and apples in an orchard. 3D extruded colorful typography, warm sunny palette, professional cover."
+            "A cheerful little kid chef avatar in a cute chef hat holding a giant smiling juicy strawberry, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_08": {
         "title": "Shapes",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Shapes'. A cheerful cartoon kid avatar building a whimsical castle with colorful "
-            "3D geometric shapes (cubes, spheres, cones) in a creative studio. 3D extruded typography, vibrant cover."
+            "A cheerful cartoon kid avatar holding colorful 3D building blocks in sphere, cube, and pyramid shapes, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_09": {
         "title": "Toys",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Toys'. A cheerful cartoon kid avatar playing with classic toys, a friendly "
-            "teddy bear, building bricks, and toy airplanes in a warm colorful playroom. 3D extruded typography, professional cover."
+            "A cheerful cartoon kid avatar playing with an adorable classic teddy bear and a colorful toy wooden train, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_10": {
         "title": "Flowers",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Flowers'. A cheerful cartoon kid avatar holding a colorful watering can in a "
-            "blooming meadow with smiling sunflowers and fluttering butterflies. 3D extruded typography, bright floral palette."
+            "A cheerful cartoon kid avatar holding a sunny yellow smiling sunflower and a cute colorful watering can, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_11": {
         "title": "Transport",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Transport'. A cheerful cartoon kid driver avatar in a cute vintage toy car "
-            "with airplanes flying in the sky and friendly trains in the background. 3D extruded typography, vibrant cover."
+            "A cheerful cartoon kid avatar sitting proudly in a bright red vintage toy roadster pedal car, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
     "vol_12": {
         "title": "Vegetables",
         "brief": (
-            "A vibrant, premium children's activity book front cover for 'The Pivot Kids: Color & Play'. "
-            "Series title 'Copy to Color: Vegetables'. A cheerful little kid gardener avatar holding an oversized smiling "
-            "carrot in a lush sunny farm garden with pumpkins and tomatoes. 3D extruded typography, fresh garden palette."
+            "A cheerful little kid gardener avatar wearing cute overalls and holding an oversized smiling orange carrot, "
+            "3D Pixar Disney animation style, isolated on a clean solid white background, "
+            "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
     },
 }
 
 
-def ingest_canva_export(download_url: str, vol_id: str) -> Path:
-    """Downloads an exported Canva cover image and saves it to assets/external_fronts/."""
-    if vol_id not in CANVA_SERIES_BRIEFS:
-        raise ValueError(f"Unknown volume ID '{vol_id}'. Valid IDs: {list(CANVA_SERIES_BRIEFS.keys())}")
+def ingest_canva_hero(url_or_path: str, vol_id: str) -> Path:
+    """
+    Downloads or copies an isolated Canva 3D hero character into assets/cover_heroes/{vol_id}_hero.png
+    so the 300 DPI native vector layout engine can layer it into the cover.
+    """
+    if vol_id not in CANVA_HERO_BRIEFS:
+        raise ValueError(f"Unknown volume ID '{vol_id}'. Valid IDs: {list(CANVA_HERO_BRIEFS.keys())}")
     
-    dest_path = EXTERNAL_FRONTS_DIR / f"{vol_id}_front.png"
-    print(f"[Canva Pipeline] Downloading exported cover for {vol_id} ({CANVA_SERIES_BRIEFS[vol_id]['title']})...")
-    urllib.request.urlretrieve(download_url, str(dest_path))
+    dest_path = HERO_ASSETS_DIR / f"{vol_id}_hero.png"
+    p_str = str(url_or_path).strip()
     
+    if p_str.startswith(("http://", "https://")):
+        print(f"[Canva Pipeline] Downloading 3D hero for {vol_id} ({CANVA_HERO_BRIEFS[vol_id]['title']})...")
+        urllib.request.urlretrieve(p_str, str(dest_path))
+    elif os.path.exists(p_str):
+        import shutil
+        print(f"[Canva Pipeline] Copying local 3D hero from {p_str} -> {dest_path}...")
+        shutil.copy(p_str, str(dest_path))
+    else:
+        raise FileNotFoundError(f"Could not find or reach hero source: {p_str}")
+        
     with Image.open(dest_path) as im:
-        print(f"[Canva Pipeline] Successfully saved {dest_path} ({im.size[0]}x{im.size[1]} px, mode={im.mode})")
+        print(f"[Canva Pipeline] Successfully ingested 3D hero: {dest_path} ({im.size[0]}x{im.size[1]} px, {im.mode})")
     return dest_path
 
 
-def list_briefs() -> None:
-    """Prints all series volumes and their Canva generation briefs."""
+def list_hero_briefs() -> None:
+    """Prints all 12 series volumes and their standardized isolated 3D character hero briefs."""
     print("=" * 80)
-    print("CANVA GENERATION BRIEFS FOR 'THE PIVOT KIDS: COPY TO COLOR' (12 VOLUMES)")
+    print("CANVA ISOLATED 3D CHARACTER HERO BRIEFS (COMPONENT-FIRST STANDARD)")
     print("=" * 80)
-    for vol_id, data in CANVA_SERIES_BRIEFS.items():
+    for vol_id, data in CANVA_HERO_BRIEFS.items():
         print(f"\n[{vol_id.upper()}] Copy to Color: {data['title']}")
-        print(f"Brief: {data['brief']}")
+        print(f"Prompt: {data['brief']}")
+
+
+def build_unified_cover(vol_id: str, page_count: int = 32) -> Path:
+    """
+    Compiles a brand-governed cover spread for the specified volume using:
+    - Native 300 DPI vector layout (LuckiestGuy 3D neon sparkle title stack)
+    - Official 'The Pivot Kids' brand mark
+    - Volume theme color gradient
+    - Ingested 3D hero character from assets/cover_heroes/{vol_id}_hero.png
+    - Two-panel activity card with wax crayons
+    - Full-wrap spread with 4x3 back grid and barcode safe zone
+    """
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "compile_cover_pil.py"),
+        "--vol", vol_id,
+        "--page-count", str(page_count),
+    ]
+    print(f"\n[Canva Pipeline] Compiling brand-governed cover spread for {vol_id}...")
+    subprocess.run(cmd, check=True)
+    out_pdf = REPO_ROOT / "local_builds" / vol_id / "v1.0-core" / f"{vol_id}-cover-spread-{page_count}p.pdf"
+    if not out_pdf.exists():
+        # Check animals default
+        if vol_id == "vol_02":
+            out_pdf = REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / f"animals-cover-spread-{page_count}p.pdf"
+    return out_pdf
+
+
+def build_all_unified_covers(page_count: int = 32) -> None:
+    """Batch-compiles all 12 series covers with 100% brand consistency and 4x3 grid synchronization."""
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "compile_cover_pil.py"),
+        "--build-all-series",
+        "--page-count", str(page_count),
+    ]
+    print("\n[Canva Pipeline] Batch-compiling all 12 unified series covers...")
+    subprocess.run(cmd, check=True)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Canva MCP Cover Pipeline Manager")
+    parser = argparse.ArgumentParser(description="Unified Brand-Governed Cover Production Pipeline")
     subparsers = parser.add_subparsers(dest="command")
 
     # List briefs
-    subparsers.add_parser("list-briefs", help="List Canva generation briefs for all 12 series volumes")
+    subparsers.add_parser("list-briefs", help="List isolated 3D character hero briefs for all 12 series volumes")
 
-    # Ingest
-    ingest_p = subparsers.add_parser("ingest", help="Ingest a Canva export URL into assets/external_fronts/")
-    ingest_p.add_argument("--vol", required=True, help="Volume ID (e.g. vol_01 to vol_12)")
-    ingest_p.add_argument("--url", required=True, help="Download URL from canva.export-design")
+    # Ingest Hero
+    ingest_hero_p = subparsers.add_parser("ingest-hero", help="Ingest a Canva 3D character hero into assets/cover_heroes/")
+    ingest_hero_p.add_argument("--vol", required=True, help="Volume ID (e.g. vol_01 to vol_12)")
+    ingest_hero_p.add_argument("--source", required=True, help="Download URL or local file path of the hero image")
 
-    # Compile spread
-    compile_p = subparsers.add_parser("compile", help="Compile KDP full-wrap spread using external front")
-    compile_p.add_argument("--vol", default="vol_02", help="Volume ID (default: vol_02)")
+    # Build Single Volume
+    build_p = subparsers.add_parser("build", help="Build unified brand-governed cover spread for a volume")
+    build_p.add_argument("--vol", default="vol_02", help="Volume ID (default: vol_02)")
+    build_p.add_argument("--page-count", type=int, default=32, help="Page count (default: 32)")
+
+    # Build All 12 Volumes
+    subparsers.add_parser("build-all", help="Build all 12 unified brand-governed series cover spreads")
 
     args = parser.parse_args()
 
     if args.command == "list-briefs":
-        list_briefs()
-    elif args.command == "ingest":
-        path = ingest_canva_export(args.url, args.vol)
+        list_hero_briefs()
+    elif args.command == "ingest-hero":
+        path = ingest_canva_hero(args.source, args.vol)
         print(f"[Canva Pipeline] Ready for assembly: {path}")
-    elif args.command == "compile":
-        vol_file = EXTERNAL_FRONTS_DIR / f"{args.vol}_front.png"
-        if not vol_file.exists():
-            print(f"[Error] External front not found at {vol_file}. Ingest it first.")
-            sys.exit(1)
-        import subprocess
-        cmd = [sys.executable, "main.py", "build-animals-cover", "--external-front", str(vol_file)]
-        subprocess.run(cmd, check=True)
+    elif args.command == "build":
+        out = build_unified_cover(args.vol, args.page_count)
+        print(f"[Canva Pipeline] Successfully compiled: {out}")
+    elif args.command == "build-all":
+        build_all_unified_covers()
     else:
         parser.print_help()
 

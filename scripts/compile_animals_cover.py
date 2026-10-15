@@ -1030,11 +1030,15 @@ def main() -> int:
     if not card_default.exists():
         card_default = Path("local_builds/animals/assets/tiger_color_thumb.png")
 
+    hero_default = Path("assets/cover_heroes/vol_02_hero.png")
+    if not hero_default.exists():
+        hero_default = Path("local_builds/animals/assets/tiger_monkey_transparent.png")
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("local_builds/animals/v1.0-core/animals-cover-spread.pdf"), help="Destination PDF path")
     parser.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation (default 32)")
     parser.add_argument("--logo", type=Path, default=Path("assets/logos/pivot_kids_sticker.png"), help="Logo PNG/SVG")
-    parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
+    parser.add_argument("--hero-art", type=Path, default=hero_default, help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=card_default, help="Activity card split image or color guide")
     parser.add_argument("--card-outline", type=Path, default=Path("assets/series_ai/vol_02/subj_01_lineart.png"), help="Activity card B&W outline")
     parser.add_argument("--external-front", type=Path, default=None, help="Path to pre-rendered external front cover image")
