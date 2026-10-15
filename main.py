@@ -80,11 +80,15 @@ def cmd_render(args: argparse.Namespace) -> None:
     out_dir = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / "prompts.jsonl"
+    series = getattr(args, "series", "solar_system_explorers")
+    edition = getattr(args, "edition", None) or getattr(args, "edition_id", "core_coloring")
+    if edition == "v1.0-core":
+        edition = "core_coloring"
     run_cmd([
         PYTHON,
         str(REPO_ROOT / "scripts" / "render_prompts.py"),
-        "--series", args.series,
-        "--edition", args.edition,
+        "--series", series,
+        "--edition", edition,
         "--output", str(out_file),
     ])
     print(f"\n[OK] Prompts rendered to {out_file}")
@@ -97,14 +101,16 @@ def cmd_prepare(args: argparse.Namespace) -> None:
 
     out_manifest = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "generation-manifest.json"
     raw_dir = REPO_ROOT / "local_builds" / "solar-system-explorers" / "v1.0-core" / "raw"
+    model = getattr(args, "model", "gemini-3.1-flash-lite-image")
+    edition_id = getattr(args, "edition_id", "v1.0-core")
     run_cmd([
         PYTHON,
         str(REPO_ROOT / "scripts" / "prepare_generation_batch.py"),
         "--prompts", str(prompts_file),
         "--provider", "google-gemini-agent-platform",
-        "--model", args.model,
-        "--model-version", args.model,
-        "--edition-id", args.edition_id,
+        "--model", model,
+        "--model-version", model,
+        "--edition-id", edition_id,
         "--asset-dir", str(raw_dir),
         "--output", str(out_manifest),
     ])
@@ -196,14 +202,18 @@ def cmd_build_cover(args: argparse.Namespace) -> None:
 
 
 def cmd_build_animals_cover(args: argparse.Namespace) -> None:
-    out_pdf = getattr(args, "output", None) or (REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / "animals-cover-spread.pdf")
+    out_pdf = getattr(args, "output", None) or (REPO_ROOT / "local_builds" / "animals" / "v1.0-core" / "animals-cover-spread-32p.pdf")
     page_count = getattr(args, "page_count", 32)
-    run_cmd([
+    ext_front = getattr(args, "external_front", None)
+    cmd = [
         PYTHON,
         str(REPO_ROOT / "scripts" / "compile_animals_cover.py"),
         "--output", str(out_pdf),
         "--page-count", str(page_count),
-    ])
+    ]
+    if ext_front:
+        cmd.extend(["--external-front", str(ext_front)])
+    run_cmd(cmd)
     print(f"\n[OK] Animals Cover Spread compiled: {out_pdf}")
 
     # Generate 300 DPI PNG visual proof
@@ -261,6 +271,8 @@ def cmd_build_series_covers(args: argparse.Namespace) -> None:
     ]
     if getattr(args, "force_fronts", False):
         cmd.append("--force-fronts")
+    if getattr(args, "external_fronts_dir", None):
+        cmd.extend(["--external-fronts-dir", str(args.external_fronts_dir)])
 
     run_cmd(cmd)
     print(f"\n[OK] All 12 Series Covers compiled for {page_count} pages.")
@@ -325,6 +337,7 @@ def main() -> int:
     p_animals = subparsers.add_parser("build-animals-cover", help="Compile 'Copy to Color: Animals' full-wrap cover spread")
     p_animals.add_argument("--output", type=Path, default=None, help="Destination PDF path")
     p_animals.add_argument("--page-count", type=int, default=32, help="Book page count for spine calculation (default 32)")
+    p_animals.add_argument("--external-front", type=Path, default=None, help="Path to pre-rendered external front cover image (80/20 workflow)")
 
     # build-copy-to-color-interior
     p_c2c = subparsers.add_parser("build-copy-to-color-interior", help="Compile 32-page 'Copy to Color' interior PDF")
@@ -338,6 +351,8 @@ def main() -> int:
     p_sc = subparsers.add_parser("build-series-covers", help="Compile all 12 series full-wrap cover spreads")
     p_sc.add_argument("--page-count", type=int, default=32, help="Page count for spine calculation (default 32)")
     p_sc.add_argument("--force-fronts", action="store_true", help="Force re-rendering all front covers")
+    p_sc.add_argument("--external-fronts-dir", type=Path, default=None, help="Directory containing pre-rendered external front covers (80/20 workflow)")
+    p_sc.add_argument("--external-front", type=Path, default=None, help="Path to single pre-rendered external front cover (80/20 workflow)")
 
     # build-all
     p_all = subparsers.add_parser("build-all", help="Compile both interior and cover PDFs")

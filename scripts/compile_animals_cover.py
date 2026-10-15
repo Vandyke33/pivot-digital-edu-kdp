@@ -981,6 +981,7 @@ def draw_animals_cover_spread(
     hero_art_path: Path | None = None,
     card_color_thumb: Path | None = None,
     card_bw_outline: Path | None = None,
+    external_front_path: Path | str | None = None,
 ) -> Path:
     """Generate the flat, print-ready full paperback cover spread PDF using the Two-Pass high-fidelity engine."""
     dims = calculate_animals_cover_dimensions(page_count=page_count)
@@ -1000,6 +1001,7 @@ def draw_animals_cover_spread(
         hero_image_path=str(hero_art_path) if hero_art_path and Path(hero_art_path).exists() else None,
         inset_image_path=str(card_color_thumb) if card_color_thumb and Path(card_color_thumb).exists() else None,
         logo_path=str(logo_path) if logo_path and Path(logo_path).exists() else None,
+        external_front=str(external_front_path) if external_front_path else None,
     )
 
     # 2. In ReportLab, ensure the PDF contains the exact mediabox points and vector spine text stream
@@ -1035,6 +1037,7 @@ def main() -> int:
     parser.add_argument("--hero-art", type=Path, default=Path("local_builds/animals/assets/tiger_monkey_transparent.png"), help="Hero characters PNG")
     parser.add_argument("--card-color", type=Path, default=card_default, help="Activity card split image or color guide")
     parser.add_argument("--card-outline", type=Path, default=Path("assets/series_ai/vol_02/subj_01_lineart.png"), help="Activity card B&W outline")
+    parser.add_argument("--external-front", type=Path, default=None, help="Path to pre-rendered external front cover image")
 
     args = parser.parse_args()
 
@@ -1048,6 +1051,7 @@ def main() -> int:
         hero_art_path=args.hero_art if args.hero_art.exists() else None,
         card_color_thumb=args.card_color if args.card_color.exists() else None,
         card_bw_outline=args.card_outline if args.card_outline.exists() else None,
+        external_front_path=args.external_front,
     )
     print(f"[OK] Full Animals Cover Spread generated successfully: {out}")
     return 0

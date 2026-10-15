@@ -136,6 +136,53 @@ def pull_remote_asset(url_or_path: str | Path | None, dest_path: str | Path) -> 
 
 
 # ---------------------------------------------------------------------------
+# 2B. 80/20 VISUAL STUDIO FRONT COVER INGESTION & NORMALIZATION ENGINE
+# ---------------------------------------------------------------------------
+def load_and_normalize_front_cover(
+    front_source: str | Path | Image.Image,
+    target_w_px: int = 2588,
+    target_h_px: int = 3375,
+) -> Image.Image:
+    """
+    80/20 Visual Studio Publishing Workflow:
+    Loads and normalizes an externally authored front cover (e.g. from Adobe Express or Figma).
+
+    Dimensions & Bleed Invariants:
+    - Target Spread Front Zone: (TRIM_W_IN + BLEED_IN) x (TRIM_H_IN + 2 * BLEED_IN)
+      = 8.625 x 11.250 in @ 300 DPI = 2588 x 3375 px (with bleed).
+    - Trim-Only Artwork: 8.5 x 11.0 in @ 300 DPI = 2550 x 3300 px.
+      If trim-only artwork is supplied, gracefully centers and pads to full bleed dimensions
+      by scaling proportionally to cover the canvas without distortion or white seams.
+    """
+    if isinstance(front_source, (str, Path)):
+        src_path = Path(front_source)
+        if not src_path.exists():
+            raise FileNotFoundError(f"[80/20 Workflow] External front cover file not found: {src_path}")
+        im = Image.open(src_path).convert("RGBA")
+    elif isinstance(front_source, Image.Image):
+        im = front_source.convert("RGBA")
+    else:
+        raise TypeError(f"Expected str, Path, or PIL.Image.Image, got {type(front_source)}")
+
+    orig_w, orig_h = im.size
+    if (orig_w, orig_h) == (target_w_px, target_h_px):
+        return im
+
+    # Calculate scale factor to cover the full target dimensions (proportional, zero distortion)
+    scale = max(target_w_px / orig_w, target_h_px / orig_h)
+    scaled_w = int(round(orig_w * scale))
+    scaled_h = int(round(orig_h * scale))
+    scaled = im.resize((scaled_w, scaled_h), Image.Resampling.LANCZOS)
+
+    # Center crop to exact target_w_px x target_h_px
+    left = (scaled_w - target_w_px) // 2
+    top = (scaled_h - target_h_px) // 2
+    normalized = scaled.crop((left, top, left + target_w_px, top + target_h_px))
+    print(f"[80/20 Workflow] Normalized external front from {orig_w}x{orig_h} to {target_w_px}x{target_h_px} (300 DPI)")
+    return normalized
+
+
+# ---------------------------------------------------------------------------
 # 3. ALPHA ISOLATION & STICKER CONTOUR ENGINE
 # ---------------------------------------------------------------------------
 def isolate_with_sticker_border(
@@ -593,6 +640,7 @@ def prebuild_all_series_front_covers(
     thumbnails_dir: str = "assets/cover_thumbnails",
     output_fronts_dir: str = "local_builds/series_fronts",
     force: bool = False,
+    external_fronts_dir: str | Path | None = None,
 ) -> dict[str, Image.Image]:
     """
     PASS 1 BATCH RUNNER: Generates all 12 standalone Front Covers first and saves them
@@ -602,8 +650,8 @@ def prebuild_all_series_front_covers(
     os.makedirs(output_fronts_dir, exist_ok=True)
     rendered_fronts: dict[str, Image.Image] = {}
 
-    # Fast disk-cache check: if all 12 covers already exist and not forced, load from disk
-    if not force:
+    # Fast disk-cache check: if all 12 covers already exist and not forced (and no external fronts dir), load from disk
+    if not force and not external_fronts_dir:
         all_exist = all(
             os.path.exists(os.path.join(output_fronts_dir, f"{item['id']}_front.png"))
             and os.path.getsize(os.path.join(output_fronts_dir, f"{item['id']}_front.png")) > 1000
@@ -623,9 +671,36 @@ def prebuild_all_series_front_covers(
             resolved_logo = str(cand)
             break
 
+    ext_dir = Path(external_fronts_dir) if external_fronts_dir else None
+
     for item in SERIES_TITLES:
         vol_id = item["id"]
+        title_slug = item["title"].lower()
         out_file = os.path.join(output_fronts_dir, f"{vol_id}_front.png")
+
+        # 80/20 Workflow: Check if external pre-rendered front exists in external_fronts_dir
+        ext_candidate = None
+        if ext_dir and ext_dir.exists():
+            for fname in [
+                f"{vol_id}_front.png", f"{vol_id}.png", f"{vol_id}_{title_slug}.png",
+                f"{title_slug}_front.png", f"{title_slug}.png", f"{item['title']}.png",
+                f"{vol_id}_front.jpg", f"{vol_id}.jpg", f"{title_slug}.jpg",
+            ]:
+                check_p = ext_dir / fname
+                if check_p.exists():
+                    ext_candidate = check_p
+                    break
+
+        if ext_candidate:
+            front_img = load_and_normalize_front_cover(
+                ext_candidate,
+                target_w_px=trim_w_px,
+                target_h_px=trim_h_px,
+            )
+            front_img.save(out_file, "PNG")
+            rendered_fronts[vol_id] = front_img
+            print(f"  [Pass 1 - 80/20 Workflow] Ingested External Front: {item['vol']} {item['title']} <- {ext_candidate}")
+            continue
 
         # Resolve hero art and activity card assets
         hero_candidate = None
@@ -742,6 +817,8 @@ def build_kdp_cover(
     thumbnails_dir: str = "assets/cover_thumbnails",
     force_fronts: bool = False,
     rendered_fronts: dict[str, Image.Image] | None = None,
+    external_front: str | Path | None = None,
+    external_fronts_dir: str | Path | None = None,
 ) -> Path:
     """Compiles print-ready Amazon KDP full-wrap paperback cover spread PDF & proof."""
     specs = calculate_cover_dimensions(page_count)
@@ -771,10 +848,19 @@ def build_kdp_cover(
             logo_path=resolved_logo,
             thumbnails_dir=thumbnails_dir,
             force=force_fronts,
+            external_fronts_dir=external_fronts_dir,
         )
 
-    # Override active volume's front cover if high-res hero/inset paths are explicitly supplied
-    if resolved_hero or resolved_inset:
+    # 80/20 Workflow: Ingest external front cover if supplied
+    if external_front:
+        ext_front_img = load_and_normalize_front_cover(
+            external_front,
+            target_w_px=trim_w + bleed,
+            target_h_px=h,
+        )
+        rendered_fronts[active_vol_id] = ext_front_img
+    elif resolved_hero or resolved_inset:
+        # Override active volume's front cover if high-res hero/inset paths are explicitly supplied
         color_cand = Path(f"assets/series_ai/{active_vol_id}/subj_01_color.png")
         lineart_cand = Path(f"assets/series_ai/{active_vol_id}/subj_01_lineart.png")
         active_color = str(color_cand) if color_cand.exists() else resolved_inset
@@ -909,7 +995,10 @@ def build_kdp_cover(
 
     # ---------------- FRONT COVER SECTION ----------------
     active_front = rendered_fronts[active_vol_id].resize((trim_w + bleed, h), Image.Resampling.LANCZOS)
-    cover.paste(active_front, (front_x_start, 0), active_front)
+    if active_front.mode == "RGBA":
+        cover.paste(active_front, (front_x_start, 0), active_front)
+    else:
+        cover.paste(active_front, (front_x_start, 0))
 
     # Save Output PDF and PNG proof
     out_p = Path(output_path)
@@ -929,10 +1018,12 @@ def build_all_12_series_covers(
     thumbnails_dir: str = "assets/cover_thumbnails",
     output_dir: str = "local_builds/series_covers_32p",
     force_fronts: bool = False,
+    external_fronts_dir: str | Path | None = None,
 ) -> list[Path]:
     """
     Compiles all 12 standalone Front Covers (Pass 1) and all 12 Full-Wrap KDP Spreads (Pass 2)
     for the entire 32-page series in a single automated batch.
+    Supports external pre-rendered front covers via external_fronts_dir (80/20 workflow).
     """
     specs = calculate_cover_dimensions(page_count)
     out_d = Path(output_dir)
@@ -951,6 +1042,7 @@ def build_all_12_series_covers(
         logo_path=resolved_logo,
         thumbnails_dir=thumbnails_dir,
         force=force_fronts,
+        external_fronts_dir=external_fronts_dir,
     )
 
     generated: list[Path] = []
@@ -967,6 +1059,7 @@ def build_all_12_series_covers(
             thumbnails_dir=thumbnails_dir,
             force_fronts=False,
             rendered_fronts=rendered_fronts,
+            external_fronts_dir=external_fronts_dir,
         )
         generated.append(p)
 
@@ -984,6 +1077,8 @@ if __name__ == "__main__":
     parser.add_argument("--hero", default=None, help="Path or remote URL to hero illustration")
     parser.add_argument("--inset", default=None, help="Path or remote URL to inset illustration")
     parser.add_argument("--logo", default=None, help="Path to brand logo")
+    parser.add_argument("--external-front", default=None, help="Path to pre-rendered external front cover image (from Adobe Express / Figma)")
+    parser.add_argument("--external-fronts-dir", default=None, help="Directory containing pre-rendered external front cover images")
     parser.add_argument("--all", action="store_true", help="Compile full spreads for all 12 series volumes")
     parser.add_argument("--force-fronts", action="store_true", help="Force re-rendering of all front covers")
 
@@ -994,6 +1089,7 @@ if __name__ == "__main__":
             page_count=args.page_count,
             logo_path=args.logo,
             force_fronts=args.force_fronts,
+            external_fronts_dir=args.external_fronts_dir,
         )
     else:
         hero_default = (
@@ -1015,4 +1111,6 @@ if __name__ == "__main__":
             inset_image_path=inset_p,
             logo_path=args.logo,
             force_fronts=args.force_fronts,
+            external_front=args.external_front,
+            external_fronts_dir=args.external_fronts_dir,
         )
