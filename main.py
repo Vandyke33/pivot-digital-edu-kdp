@@ -219,6 +219,18 @@ def cmd_build_animals_cover(args: argparse.Namespace) -> None:
 
 
 def cmd_build_copy_to_color_interior(args: argparse.Namespace) -> None:
+    if getattr(args, "all", False):
+        cmd = [
+            PYTHON,
+            str(REPO_ROOT / "scripts" / "compile_copy_to_color_interior.py"),
+            "--all",
+        ]
+        if getattr(args, "output", None):
+            cmd.extend(["--output", str(args.output)])
+        run_cmd(cmd)
+        print(f"\n[OK] All 12 32-page Copy-to-Color Interiors compiled.")
+        return
+
     vol_id = getattr(args, "vol_id", "vol_02")
     vol_title = getattr(args, "vol_title", None)
     assets_dir = getattr(args, "assets_dir", None)
@@ -252,6 +264,22 @@ def cmd_build_series_covers(args: argparse.Namespace) -> None:
 
     run_cmd(cmd)
     print(f"\n[OK] All 12 Series Covers compiled for {page_count} pages.")
+
+
+def cmd_preflight(args: argparse.Namespace) -> None:
+    cmd = [
+        PYTHON,
+        str(REPO_ROOT / "scripts" / "preflight_kdp.py"),
+    ]
+    if getattr(args, "all", False):
+        cmd.append("--all")
+    if getattr(args, "vol", None):
+        cmd.extend(["--vol", str(args.vol)])
+    if getattr(args, "json", False):
+        cmd.append("--json")
+
+    run_cmd(cmd)
+
 
 
 
@@ -300,6 +328,7 @@ def main() -> int:
 
     # build-copy-to-color-interior
     p_c2c = subparsers.add_parser("build-copy-to-color-interior", help="Compile 32-page 'Copy to Color' interior PDF")
+    p_c2c.add_argument("--all", action="store_true", help="Batch compile all 12 series interior volumes")
     p_c2c.add_argument("--vol-id", default="vol_02", help="Series volume ID (e.g. vol_01 to vol_12)")
     p_c2c.add_argument("--vol-title", default=None, help="Volume title override")
     p_c2c.add_argument("--output", type=Path, default=None, help="Destination PDF path")
@@ -314,6 +343,12 @@ def main() -> int:
     p_all = subparsers.add_parser("build-all", help="Compile both interior and cover PDFs")
     p_all.add_argument("--series", default="solar_system_explorers", choices=["solar_system_explorers", "copy_to_color_animals", "animals"], help="Series to build (default: solar_system_explorers)")
     p_all.add_argument("--author", default=None, help="Author name to display on cover")
+
+    # preflight
+    p_pref = subparsers.add_parser("preflight", help="Run automated Amazon KDP quality preflight audit")
+    p_pref.add_argument("--all", action="store_true", help="Audit all 12 series volumes")
+    p_pref.add_argument("--vol", default=None, help="Audit a specific volume (e.g., vol_01 to vol_12, animals)")
+    p_pref.add_argument("--json", action="store_true", help="Output results in JSON format")
 
     # test
     subparsers.add_parser("test", help="Run full pipeline test suite")
@@ -341,6 +376,8 @@ def main() -> int:
         cmd_build_copy_to_color_interior(args)
     elif args.command == "build-series-covers":
         cmd_build_series_covers(args)
+    elif args.command == "preflight":
+        cmd_preflight(args)
     elif args.command == "build-all":
         series = getattr(args, "series", "solar_system_explorers")
         if series in ["copy_to_color_animals", "animals"]:

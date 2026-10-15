@@ -20,7 +20,10 @@ def extract_with_sticker_contour(
     contour_color: tuple[int, int, int] = (255, 255, 255),
     remove_trapped_pockets: bool = True,
     min_pocket_area: int = 1800,
+    stroke_size: int | None = None,
 ) -> Image.Image:
+    if stroke_size is not None:
+        contour_radius = stroke_size
     """
     Extract foreground subject from a white background using connected corner flood-fill.
     
@@ -222,5 +225,9 @@ def process_image_file(
         processed.save(out_p, format="PNG")
 
     return out_p
+
+
+# Export alias for convenience and backward compatibility
+isolate_with_sticker_border = extract_with_sticker_contour
 
 

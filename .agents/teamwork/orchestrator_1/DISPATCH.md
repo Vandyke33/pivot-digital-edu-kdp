@@ -29,3 +29,13 @@ Build and automate an end-to-end production pipeline for the 12-volume children'
 - Decompose the work, dispatch specialist subagents as needed, and manage the team according to Teamwork rules.
 - When all tasks are completed and verified, send your final completion report back to Sentinel. Sentinel will conduct an independent Victory Audit before final acceptance.
 
+
+
+## 2026-10-14T19:46:45Z
+Sender: 6e10828b-c6e8-4375-b65e-e873a5a892e8 (Sentinel)
+Priority: MESSAGE_PRIORITY_HIGH
+
+User Directive received and appended to ORIGINAL_REQUEST.md:
+"commit changes as stages are achieved to track progress and checkpoint code"
+
+Please ensure git commits are made at stage and milestone checkpoints as progress is achieved across the implementation.

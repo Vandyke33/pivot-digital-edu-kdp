@@ -17,7 +17,7 @@ from scripts.compile_copy_to_color_interior import (
     SERIES_CATALOG,
     build_32_page_copy_to_color_book,
     color_image_to_clean_lineart,
-    generate_procedural_subject_pair,
+    resolve_subject_assets,
 )
 from scripts.compile_cover_pil import (
     SERIES_TITLES,
@@ -65,16 +65,10 @@ class CopyToColorInteriorTests(unittest.TestCase):
         extrema = gray.getextrema()
         self.assertEqual(extrema, (0, 255))
 
-    def test_procedural_subject_pair_generation(self) -> None:
-        """Verify fallback procedural illustration generation produces 1:1 color/BW pair."""
-        color_im, bw_im = generate_procedural_subject_pair("01", "TIGER", (255, 73, 73))
-        self.assertEqual(color_im.size, bw_im.size)
-        self.assertEqual(color_im.mode, "RGBA")
-        self.assertEqual(bw_im.mode, "RGBA")
-
-        # Verify lineart has pure black lines
-        gray = bw_im.convert("L")
-        self.assertEqual(gray.getextrema()[0], 0)
+    def test_resolve_subject_assets_fail_closed(self) -> None:
+        """Verify resolve_subject_assets strictly enforces NO_PROCEDURAL_ART and fails closed when assets missing."""
+        with self.assertRaises(FileNotFoundError):
+            resolve_subject_assets("vol_99", 99, "NON_EXISTENT")
 
     def test_build_32_page_copy_to_color_book(self) -> None:
         """Verify end-to-end compilation of a compliant 32-page interior PDF."""
@@ -93,9 +87,9 @@ class CopyToColorInteriorTests(unittest.TestCase):
             reader = PdfReader(str(result))
             self.assertEqual(len(reader.pages), 32)
 
-            # Inspect page geometry (8.5 x 11.0 in = 612 x 792 pt)
-            expected_w_pt = 8.5 * 72.0
-            expected_h_pt = 11.0 * 72.0
+            # Inspect page geometry (8.625 x 11.250 in = 621.0 x 810.0 pt bleed mediabox)
+            expected_w_pt = 8.625 * 72.0  # 621.0 pt
+            expected_h_pt = 11.250 * 72.0  # 810.0 pt
             for idx, page in enumerate(reader.pages):
                 self.assertAlmostEqual(float(page.mediabox.width), expected_w_pt, places=1)
                 self.assertAlmostEqual(float(page.mediabox.height), expected_h_pt, places=1)

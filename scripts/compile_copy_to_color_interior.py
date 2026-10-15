@@ -35,22 +35,25 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.utils.cover_environment import draw_five_point_star
+
 try:
-    from scripts.utils.animal_illustrations import draw_animal_character
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.utils import ImageReader
+    HAS_REPORTLAB = True
 except ImportError:
-    try:
-        from utils.animal_illustrations import draw_animal_character
-    except ImportError:
-        draw_animal_character = None
+    HAS_REPORTLAB = False
 
 
 # ---------------------------------------------------------------------------
-# 1. KDP PHYSICAL & CANVAS CONSTANTS (8.5 x 11.0 in @ 300 DPI)
+# 1. KDP PHYSICAL & CANVAS CONSTANTS (8.625 x 11.250 in @ 300 DPI)
 # ---------------------------------------------------------------------------
 DPI = 300
-PAGE_W = int(8.5 * DPI)       # 2550 px
-PAGE_H = int(11.0 * DPI)      # 3300 px
+PAGE_W = 2588  # 8.625 * 300 = 2587.5 -> 2588 px
+PAGE_H = 3375  # 11.250 * 300 = 3375 px
 SAFE_MARGIN = int(0.5 * DPI)  # 150 px
+MEDIABOX_W_PT = 621.0  # 8.625 * 72 pt
+MEDIABOX_H_PT = 810.0  # 11.250 * 72 pt
 
 # ---------------------------------------------------------------------------
 # 2. 12-VOLUME SERIES CATALOG & 30-SUBJECT CURATED REGISTRY
@@ -291,39 +294,62 @@ def color_image_to_clean_lineart(color_img: Image.Image, stroke_boost: int = 3) 
     return bw.convert("RGBA")
 
 # ---------------------------------------------------------------------------
-# 5. PROCEDURAL SUBJECT ARTWORK FALLBACK (FOR TESTING / UNGENERATED ASSETS)
+# 5. AI-FIRST SUBJECT ARTWORK RESOLVER (STRICT FAIL-CLOSED, NO PROCEDURAL ART)
 # ---------------------------------------------------------------------------
-def generate_procedural_subject_pair(code_label: str, word_label: str,
-                                     primary_color: tuple) -> tuple[Image.Image, Image.Image]:
+def resolve_subject_assets(
+    vol_id: str,
+    subject_idx: int,
+    subject_name: str,
+    assets_dir: str | Path | None = None,
+) -> tuple[Image.Image, Image.Image]:
     """
-    Generates a clean vector-style character/object pair (Color Reference + B&W Outline)
-    when external source assets are pending, guaranteeing a print-ready build without crashing.
-    Uses multi-animal illustration drawer for all 30 animals in series volume 2.
+    Resolves the 1:1 paired Color Guide + B&W Coloring Lineart.
+    Strictly enforces NO_PROCEDURAL_ART: never substitutes geometric shapes.
+    Fails closed with FileNotFoundError if AI illustration assets are missing.
     """
-    if draw_animal_character is not None:
-        color_im = draw_animal_character(word_label, primary_color)
-    else:
-        w, h = 1800, 1800
-        color_im = Image.new("RGBA", (w, h), (255, 255, 255, 255))
-        d_c = ImageDraw.Draw(color_im)
-        cx, cy = w // 2, h // 2
-        body_col = primary_color + (255,)
-        belly_col = (255, 245, 210, 255)
-        eye_col = (20, 20, 25, 255)
-        d_c.ellipse([cx - 480, cy - 540, cx - 240, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
-        d_c.ellipse([cx + 240, cy - 540, cx + 480, cy - 300], fill=body_col, outline=(30, 30, 30, 255), width=22)
-        d_c.ellipse([cx - 420, cy - 420, cx + 420, cy + 420], fill=body_col, outline=(30, 30, 30, 255), width=24)
-        d_c.ellipse([cx - 240, cy - 40, cx + 240, cy + 320], fill=belly_col, outline=(30, 30, 30, 255), width=18)
-        d_c.ellipse([cx - 220, cy - 160, cx - 80, cy - 20], fill=eye_col)
-        d_c.ellipse([cx - 180, cy - 150, cx - 120, cy - 90], fill=(255, 255, 255, 255))
-        d_c.ellipse([cx + 80, cy - 160, cx + 220, cy - 20], fill=eye_col)
-        d_c.ellipse([cx + 120, cy - 150, cx + 180, cy - 90], fill=(255, 255, 255, 255))
-        d_c.ellipse([cx - 60, cy + 40, cx + 60, cy + 130], fill=(240, 60, 90, 255), outline=(30, 30, 30, 255), width=14)
-        d_c.arc([cx - 120, cy + 120, cx + 120, cy + 260], start=20, end=160, fill=(30, 30, 30, 255), width=18)
+    search_dirs: list[Path] = []
+    if assets_dir:
+        search_dirs.append(Path(assets_dir))
+    search_dirs.append(REPO_ROOT / "assets" / "series_ai" / vol_id)
+    search_dirs.append(REPO_ROOT / "local_builds" / "animals" / "assets")
 
-    # Derive pure B&W lineart with 100% matching geometry
-    bw_im = color_image_to_clean_lineart(color_im, stroke_boost=3)
-    return color_im, bw_im
+    color_cand: Path | None = None
+    lineart_cand: Path | None = None
+
+    for d in search_dirs:
+        if not d.exists():
+            continue
+        c_p = d / f"subj_{subject_idx:02d}_color.png"
+        l_p = d / f"subj_{subject_idx:02d}_lineart.png"
+        b_p = d / f"subj_{subject_idx:02d}_bw.png"
+
+        if c_p.exists() and l_p.exists():
+            color_cand = c_p
+            lineart_cand = l_p
+            break
+        elif c_p.exists() and b_p.exists():
+            color_cand = c_p
+            lineart_cand = b_p
+            break
+
+    # Legacy tiger asset fallback for vol_02 subj 1
+    if not color_cand and vol_id == "vol_02" and subject_idx == 1:
+        leg_c = REPO_ROOT / "local_builds/animals/assets/tiger_color_thumb.png"
+        leg_l = REPO_ROOT / "local_builds/animals/assets/tiger_outline.png"
+        if leg_c.exists() and leg_l.exists():
+            color_cand = leg_c
+            lineart_cand = leg_l
+
+    if color_cand and lineart_cand:
+        color_im = Image.open(str(color_cand)).convert("RGBA")
+        lineart_im = Image.open(str(lineart_cand)).convert("RGBA")
+        return color_im, lineart_im
+
+    raise FileNotFoundError(
+        f"[NO_PROCEDURAL_ART VIOLATION BLOCKED] AI illustration assets missing for {vol_id} #{subject_idx:02d} ({subject_name}). "
+        f"Python geometric shape fallbacks are strictly banned. "
+        f"Run: python scripts/generate_series_assets.py --vol-id {vol_id} to generate the real AI paired artwork."
+    )
 
 # ---------------------------------------------------------------------------
 # 6. COPY-TO-COLOR PAGE CHROME RENDERER
@@ -553,9 +579,13 @@ def render_page_32_certificate(vol_title: str, primary_color: tuple, secondary_c
     font_tagline = load_font("Fredoka-Bold.ttf", 36)
 
     # Award header
-    award_txt = "★ SUPER COLORIST AWARD! ★"
+    award_txt = "SUPER COLORIST AWARD!"
     a_bb = draw.textbbox((0, 0), award_txt, font=font_award)
-    draw.text((cx - (a_bb[2] - a_bb[0]) // 2, SAFE_MARGIN + 220), award_txt, fill=primary_color, font=font_award)
+    award_w = a_bb[2] - a_bb[0]
+    draw.text((cx - award_w // 2, SAFE_MARGIN + 220), award_txt, fill=primary_color, font=font_award)
+    # Flank with crisp vector 5-point gold stars (no unicode tofu)
+    draw_five_point_star(draw, cx - award_w // 2 - 60, SAFE_MARGIN + 265, outer_r=32, inner_r=14, fill=(255, 215, 0), outline=(217, 119, 6), width=4)
+    draw_five_point_star(draw, cx + award_w // 2 + 60, SAFE_MARGIN + 265, outer_r=32, inner_r=14, fill=(255, 215, 0), outline=(217, 119, 6), width=4)
 
     cert_txt = "This Certificate is Proudly Presented to:"
     c_bb = draw.textbbox((0, 0), cert_txt, font=font_cert)
@@ -657,36 +687,13 @@ def build_32_page_copy_to_color_book(
             secondary_color=s_col,
         )
 
-        # 2. Resolve Artwork (Color Reference & B&W Outline)
-        color_img: Image.Image | None = None
-        bw_img: Image.Image | None = None
-
-        # Check disk assets directory if provided
-        if assets_dir:
-            a_dir = Path(assets_dir)
-            c_cand = a_dir / f"subj_{idx:02d}_color.png"
-            b_cand = a_dir / f"subj_{idx:02d}_bw.png"
-            if c_cand.exists():
-                color_img = Image.open(str(c_cand)).convert("RGBA")
-                if b_cand.exists():
-                    bw_img = Image.open(str(b_cand)).convert("RGBA")
-                else:
-                    bw_img = color_image_to_clean_lineart(color_img, stroke_boost=3)
-
-        # Special case for animals volume if high-res 1:1 assets exist in local_builds
-        if color_img is None and vol_id == "vol_02" and idx == 1:
-            t_col = REPO_ROOT / "local_builds/animals/assets/tiger_color_thumb.png"
-            t_bw = REPO_ROOT / "local_builds/animals/assets/tiger_outline.png"
-            if t_col.exists():
-                color_img = Image.open(str(t_col)).convert("RGBA")
-                if t_bw.exists():
-                    bw_img = Image.open(str(t_bw)).convert("RGBA")
-                else:
-                    bw_img = color_image_to_clean_lineart(color_img, stroke_boost=3)
-
-        # Fallback to high-quality procedural illustration if no asset is available yet
-        if color_img is None or bw_img is None:
-            color_img, bw_img = generate_procedural_subject_pair(code_label, word_label, p_col)
+        # 2. Resolve Artwork (Color Reference & B&W Outline) via AI-first pipeline
+        color_img, bw_img = resolve_subject_assets(
+            vol_id=vol_id,
+            subject_idx=idx,
+            subject_name=word_label,
+            assets_dir=assets_dir,
+        )
 
         # 3. Composite Small Color Reference Guide (Top-Right inside frame: 680x680 box)
         guide_copy = color_img.copy()
@@ -713,16 +720,35 @@ def build_32_page_copy_to_color_book(
     p32 = render_page_32_certificate(resolved_title, p_col, s_col)
     pages.append(p32)
 
-    # Save print-ready multi-page PDF
-    pages[0].save(
-        str(out_pdf),
-        "PDF",
-        resolution=DPI,
-        save_all=True,
-        append_images=pages[1:],
-    )
+    # Save print-ready multi-page PDF with exact bleed mediabox (621.0 x 810.0 pt)
+    if HAS_REPORTLAB:
+        c = canvas.Canvas(str(out_pdf), pagesize=(MEDIABOX_W_PT, MEDIABOX_H_PT))
+        for p in pages:
+            c.drawImage(ImageReader(p), 0, 0, width=MEDIABOX_W_PT, height=MEDIABOX_H_PT)
+            c.showPage()
+        c.save()
+    else:
+        pages[0].save(
+            str(out_pdf),
+            "PDF",
+            resolution=DPI,
+            save_all=True,
+            append_images=pages[1:],
+        )
 
-    # Render proof contact sheet of sample pages (P1 Welcome, P2 Tiger, P3 Monkey, P4 Elephant, P5 Giraffe, P6 Lion, P7 Zebra, P32 Certificate)
+    # Mirror to legacy path for vol_02 if present
+    if vol_id == "vol_02":
+        legacy_dir = REPO_ROOT / "local_builds" / "animals" / "v1.0-core"
+        if legacy_dir.exists():
+            legacy_pdf = legacy_dir / "copy-to-color-vol_02-32p-interior.pdf"
+            if legacy_pdf.resolve() != out_pdf.resolve():
+                import shutil
+                try:
+                    shutil.copy2(str(out_pdf), str(legacy_pdf))
+                except Exception:
+                    pass
+
+    # Render proof contact sheet of sample pages (P1 Welcome, P2-P7, P32 Certificate)
     proof_path = out_pdf.parent / f"{out_pdf.stem}_proof.png"
     proof_w = 400
     proof_h = int(proof_w * (PAGE_H / PAGE_W))
@@ -742,17 +768,45 @@ def build_32_page_copy_to_color_book(
     return out_pdf
 
 
+def build_all_series_interiors(output_dir: str | Path | None = None) -> dict[str, Path]:
+    """
+    Batch-compiles all 12 series volumes (Alphabet through Vegetables) into 32-page
+    print-ready interior PDFs and 300 DPI contact sheet proofs.
+    """
+    out_dir = Path(output_dir) if output_dir else (REPO_ROOT / "local_builds" / "interiors")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    results: dict[str, Path] = {}
+    print(f"\n{'='*70}\nBATCH COMPILING ALL 12 SERIES INTERIORS (32 PAGES EACH)\n{'='*70}")
+    for v_id, meta in SERIES_CATALOG.items():
+        t_name = meta["title"]
+        dest_pdf = out_dir / f"{v_id}_{t_name.lower()}_32p_interior.pdf"
+        res = build_32_page_copy_to_color_book(
+            vol_id=v_id,
+            vol_title=t_name,
+            output_pdf_path=dest_pdf,
+            primary_color=meta["primary"],
+            secondary_color=meta["secondary"],
+        )
+        results[v_id] = res
+    print(f"\n{'='*70}\nALL 12 SERIES INTERIORS COMPILED SUCCESSFULLY!\n{'='*70}")
+    return results
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Automated 32-Page 'Copy to Color' Interior Compiler")
+    parser.add_argument("--all", action="store_true", help="Batch compile all 12 series interior volumes")
     parser.add_argument("--vol-id", default="vol_02", help="Series volume ID (e.g., vol_01 to vol_12)")
     parser.add_argument("--vol-title", default=None, help="Volume title override")
     parser.add_argument("--assets-dir", default=None, help="Directory containing subj_XX_color.png and subj_XX_bw.png")
     parser.add_argument("--output", default=None, help="Destination PDF path")
     args = parser.parse_args()
 
-    build_32_page_copy_to_color_book(
-        vol_id=args.vol_id,
-        vol_title=args.vol_title,
-        assets_dir=args.assets_dir,
-        output_pdf_path=args.output,
-    )
+    if args.all:
+        build_all_series_interiors(output_dir=args.output)
+    else:
+        build_32_page_copy_to_color_book(
+            vol_id=args.vol_id,
+            vol_title=args.vol_title,
+            assets_dir=args.assets_dir,
+            output_pdf_path=args.output,
+        )

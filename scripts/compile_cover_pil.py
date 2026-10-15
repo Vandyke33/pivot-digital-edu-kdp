@@ -28,9 +28,9 @@ from scripts.utils.alpha_extraction import extract_with_sticker_contour
 from scripts.utils.cover_environment import (
     draw_checkered_border,
     draw_curved_ribbon_header,
-    draw_jungalow_elements,
-    draw_mascot_boy_with_wand,
+    draw_five_point_star,
     draw_pattern_collage,
+    draw_sparkle_star,
 )
 
 
@@ -343,12 +343,112 @@ def draw_neon_sparkle_text(
 # ---------------------------------------------------------------------------
 # 5. TWO-PASS FRONT COVER GENERATOR & BACK COVER REPLICA GRID
 # ---------------------------------------------------------------------------
+def render_two_panel_activity_card(
+    card_w: int,
+    card_h: int,
+    color_path: str | Path | None,
+    lineart_path: str | Path | None,
+    pill_text: str = "TIGER",
+    pill_color: tuple = (255, 73, 73, 255),
+) -> Image.Image:
+    """
+    Renders the premium two-panel floating activity card:
+      - Left sub-panel: 'Color Guide' with the complete, uncropped full-color subject.
+      - Right sub-panel: 'Color Me!' with the complete, uncropped B&W coloring lineart.
+      - Top pill badge with theme item name.
+      - Crisp vector borders and drop shadow.
+    """
+    card = Image.new("RGBA", (card_w + 16, card_h + 16), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(card)
+
+    # 1. Soft Drop Shadow
+    draw.rounded_rectangle([10, 12, card_w + 10, card_h + 12], radius=26, fill=(0, 0, 0, 65))
+
+    # 2. Main Crisp White Container
+    draw.rounded_rectangle([2, 2, card_w + 2, card_h + 2], radius=26, fill="white", outline="#CBD5E1", width=4)
+
+    # 3. Top Theme Pill Badge
+    pill_w = min(int(card_w * 0.52), 260)
+    pill_h = 44
+    px0 = (card_w + 4 - pill_w) // 2
+    py0 = 14
+    draw.rounded_rectangle([px0, py0, px0 + pill_w, py0 + pill_h], radius=14, fill=pill_color)
+    badge_f = load_fancy_font("Fredoka-Bold.ttf", 26)
+    b_bb = draw.textbbox((0, 0), pill_text, font=badge_f)
+    bw, bh = b_bb[2] - b_bb[0], b_bb[3] - b_bb[1]
+    draw.text((px0 + (pill_w - bw) // 2, py0 + (pill_h - bh) // 2 - 2), pill_text, fill="white", font=badge_f)
+
+    # 4. Dimensions for the Two Sub-Panels
+    margin_x = 16
+    margin_bottom = 16
+    top_y = py0 + pill_h + 12
+    gap = 12
+    avail_w = card_w - (margin_x * 2) - gap
+    panel_w = avail_w // 2
+    panel_h = card_h - top_y - margin_bottom
+
+    # Sub-header font
+    hdr_font = load_fancy_font("Fredoka-Bold.ttf", 22)
+
+    # --- LEFT SUB-PANEL: COLOR GUIDE ---
+    lx0 = margin_x + 2
+    ly0 = top_y
+    lx1 = lx0 + panel_w
+    ly1 = ly0 + panel_h
+    draw.rounded_rectangle([lx0, ly0, lx1, ly1], radius=16, fill="#F8FAFC", outline="#E2E8F0", width=3)
+    draw.rounded_rectangle([lx0 + 6, ly0 + 6, lx1 - 6, ly0 + 36], radius=10, fill="#FEF3C7")
+    hdr_txt = "Color Guide"
+    h_bb = draw.textbbox((0, 0), hdr_txt, font=hdr_font)
+    draw.text((lx0 + (panel_w - (h_bb[2] - h_bb[0])) // 2, ly0 + 8), hdr_txt, fill="#B45309", font=hdr_font)
+
+    if color_path and os.path.exists(str(color_path)):
+        try:
+            with Image.open(str(color_path)) as c_im:
+                c_rgba = c_im.convert("RGBA")
+                max_w = panel_w - 16
+                max_h = panel_h - 48
+                sc = min(max_w / c_rgba.width, max_h / c_rgba.height)
+                nw, nh = max(1, int(c_rgba.width * sc)), max(1, int(c_rgba.height * sc))
+                c_res = c_rgba.resize((nw, nh), Image.Resampling.LANCZOS)
+                card.paste(c_res, (lx0 + (panel_w - nw) // 2, ly0 + 40 + (max_h - nh) // 2), c_res)
+        except Exception as e:
+            print(f"[Warning] Failed to render color guide in card: {e}")
+
+    # --- RIGHT SUB-PANEL: COLOR ME! ---
+    rx0 = lx1 + gap
+    ry0 = top_y
+    rx1 = rx0 + panel_w
+    ry1 = ry0 + panel_h
+    draw.rounded_rectangle([rx0, ry0, rx1, ry1], radius=16, fill="#FFFFFF", outline="#0284C7", width=3)
+    draw.rounded_rectangle([rx0 + 6, ry0 + 6, rx1 - 6, ry0 + 36], radius=10, fill="#E0F2FE")
+    hdr_txt2 = "Color Me!"
+    h_bb2 = draw.textbbox((0, 0), hdr_txt2, font=hdr_font)
+    draw.text((rx0 + (panel_w - (h_bb2[2] - h_bb2[0])) // 2, ry0 + 8), hdr_txt2, fill="#0369A1", font=hdr_font)
+
+    if lineart_path and os.path.exists(str(lineart_path)):
+        try:
+            with Image.open(str(lineart_path)) as l_im:
+                l_rgba = l_im.convert("RGBA")
+                max_w = panel_w - 16
+                max_h = panel_h - 48
+                sc = min(max_w / l_rgba.width, max_h / l_rgba.height)
+                nw, nh = max(1, int(l_rgba.width * sc)), max(1, int(l_rgba.height * sc))
+                l_res = l_rgba.resize((nw, nh), Image.Resampling.LANCZOS)
+                card.paste(l_res, (rx0 + (panel_w - nw) // 2, ry0 + 40 + (max_h - nh) // 2), l_res)
+        except Exception as e:
+            print(f"[Warning] Failed to render lineart in card: {e}")
+
+    return card
+
+
 def render_single_front_cover(
     vol_meta: dict,
     width_px: int,
     height_px: int,
     logo_path: str | Path | None = None,
     hero_path: str | Path | None = None,
+    color_guide_path: str | Path | None = None,
+    lineart_path: str | Path | None = None,
     inset_path: str | Path | None = None,
 ) -> Image.Image:
     """
@@ -361,9 +461,7 @@ def render_single_front_cover(
     draw_pattern_collage(front, width_px, height_px, is_spread=False)
     # 2. Layered green rolling hills
     draw_rolling_hills(front, height_px, width_px)
-    # 3. Lush jungalow nature accents (toadstool mushrooms, daisies, ladybugs, butterflies)
-    draw_jungalow_elements(front, width_px, height_px, is_spread=False)
-    # 4. Storybook checkered outer border
+    # 3. Storybook checkered outer border
     draw_checkered_border(front, width_px, height_px, tile_size=44, rows=2)
     draw = ImageDraw.Draw(front)
     cx = width_px // 2
@@ -380,12 +478,12 @@ def render_single_front_cover(
     # 1. Top Brand Logo (Auto-isolated with smooth sticker contour)
     if logo_path and os.path.exists(str(logo_path)):
         logo_img = isolate_with_sticker_border(str(logo_path), stroke_size=12, remove_trapped_pockets=False)
-        logo_img.thumbnail((440, 440), Image.Resampling.LANCZOS)
-        front.paste(logo_img, (cx - logo_img.width // 2, 90), logo_img)
+        logo_img.thumbnail((480, 480), Image.Resampling.LANCZOS)
+        front.paste(logo_img, (cx - logo_img.width // 2, 85), logo_img)
 
     # 2. Fancy Bundled Display Fonts (Neon + 3D + Sparkles)
-    font_main = load_fancy_font("LuckiestGuy.ttf", 168)
-    font_subject = load_fancy_font("LuckiestGuy.ttf", 195)
+    font_main = load_fancy_font("LuckiestGuy.ttf", 205)
+    font_subject = load_fancy_font("LuckiestGuy.ttf", 238)
 
     # "Copy to Color" — Directly Below Logo: Fancy Extruded 3D Display Text with Sparkles
     draw_neon_sparkle_text(
@@ -396,73 +494,92 @@ def render_single_front_cover(
         fill_color=(255, 255, 255, 255),
         outline_color=NAVY_TEXT,
         neon_color=vol_meta["neon"],
-        outline_width=12,
-        extrusion_depth=14,
+        outline_width=13,
+        extrusion_depth=16,
         add_sparkles=True,
     )
 
     # Subject Title (e.g., "ANIMALS", "ALPHABET", "BIRDS") — Directly Below Series Title
     draw_neon_sparkle_text(
         front,
-        (cx, 840),
+        (cx, 855),
         vol_meta["title"].upper(),
         font_subject,
         fill_color=YELLOW_TEXT,
         outline_color=(95, 25, 10, 255),
         neon_color=vol_meta["neon"],
-        outline_width=13,
-        extrusion_depth=16,
+        outline_width=14,
+        extrusion_depth=18,
         add_sparkles=True,
     )
 
-    # 3. Tilted Wax Crayons (Floating on left edge)
-    draw_crayons_cluster(front, int(width_px * 0.04), int(height_px * 0.33))
+    # 3. Glossy 3D Crayons (Floating on left edge)
+    crayons_ai = Path("assets/cover/crayons_3d.png")
+    if crayons_ai.exists():
+        try:
+            with Image.open(str(crayons_ai)) as cr_im:
+                cr_rgba = cr_im.convert("RGBA")
+                cr_w = int(width_px * 0.28)
+                cr_h = int(cr_rgba.height * (cr_w / cr_rgba.width))
+                cr_res = cr_rgba.resize((cr_w, cr_h), Image.Resampling.LANCZOS)
+                front.paste(cr_res, (int(width_px * 0.03), int(height_px * 0.32)), cr_res)
+        except Exception:
+            draw_crayons_cluster(front, int(width_px * 0.04), int(height_px * 0.33))
+    else:
+        draw_crayons_cluster(front, int(width_px * 0.04), int(height_px * 0.33))
 
-    # 4. Inset "Before & After" Activity Preview Card
-    card_w, card_h = int(width_px * 0.38), int(height_px * 0.31)
-    cx0, cy0 = width_px - card_w - int(width_px * 0.05), int(height_px * 0.36)
-    # Card shadow
-    draw.rounded_rectangle([cx0 + 8, cy0 + 10, cx0 + card_w + 8, cy0 + card_h + 10], radius=28, fill=(0, 0, 0, 55))
-    # Card body
-    draw.rounded_rectangle([cx0, cy0, cx0 + card_w, cy0 + card_h], radius=28, fill="white", outline="#E2E8F0", width=5)
+    # 4. Premium Two-Panel Activity Card (Color Guide | Color Me!)
+    card_w = int(width_px * 0.44)
+    card_h = int(height_px * 0.32)
+    resolved_col = color_guide_path or inset_path
+    resolved_line = lineart_path
+    if not resolved_col:
+        v_col = Path(f"assets/series_ai/{vol_meta['id']}/subj_01_color.png")
+        if v_col.exists():
+            resolved_col = v_col
+    if not resolved_line:
+        v_line = Path(f"assets/series_ai/{vol_meta['id']}/subj_01_lineart.png")
+        if v_line.exists():
+            resolved_line = v_line
 
-    # Pill badge inside activity card
-    pill_w = int(card_w * 0.56)
-    px0 = cx0 + (card_w - pill_w) // 2
-    draw.rounded_rectangle([px0, cy0 + 16, px0 + pill_w, cy0 + 64], radius=16, fill=vol_meta["bg_top"])
-    badge_f = load_fancy_font("Fredoka-Bold.ttf", 32)
-    b_txt = vol_meta.get("pill", "COLOR")
-    b_bb = draw.textbbox((0, 0), b_txt, font=badge_f)
-    draw.text((px0 + (pill_w - (b_bb[2] - b_bb[0])) // 2, cy0 + 20), b_txt, fill="white", font=badge_f)
-
-    if inset_path and os.path.exists(str(inset_path)):
-        inset_img = Image.open(str(inset_path)).convert("RGBA")
-        inset_max_w = card_w - 30
-        inset_max_h = card_h - 120
-        inset_sc = min(inset_max_w / inset_img.width, inset_max_h / inset_img.height)
-        new_iw = int(inset_img.width * inset_sc)
-        new_ih = int(inset_img.height * inset_sc)
-        inset_img = inset_img.resize((new_iw, new_ih), Image.Resampling.LANCZOS)
-        front.paste(inset_img, (cx0 + (card_w - new_iw) // 2, cy0 + 74), inset_img)
-
-        # "Color Guide" and "Color Me!" labels under inset
-        lbl_font = load_fancy_font("Fredoka-Bold.ttf", 20)
-        draw.text((cx0 + 24, cy0 + card_h - 36), "Color Guide", fill="#64748B", font=lbl_font)
-        draw.text((cx0 + card_w - 130, cy0 + card_h - 36), "Color Me!", fill="#0284C7", font=lbl_font)
+    activity_card = render_two_panel_activity_card(
+        card_w=card_w,
+        card_h=card_h,
+        color_path=resolved_col,
+        lineart_path=resolved_line,
+        pill_text=vol_meta.get("pill", "COLOR"),
+        pill_color=vol_meta["bg_top"],
+    )
+    cx0 = width_px - activity_card.width - int(width_px * 0.04)
+    cy0 = int(height_px * 0.34)
+    front.paste(activity_card, (cx0, cy0), activity_card)
 
     # 5. Hero Character Illustration (Isolated with trapped white pockets removed)
     if hero_path and os.path.exists(str(hero_path)):
-        hero = isolate_with_sticker_border(str(hero_path), stroke_size=14, remove_trapped_pockets=True)
-        # Proportionally scale up/down to prominently fill the bottom-left area
-        target_w = int(width_px * 0.58)
-        target_h = int(height_px * 0.44)
+        hero = isolate_with_sticker_border(str(hero_path), stroke_size=15, remove_trapped_pockets=True)
+        # Proportionally scale up to prominently fill the bottom-left area (~60% of trim width)
+        target_w = int(width_px * 0.60)
+        target_h = int(height_px * 0.46)
         hero_sc = min(target_w / hero.width, target_h / hero.height)
         new_hw = int(hero.width * hero_sc)
         new_hh = int(hero.height * hero_sc)
         hero = hero.resize((new_hw, new_hh), Image.Resampling.LANCZOS)
-        hx = int(width_px * 0.05)
-        hy = height_px - new_hh - 110
+        hx = int(width_px * 0.04)
+        hy = height_px - new_hh - 90
         front.paste(hero, (hx, hy), hero)
+
+    # 6. Lush Jungle Foreground Frame (Layered across bottom edge)
+    jungle_frame = Path("assets/cover/jungle_foreground_frame.png")
+    if jungle_frame.exists():
+        try:
+            with Image.open(str(jungle_frame)) as j_im:
+                j_rgba = j_im.convert("RGBA")
+                jw = width_px
+                jh = int(j_rgba.height * (jw / j_rgba.width))
+                j_res = j_rgba.resize((jw, jh), Image.Resampling.LANCZOS)
+                front.paste(j_res, (0, height_px - jh), j_res)
+        except Exception as e:
+            print(f"[Warning] Failed to render jungle foreground frame: {e}")
 
     return front
 
@@ -508,34 +625,30 @@ def prebuild_all_series_front_covers(
         vol_id = item["id"]
         out_file = os.path.join(output_fronts_dir, f"{vol_id}_front.png")
 
-        # Resolve hero art
+        # Resolve hero art and activity card assets
         hero_candidate = None
+        color_cand = Path(f"assets/series_ai/{vol_id}/subj_01_color.png")
+        lineart_cand = Path(f"assets/series_ai/{vol_id}/subj_01_lineart.png")
+
         if vol_id == "vol_02":
             # For animals, use high-res tiger & monkey
-            for cand in ["local_builds/animals/assets/tiger_monkey_transparent.png", os.path.join(thumbnails_dir, f"{vol_id}.png")]:
+            for cand in [
+                "assets/cover/hero_tiger_monkey.png",
+                "local_builds/animals/assets/tiger_monkey_transparent.png",
+                os.path.join(thumbnails_dir, f"{vol_id}.png"),
+            ]:
                 if os.path.exists(cand):
                     hero_candidate = cand
                     break
         else:
-            cand = os.path.join(thumbnails_dir, f"{vol_id}.png")
-            if not os.path.exists(cand):
-                cand = f"local_builds/animals/assets/thumbnails/{vol_id}.png"
-            hero_candidate = cand if os.path.exists(cand) else None
-
-        # Resolve split color guide + B&W outline activity preview card
-        inset_cand = None
-        split_candidates = [
-            os.path.join("assets/activity_cards", f"{vol_id}_split.png"),
-            f"local_builds/animals/assets/inset_{item['title'].lower()}_split.png",
-            "local_builds/animals/assets/inset_tiger_split.png" if vol_id == "vol_02" else None,
-        ]
-        for sc in split_candidates:
-            if sc and os.path.exists(sc):
-                inset_cand = sc
-                break
-
-        if not inset_cand:
-            inset_cand = hero_candidate
+            # For other volumes, use subject #1 color illustration if available, or thumbnail
+            if color_cand.exists():
+                hero_candidate = str(color_cand)
+            else:
+                cand = os.path.join(thumbnails_dir, f"{vol_id}.png")
+                if not os.path.exists(cand):
+                    cand = f"local_builds/animals/assets/thumbnails/{vol_id}.png"
+                hero_candidate = cand if os.path.exists(cand) else None
 
         front_img = render_single_front_cover(
             vol_meta=item,
@@ -543,7 +656,8 @@ def prebuild_all_series_front_covers(
             height_px=trim_h_px,
             logo_path=resolved_logo,
             hero_path=hero_candidate,
-            inset_path=inset_cand,
+            color_guide_path=str(color_cand) if color_cand.exists() else None,
+            lineart_path=str(lineart_cand) if lineart_cand.exists() else None,
         )
         front_img.save(out_file, "PNG")
         rendered_fronts[vol_id] = front_img
@@ -686,9 +800,7 @@ def build_kdp_cover(
     draw_pattern_collage(cover, w, h, is_spread=True)
     # 2. Layered green rolling hills
     draw_rolling_hills(cover, h, w)
-    # 3. Lush jungalow nature accents (toadstool mushrooms, daisies, ladybugs, butterflies)
-    draw_jungalow_elements(cover, w, h, is_spread=True)
-    # 4. Checkered storybook frame around perimeter of spread
+    # 3. Checkered storybook frame around perimeter of spread
     draw_checkered_border(cover, w, h, tile_size=44, rows=2)
 
     draw = ImageDraw.Draw(cover)
@@ -699,23 +811,23 @@ def build_kdp_cover(
     front_x_start = spine_x_end
 
     # ---------------- BACK COVER SECTION ----------------
-    # 1. Top Pivot Kids logo (Top-left)
+    # 1. Top Pivot Kids logo (Top-left with safe margins, no collision)
     if resolved_logo and os.path.exists(resolved_logo):
         logo_back = isolate_with_sticker_border(resolved_logo, stroke_size=10, remove_trapped_pockets=False)
-        logo_back.thumbnail((230, 230), Image.Resampling.LANCZOS)
-        cover.paste(logo_back, (bleed + int(0.35 * DPI), int(0.32 * DPI)), logo_back)
+        logo_back.thumbnail((190, 190), Image.Resampling.LANCZOS)
+        cover.paste(logo_back, (bleed + int(0.42 * DPI), int(0.40 * DPI)), logo_back)
 
     # 2. Top "TITLES IN THIS SERIES" curved ribbon banner
     banner_font = load_fancy_font("Fredoka-Bold.ttf", 46)
-    ribbon_cx = bleed + trim_w // 2 + 30
-    ribbon_cy = int(0.55 * DPI)
+    ribbon_cx = bleed + trim_w // 2 + 25
+    ribbon_cy = int(0.52 * DPI)
     draw_curved_ribbon_header(cover, ribbon_cx, ribbon_cy, "TITLES IN THIS SERIES", banner_font)
 
-    # 3. "CAN YOU COLLECT THEM ALL?" banner pill + Boy Mascot with Star Wand
-    pill_w = int(trim_w * 0.58)
+    # 3. "CAN YOU COLLECT THEM ALL?" banner pill + AI Mascot with Star Wand
+    pill_w = int(trim_w * 0.52)
     pill_h = 72
-    px0 = bleed + int(0.08 * trim_w)
-    py0 = int(0.85 * DPI)
+    px0 = bleed + int(0.18 * trim_w)
+    py0 = int(0.92 * DPI)
     draw.rounded_rectangle([px0, py0, px0 + pill_w, py0 + pill_h], radius=24, fill=(254, 240, 138, 255), outline=(220, 38, 38, 255), width=5)
     collect_font = load_fancy_font("Fredoka-Bold.ttf", 30)
     coll_txt = "CAN YOU COLLECT THEM ALL?"
@@ -728,15 +840,25 @@ def build_kdp_cover(
     draw_sparkle_star(draw, tx - 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
     draw_sparkle_star(draw, tx + tw + 32, py0 + pill_h // 2, outer_r=16, inner_r=4, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
 
-    # Mascot Boy waving star wand
-    mascot_x = bleed + int(0.85 * trim_w)
-    mascot_y = int(0.92 * DPI)
-    draw_mascot_boy_with_wand(cover, mascot_x, mascot_y)
+    # Mascot Boy waving star wand (Placed comfortably below top border with hat fully visible)
+    mascot_path = Path("assets/cover/mascot_kid_wand.png")
+    if mascot_path.exists():
+        try:
+            with Image.open(str(mascot_path)) as m_im:
+                m_rgba = m_im.convert("RGBA")
+                m_target_w = int(trim_w * 0.22)
+                m_target_h = int(m_rgba.height * (m_target_w / m_rgba.width))
+                m_res = m_rgba.resize((m_target_w, m_target_h), Image.Resampling.LANCZOS)
+                mx = bleed + int(0.74 * trim_w)
+                my = int(0.76 * DPI)
+                cover.paste(m_res, (mx, my), m_res)
+        except Exception as e:
+            print(f"[Warning] Failed to render back-cover mascot: {e}")
 
     # 4. 4x3 Grid of authentic Front Covers
-    grid_start_y = int(1.18 * DPI)
+    grid_start_y = int(1.22 * DPI)
     grid_w = int(trim_w * 0.90)
-    grid_h = int(h * 0.62)
+    grid_h = int(h * 0.60)
     render_back_cover_grid(cover, draw, bleed + int(trim_w * 0.05), grid_start_y, grid_w, grid_h, rendered_fronts)
 
     # 5. Collector's container (Bottom-left)

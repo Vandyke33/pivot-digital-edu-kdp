@@ -684,7 +684,7 @@ def draw_back_cover(
 
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 14)
-    c.drawCentredString(banner_x + banner_w / 2.0, banner_y + 0.11 * inch, "★ TITLES IN THIS SERIES ★")
+    c.drawCentredString(banner_x + banner_w / 2.0, banner_y + 0.11 * inch, "TITLES IN THIS SERIES")
     c.restoreState()
 
     # 2. Centered 4x3 Grid of 12 Miniature Book Covers (No placeholder dots!)
@@ -730,7 +730,7 @@ def draw_back_cover(
 
     c.setFillColor(HexColor("#FFFFFF"))
     c.setFont("Helvetica-Bold", 10.5)
-    c.drawCentredString(container_x + container_w / 2.0, container_y + 0.10 * inch, "★ Collector's Series of 15 Interactive Titles ★")
+    c.drawCentredString(container_x + container_w / 2.0, container_y + 0.10 * inch, "Collector's Series of 12 Interactive Titles")
 
     # Text below green container
     c.setFont("Helvetica-Bold", 10.0)

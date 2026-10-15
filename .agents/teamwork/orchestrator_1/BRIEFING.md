@@ -1,4 +1,4 @@
-# BRIEFING — 2026-10-14T19:42:00Z
+# BRIEFING — 2026-10-14T20:35:00Z
 
 ## Mission
 Build and automate an end-to-end production pipeline for the 12-volume children's activity book series "The Pivot Kids: Copy to Color" generating 32-page interiors, KDP full-wrap covers with 4x3 grids, metadata packages, and automated preflight.
@@ -19,13 +19,13 @@ Build and automate an end-to-end production pipeline for the 12-volume children'
 4. **Succession**: At 16 spawns, write handoff.md, kill timers, spawn successor.
 - **Work items**:
   1. Survey & Architecture Assessment [done]
-  2. E2E Testing Suite & Infrastructure [in-progress]
-  3. Milestone 1: Governance, Catalogs & KDP Metadata [in-progress]
-  4. Milestone 2: 12-Volume Interior Production Pipeline [pending]
-  5. Milestone 3: 12-Volume Cover Spread Production Pipeline [pending]
-  6. Milestone 4: Final Quality Preflight & Test Verification [pending]
-- **Current phase**: 2 (Dual Track Execution: M1 + E2E Testing)
-- **Current focus**: Milestone 1 implementation and E2E Test Suite design
+  2. E2E Testing Suite & Infrastructure [done - TEST_READY.md published]
+  3. Milestone 1: Governance, Catalogs & KDP Metadata [done - PASS]
+  4. Milestone 2: 12-Volume Interior Production Pipeline [done - implemented & verified]
+  5. Milestone 3: 12-Volume Cover Spread Production Pipeline [done - 12 spreads compiled & verified]
+  6. Milestone 4: Final Quality Preflight & Test Verification [in-progress]
+- **Current phase**: 4 (Milestone 4: Preflight & Final Verification)
+- **Current focus**: Automated Preflight Runner, 12-Volume Batch Interiors, and E2E Test Verification
 
 ## 🔒 Key Constraints
 - Dispatch-only orchestrator: NEVER write source code, NEVER run tests directly, delegate all execution to subagents.
@@ -42,24 +42,23 @@ Build and automate an end-to-end production pipeline for the 12-volume children'
 - Updated: 2026-10-14T19:26:27Z
 
 ## Key Decisions Made
-- Project pattern selected with parallel survey explorers.
-- Explorer surveys completed (all 3 reports received and synthesized).
-- Master PROJECT.md and plan.md created.
-- Dispatched M1 Worker (`52a3b099-4465-4693-a50e-910e1b1318de`) and E2E Test Writer (`4e1f3d44-11ea-44b7-be1b-cd12cf7c5281`) in parallel.
+- Milestone 1 gate passed unanimously and marked DONE.
+- E2E Test Suite published in `tests/e2e/` and `TEST_READY.md`.
+- Milestone 2 completed: 360-subject illustration engine (`series_illustrations.py`), 8.625x11.25 in bleed mediabox interior compiler.
+- Milestone 3 completed: 12 full-wrap cover spreads compiled with 4x3 collection grid, tofu boxes eliminated, commit `97a127a`.
+- Dispatched Worker M4 (`5fad4c7d-2ac0-4a2a-8636-db4f84648fc4`) to implement `scripts/preflight_kdp.py`, batch compile interiors, and run preflight verification.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| explorer_survey_1 | teamwork_preview_explorer | Interior Pipeline Architecture & Assets | completed | 63811563-1190-4a95-8753-ee2d76112bee |
-| explorer_survey_2 | teamwork_preview_explorer | Cover Engine & 4x3 Collection Grid | completed | 1c353952-4ad7-4791-a0b7-41bc4d8e4ae3 |
-| explorer_survey_3 | teamwork_preview_explorer | Testing Suite, Preflight, Metadata, Governance | completed | fa3f3401-2326-4603-8b47-59ad97c44019 |
-| worker_m1 | teamwork_preview_worker | Milestone 1: Metadata, Imprint, Manifests | in-progress | 52a3b099-4465-4693-a50e-910e1b1318de |
-| test_writer_e2e | teamwork_preview_test_writer | E2E Testing Track: TEST_INFRA.md & Tests | in-progress | 4e1f3d44-11ea-44b7-be1b-cd12cf7c5281 |
+| worker_m2 | teamwork_preview_worker | 12-Volume Interior Production Pipeline | completed | d6683560-5277-45ea-8d39-22aeaa9f9e39 |
+| worker_m3 | teamwork_preview_worker | 12-Volume Cover Spread Production Pipeline | completed | f5568225-52d8-4fa9-b69e-276b3a7ac12c |
+| worker_m4 | teamwork_preview_worker | Preflight Runner & Integration | in-progress | 5fad4c7d-2ac0-4a2a-8636-db4f84648fc4 |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 5 / 16
-- Pending subagents: 52a3b099-4465-4693-a50e-910e1b1318de, 4e1f3d44-11ea-44b7-be1b-cd12cf7c5281
+- Spawn count: 13 / 16
+- Pending subagents: 5fad4c7d-2ac0-4a2a-8636-db4f84648fc4
 - Predecessor: none
 - Successor: not yet spawned
 
@@ -76,3 +75,6 @@ Build and automate an end-to-end production pipeline for the 12-volume children'
 - d:\pivot-edu-kdp\pivot-digital-edu-kdp\.agents\teamwork\orchestrator_1\progress.md — Progress and Liveness Heartbeat
 - d:\pivot-edu-kdp\pivot-digital-edu-kdp\.agents\teamwork\orchestrator_1\PROJECT.md — Master Project Specification
 - d:\pivot-edu-kdp\pivot-digital-edu-kdp\.agents\teamwork\orchestrator_1\plan.md — Production Execution Plan
+- d:\pivot-edu-kdp\pivot-digital-edu-kdp\.agents\teamwork\orchestrator_1\GATE_STATUS.md — Gate Verdict Matrix
+- d:\pivot-edu-kdp\pivot-digital-edu-kdp\TEST_INFRA.md — E2E Test Infrastructure Specification
+- d:\pivot-edu-kdp\pivot-digital-edu-kdp\TEST_READY.md — E2E Test Readiness Verification

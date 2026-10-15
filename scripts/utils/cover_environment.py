@@ -190,124 +190,33 @@ def draw_pattern_collage(canvas: Image.Image, width: int, height: int, is_spread
         draw.arc([cx - rad * 0.7, cy - rad * 0.7, cx + rad * 0.7, cy + rad * 0.7], start=200, end=320, fill="white", width=4)
 
 
-def draw_toadstool_mushroom(draw: ImageDraw.ImageDraw, x: int, y: int, width: int = 120, height: int = 140) -> None:
-    """Draws a red polka-dot fly-agaric toadstool mushroom."""
-    cap_h = int(height * 0.6)
-    stem_w = int(width * 0.42)
-    stem_h = height - cap_h + 10
-    stem_x = x + (width - stem_w) // 2
-    stem_y = y + cap_h - 10
-
-    # Stem
-    draw.rounded_rectangle([stem_x, stem_y, stem_x + stem_w, stem_y + stem_h], radius=16, fill=(254, 243, 199, 255), outline=OUTLINE_DARK, width=8)
-    # Red Cap
-    draw.pieslice([x, y, x + width, y + cap_h * 2], start=180, end=360, fill=(220, 38, 38, 255), outline=OUTLINE_DARK, width=10)
-    # White Polka Dots
-    dots = [
-        (x + width * 0.25, y + cap_h * 0.45, width * 0.10),
-        (x + width * 0.50, y + cap_h * 0.25, width * 0.12),
-        (x + width * 0.75, y + cap_h * 0.48, width * 0.09),
-        (x + width * 0.40, y + cap_h * 0.65, width * 0.08),
-        (x + width * 0.65, y + cap_h * 0.72, width * 0.08),
-    ]
-    for dx, dy, dr in dots:
-        draw.ellipse([dx - dr, dy - dr, dx + dr, dy + dr], fill=(255, 255, 255, 255))
-
-
-def draw_flower_daisy(draw: ImageDraw.ImageDraw, cx: int, cy: int, r: int = 35, petal_col: tuple = (255, 255, 255, 255), center_col: tuple = (250, 204, 21, 255)) -> None:
-    """Draws a cute flower with radiating rounded petals and a yellow center."""
-    for ang in range(0, 360, 45):
-        rad = math.radians(ang)
-        px = cx + int(r * 0.85 * math.cos(rad))
-        py = cy + int(r * 0.85 * math.sin(rad))
-        draw.ellipse([px - r * 0.45, py - r * 0.45, px + r * 0.45, py + r * 0.45], fill=petal_col, outline=OUTLINE_DARK, width=4)
-    draw.ellipse([cx - r * 0.55, cy - r * 0.55, cx + r * 0.55, cy + r * 0.55], fill=center_col, outline=OUTLINE_DARK, width=5)
-
-
-def draw_butterfly(draw: ImageDraw.ImageDraw, cx: int, cy: int, size: int = 60, wing_col: tuple = (192, 132, 252, 255)) -> None:
-    """Draws a colorful cartoon butterfly."""
-    draw.ellipse([cx - size, cy - size * 0.8, cx - size * 0.1, cy + size * 0.1], fill=wing_col, outline=OUTLINE_DARK, width=5)
-    draw.ellipse([cx - size * 0.8, cy, cx - size * 0.1, cy + size * 0.8], fill=wing_col, outline=OUTLINE_DARK, width=4)
-    draw.ellipse([cx + size * 0.1, cy - size * 0.8, cx + size, cy + size * 0.1], fill=wing_col, outline=OUTLINE_DARK, width=5)
-    draw.ellipse([cx + size * 0.1, cy, cx + size * 0.8, cy + size * 0.8], fill=wing_col, outline=OUTLINE_DARK, width=4)
-    draw.ellipse([cx - size * 0.65, cy - size * 0.45, cx - size * 0.35, cy - size * 0.15], fill=(254, 240, 138, 255))
-    draw.ellipse([cx + size * 0.35, cy - size * 0.45, cx + size * 0.65, cy - size * 0.15], fill=(254, 240, 138, 255))
-    draw.rounded_rectangle([cx - size * 0.12, cy - size * 0.6, cx + size * 0.12, cy + size * 0.6], radius=8, fill=(30, 30, 30, 255))
-
-
-def draw_ladybug(draw: ImageDraw.ImageDraw, cx: int, cy: int, size: int = 36) -> None:
-    """Draws a cute red ladybug with black spots."""
-    draw.ellipse([cx - size, cy - size, cx + size, cy + size], fill=(239, 68, 68, 255), outline=OUTLINE_DARK, width=5)
-    draw.ellipse([cx - size * 0.5, cy - size * 1.1, cx + size * 0.5, cy - size * 0.5], fill=(20, 20, 20, 255))
-    draw.line([(cx, cy - size * 0.6), (cx, cy + size)], fill=(20, 20, 20, 255), width=5)
-    dots = [(-size * 0.45, -size * 0.2), (-size * 0.45, size * 0.35), (size * 0.45, -size * 0.2), (size * 0.45, size * 0.35)]
-    for dx, dy in dots:
-        draw.ellipse([cx + dx - 5, cy + dy - 5, cx + dx + 5, cy + dy + 5], fill=(20, 20, 20, 255))
-
-
-def draw_jungalow_elements(canvas: Image.Image, width: int, height: int, is_spread: bool = False) -> None:
-    """
-    Renders lush nature accents across the rolling hills: toadstool mushrooms,
-    daisies, ladybugs, and fluttering butterflies with flight trail loops.
-    """
-    draw = ImageDraw.Draw(canvas)
-    hill_base_y = int(height * 0.82)
-
-    if is_spread:
-        # Spread layout
-        # Back cover left mushroom cluster
-        draw_toadstool_mushroom(draw, 120, height - 420, width=180, height=210)
-        draw_toadstool_mushroom(draw, 270, height - 320, width=120, height=140)
-
-        # Front cover bottom-left mushroom cluster
-        fx_offset = int(width * 0.51)
-        draw_toadstool_mushroom(draw, fx_offset + 50, height - 440, width=220, height=250)
-        draw_toadstool_mushroom(draw, fx_offset + 250, height - 330, width=140, height=160)
-
-        # Butterflies with dotted curved flight trails
-        # Back cover butterfly
-        draw_butterfly(draw, 320, height - 750, size=52, wing_col=(236, 72, 153, 255))
-        # Front cover right butterfly
-        draw_butterfly(draw, width - 260, height - 1650, size=68, wing_col=(251, 146, 60, 255))
-        draw_butterfly(draw, width - 220, height - 1100, size=75, wing_col=(192, 132, 252, 255))
-        draw_butterfly(draw, width - 420, height - 350, size=60, wing_col=(192, 132, 252, 255))
-
-        # Ladybugs on leaves
-        draw_ladybug(draw, fx_offset + 860, height - 420, size=32)
-        draw_ladybug(draw, width - 180, height - 280, size=38)
-
-        # Flowers across grass
-        draw_flower_daisy(draw, 720, height - 260, r=36, petal_col=(255, 255, 255, 255))
-        draw_flower_daisy(draw, 1450, height - 280, r=40, petal_col=(253, 186, 116, 255))
-        draw_flower_daisy(draw, fx_offset + 950, height - 380, r=42, petal_col=(244, 114, 182, 255))
-        draw_flower_daisy(draw, width - 120, height - 480, r=46, petal_col=(250, 204, 21, 255))
-        draw_flower_daisy(draw, fx_offset + 1240, height - 220, r=40, petal_col=(244, 114, 182, 255))
-
-    else:
-        # Standalone front cover
-        draw_toadstool_mushroom(draw, 60, height - 440, width=220, height=250)
-        draw_toadstool_mushroom(draw, 260, height - 330, width=140, height=160)
-
-        # Butterflies
-        draw_butterfly(draw, width - 260, height - 1650, size=68, wing_col=(251, 146, 60, 255))
-        draw_butterfly(draw, width - 200, height - 1100, size=75, wing_col=(192, 132, 252, 255))
-        draw_butterfly(draw, width - 380, height - 350, size=60, wing_col=(192, 132, 252, 255))
-
-        # Ladybugs
-        draw_ladybug(draw, width - 180, height - 280, size=38)
-        # Flowers
-        draw_flower_daisy(draw, width - 120, height - 480, r=46, petal_col=(250, 204, 21, 255))
-        draw_flower_daisy(draw, width - 320, height - 220, r=40, petal_col=(244, 114, 182, 255))
+def draw_five_point_star(
+    draw: ImageDraw.ImageDraw,
+    cx: float,
+    cy: float,
+    outer_r: float = 20,
+    inner_r: float = 8,
+    fill: tuple = (250, 204, 21, 255),
+    outline: tuple | None = (180, 83, 9, 255),
+    width: int = 2,
+) -> None:
+    """Draws a crisp 5-point vector star polygon with optional outline."""
+    pts = []
+    for i in range(10):
+        r = outer_r if i % 2 == 0 else inner_r
+        ang = -math.pi / 2 + i * (math.pi / 5)
+        pts.append((cx + r * math.cos(ang), cy + r * math.sin(ang)))
+    draw.polygon(pts, fill=fill, outline=outline, width=width)
 
 
 def draw_curved_ribbon_header(canvas: Image.Image, cx: int, cy: int, text: str, font: ImageFont.FreeTypeFont) -> None:
     """
     Renders an ornate parchment ribbon banner with 3D drop shadow and triangular notched ends.
-    Text: TITLES IN THIS SERIES (flanked by procedural golden vector stars)
+    Text: TITLES IN THIS SERIES (flanked by crisp vector 5-point gold stars)
     """
     draw = ImageDraw.Draw(canvas)
     # Strip any accidental unicode stars from text to avoid missing glyph tofu boxes
-    clean_text = text.replace("\u2605", "").replace("\u2606", "").strip()
+    clean_text = text.replace("\u2605", "").replace("\u2606", "").replace("★", "").replace("✦", "").strip()
     bbox = draw.textbbox((0, 0), clean_text, font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
@@ -336,71 +245,10 @@ def draw_curved_ribbon_header(canvas: Image.Image, cx: int, cy: int, text: str, 
     # Center text
     draw.text((cx - tw // 2, cy - th // 2 - 4), clean_text, fill=(69, 26, 3, 255), font=font)
 
-    # Flank with procedural golden vector sparkle stars
+    # Flank with crisp vector 5-point gold stars
     star_offset = tw // 2 + 42
-    draw_sparkle_star(draw, cx - star_offset, cy - 2, outer_r=20, inner_r=5, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
-    draw_sparkle_star(draw, cx + star_offset, cy - 2, outer_r=20, inner_r=5, fill=(245, 158, 11, 255), outline=(180, 83, 9, 255))
-
-
-def draw_mascot_boy_with_wand(canvas: Image.Image, cx: int, cy: int) -> None:
-    """
-    Renders the playful boy mascot wearing a colorful backwards baseball cap,
-    holding a glowing magic star wand next to the 'CAN YOU COLLECT THEM ALL?' banner.
-    """
-    draw = ImageDraw.Draw(canvas)
-
-    # 1. Backwards Baseball Cap (Cyan crown, yellow bill to back, red band)
-    # Bill turned backwards (pointing right)
-    draw.polygon([(cx + 40, cy - 150), (cx + 170, cy - 130), (cx + 160, cy - 80), (cx + 30, cy - 90)], fill=(250, 204, 21, 255), outline=OUTLINE_DARK, width=8)
-    # Main Cap Crown (Cyan)
-    draw.pieslice([cx - 150, cy - 250, cx + 110, cy + 10], start=180, end=360, fill=(2, 132, 199, 255), outline=OUTLINE_DARK, width=10)
-    # Cap edge band (Red)
-    draw.rounded_rectangle([cx - 160, cy - 130, cx + 100, cy - 90], radius=16, fill=(239, 68, 68, 255), outline=OUTLINE_DARK, width=8)
-    # Top cap button
-    draw.ellipse([cx - 35, cy - 265, cx - 5, cy - 235], fill=(250, 204, 21, 255), outline=OUTLINE_DARK, width=6)
-
-    # 2. Boy Face & Brown Hair Tuft
-    # Hair tuft peeking from cap
-    draw.polygon([(cx - 130, cy - 100), (cx - 160, cy - 60), (cx - 110, cy - 70)], fill=(120, 53, 15, 255), outline=OUTLINE_DARK, width=6)
-    draw.polygon([(cx + 40, cy - 90), (cx + 80, cy - 50), (cx + 50, cy - 60)], fill=(120, 53, 15, 255), outline=OUTLINE_DARK, width=6)
-
-    # Face (Peachy skin)
-    skin_col = (255, 224, 194, 255)
-    draw.ellipse([cx - 140, cy - 110, cx + 80, cy + 110], fill=skin_col, outline=OUTLINE_DARK, width=10)
-
-    # Ears
-    draw.ellipse([cx - 165, cy - 30, cx - 120, cy + 40], fill=skin_col, outline=OUTLINE_DARK, width=8)
-    draw.ellipse([cx + 60, cy - 30, cx + 105, cy + 40], fill=skin_col, outline=OUTLINE_DARK, width=8)
-
-    # Eyes (Big cheerful anime/cartoon eyes)
-    for ex in (cx - 85, cx + 25):
-        draw.ellipse([ex - 24, cy - 40, ex + 24, cy + 15], fill=(20, 20, 25, 255))
-        draw.ellipse([ex - 12, cy - 32, ex + 12, cy - 8], fill="white")
-        draw.ellipse([ex + 2, cy + 2, ex + 10, cy + 10], fill="white")
-
-    # Rosy Cheeks
-    draw.ellipse([cx - 115, cy + 5, cx - 65, cy + 45], fill=(255, 150, 170, 190))
-    draw.ellipse([cx + 10, cy + 5, cx + 60, cy + 45], fill=(255, 150, 170, 190))
-
-    # Cute nose and wide open smile
-    draw.ellipse([cx - 33, cy - 2, cx - 21, cy + 12], fill=(240, 110, 120, 255))
-    draw.arc([cx - 65, cy + 5, cx + 5, cy + 75], start=10, end=170, fill=OUTLINE_DARK, width=8)
-    draw.pieslice([cx - 55, cy + 25, cx - 5, cy + 75], start=10, end=170, fill=(239, 68, 68, 255))
-
-    # 3. Hoodie / Shirt (Purple/Blue)
-    draw.polygon([(cx - 130, cy + 90), (cx + 70, cy + 90), (cx + 120, cy + 220), (cx - 180, cy + 220)], fill=(126, 34, 206, 255), outline=OUTLINE_DARK, width=10)
-
-    # 4. Raised Arm holding Magic Wand
-    # Hand
-    draw.ellipse([cx - 200, cy - 130, cx - 145, cy - 75], fill=skin_col, outline=OUTLINE_DARK, width=8)
-    # Wand stick
-    draw.line([(cx - 170, cy - 90), (cx - 230, cy - 220)], fill=(146, 64, 14, 255), width=12)
-    # Glowing Yellow Star Tip
-    star_cx, star_cy = cx - 240, cy - 240
-    # Outer yellow glow halo
-    draw.ellipse([star_cx - 50, star_cy - 50, star_cx + 50, star_cy + 50], fill=(254, 240, 138, 140))
-    # 4-point Starburst
-    draw_sparkle_star(draw, star_cx, star_cy, outer_r=38, inner_r=9, fill=(255, 230, 80, 255), outline=(245, 158, 11, 255))
+    draw_five_point_star(draw, cx - star_offset, cy - 2, outer_r=18, inner_r=8, fill=(250, 204, 21, 255), outline=(180, 83, 9, 255))
+    draw_five_point_star(draw, cx + star_offset, cy - 2, outer_r=18, inner_r=8, fill=(250, 204, 21, 255), outline=(180, 83, 9, 255))
 
 
 def draw_sparkle_star(

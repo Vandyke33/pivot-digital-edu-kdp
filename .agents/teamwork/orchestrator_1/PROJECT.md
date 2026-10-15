@@ -38,10 +38,10 @@ The production system is an automated, deterministic multi-volume publishing pip
 ## Feature Inventory
 | # | Feature | Description | Milestone | Source |
 |---|---------|-------------|-----------|--------|
-| 1 | Publisher Imprint Rectification | Correct line 522 typo "Publications" -> "The Pivot Digital Publication" in `compile_copy_to_color_interior.py` | M1 | Survey |
-| 2 | KDP Metadata Registry | Inject complete metadata blocks into `catalogs/catalog_master.json` for all 12 volumes | M1 | Survey |
-| 3 | 32-Page Manifest Generation | Create 12 edition manifests in `manifests/` (`alphabet-v1.0-core-32p.json` .. `vegetables-v1.0-core-32p.json`) | M1 | Survey |
-| 4 | Brand Governance Enforcement | Strict elimination of "My First" (case-insensitive) across all files, code, and metadata | M1 | Survey |
+| 1 | Publisher Imprint Rectification | Correct line 522 typo "Publications" -> "The Pivot Digital Publication" in `compile_copy_to_color_interior.py` | M1 | Survey (DONE) |
+| 2 | KDP Metadata Registry | Inject complete metadata blocks into `catalogs/catalog_master.json` for all 12 volumes | M1 | Survey (DONE) |
+| 3 | 32-Page Manifest Generation | Create 12 edition manifests in `manifests/` (`alphabet-v1.0-core-32p.json` .. `vegetables-v1.0-core-32p.json`) | M1 | Survey (DONE) |
+| 4 | Brand Governance Enforcement | Strict elimination of "My First" (case-insensitive) across all files, code, and metadata | M1 | Survey (DONE) |
 | 5 | Multi-Domain Illustration Engine | Implement `scripts/utils/series_illustrations.py` with 360 distinct procedural subjects across all 12 series volumes | M2 | Survey |
 | 6 | Bleed Mediabox Interior Alignment | Update interior canvas to 2588x3375 px (621.0 x 810.0 pt mediabox) at 300 DPI | M2 | Survey |
 | 7 | Batch Interior Compilation | Add `--all` to `compile_copy_to_color_interior.py` and `main.py build-copy-to-color-interior` | M2 | Survey |
@@ -51,7 +51,7 @@ The production system is an automated, deterministic multi-volume publishing pip
 | 11 | Two-Pass 4x3 Collection Grid | Embed 12 authentic miniature front covers into back cover grid without circular dependency | M3 | Survey |
 | 12 | 12-Volume Full-Wrap Covers & Proofs | Generate all 12 full-wrap cover PDFs ($17.322 \times 11.250\text{ in}$) and 300 DPI preview PNGs | M3 | Survey |
 | 13 | Automated Quality Preflight | Implement `scripts/preflight_kdp.py` and `main.py preflight` checking all 12 criteria | M4 | Survey |
-| 14 | E2E Test Suite (Tiers 1–4) | Build and pass comprehensive E2E test suite covering feature, boundary, cross-feature, and workload tests | M4 | Survey |
+| 14 | E2E Test Suite (Tiers 1–4) | Build and pass comprehensive E2E test suite covering feature, boundary, cross-feature, and workload tests | M4 | Survey (READY) |
 | 15 | Unit Test Suite 100% Pass | Ensure existing test suite (`python -m unittest discover -s tests`) passes with 0 errors | M4 | Survey |
 
 ---
@@ -59,7 +59,7 @@ The production system is an automated, deterministic multi-volume publishing pip
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | Governance, Catalogs & KDP Metadata | Imprint fix, 12-volume metadata in `catalog_master.json`, manifests in `manifests/`, brand verification | none | PLANNED |
+| M1 | Governance, Catalogs & KDP Metadata | Imprint fix, 12-volume metadata in `catalog_master.json`, manifests in `manifests/`, brand verification | none | DONE |
 | M2 | 12-Volume Interior Production Pipeline | Multi-domain illustration engine (`series_illustrations.py`), 8.625x11.25 in bleed mediabox, batch interior compiler, generate 12 interior PDFs & proofs | M1 | PLANNED |
 | M3 | 12-Volume Cover Spread Production Pipeline | Vector star tofu fix, split activity cards, 4x3 collection grid, batch cover compiler, generate 12 full-wrap cover spreads & proofs | M1 | PLANNED |
 | M4 | Final Milestone: E2E Quality Preflight & Test Verification | Build `scripts/preflight_kdp.py`, pass 100% of E2E tests (Tiers 1-4) and unit tests, verify all 12 release packages | M2, M3 | PLANNED |
@@ -97,4 +97,3 @@ The production system is an automated, deterministic multi-volume publishing pip
 - `main.py`: Unified CLI dispatch
 - `tests/`: Unit and E2E test suites
 - `local_builds/`: Release output artifacts (interiors, covers, proofs)
-

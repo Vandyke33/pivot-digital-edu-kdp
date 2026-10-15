@@ -18,6 +18,7 @@ Produce original, age-appropriate children's coloring and activity books for Ama
 - Preserve source files and never silently overwrite approved or released assets. Use a new versioned object path for revisions.
 - Keep SVG masters outside Git under `assets/svg/<category>/<asset-id>/v1.svg`; store stable IDs, source and preview hashes, visual fingerprints, QA, lineage, and edition usage in `catalogs/asset_registry.json`.
 - Block exact repeats of published assets. Flag visually similar previews (64-bit dHash distance <= 6) and require a target-specific `ACCEPT_DISTINCT` human review with reviewer, timestamp, and rationale before build. New derivatives need a new ID, parent ID, and meaningful change note.
+- **Strict Ban on Procedural Shape Illustrations (NO_PROCEDURAL_ART):** Python (`PIL.ImageDraw` / `ReportLab`) must NEVER draw animals, characters, mascots, crayons, flowers, or mushrooms using geometric primitives (`circle`, `ellipse`, `polygon`, `arc`). Python is strictly restricted to layout chrome, typography rendering, and assembling high-resolution AI-generated visual components. If any required AI illustration is missing on disk, the build must invoke the AI generation pipeline or fail closed with an error—never substitute geometric shapes.
 
 ## Strict Brand & Title Naming Policy (No "My First" Prefix)
 
