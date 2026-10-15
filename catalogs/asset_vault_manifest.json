@@ -1,9 +1,9 @@
 {
-  "snapshot_id": "vault_snapshot_20261015_111032_gold_master",
-  "created_at_utc": "2026-10-15T11:10:38.407131+00:00",
-  "total_files": 135,
-  "total_bytes": 91067199,
-  "archive_path": "backups\\vault_snapshot_20261015_111032_gold_master.zip",
+  "snapshot_id": "vault_snapshot_20261015_130305_gold_master_v2",
+  "created_at_utc": "2026-10-15T13:03:09.583011+00:00",
+  "total_files": 136,
+  "total_bytes": 92484967,
+  "archive_path": "backups\\vault_snapshot_20261015_130305_gold_master_v2.zip",
   "files": {
     "assets/brand/pivot_digital_logo_dark.svg": {
       "size": 2906,
@@ -101,9 +101,9 @@
       "mtime": 1792052559.7063494
     },
     "assets/cover_heroes/vol_09_hero.png": {
-      "size": 741148,
-      "sha256": "dd39dd678e5fd30192c34c006e51e011ee720f3c759c340fc8e847aa77b7db0f",
-      "mtime": 1792052559.7063494
+      "size": 974175,
+      "sha256": "c18bcec9a61da3dcc9380415ac042f07c03be5c55140fa3587f511fdffa6966a",
+      "mtime": 1792068561.3295176
     },
     "assets/cover_heroes/vol_10_hero.png": {
       "size": 982425,
@@ -125,15 +125,20 @@
       "sha256": "f162cc7bbe25ea611b69b7291454ad24cc3085cd75eb464588c7a180d85bffc5",
       "mtime": 1792060923.052847
     },
+    "assets/cover_heroes/raw/vol_09_raw.png": {
+      "size": 494374,
+      "sha256": "27b9173b3691ce50bcb996a649ba4f7d2d5842827251263ce89787b340dbe86c",
+      "mtime": 1792068486.9489474
+    },
     "assets/series_ai/vol_01/subj_01_color.png": {
-      "size": 495487,
-      "sha256": "d0cc5a6eaa84186d7e10eee9ada3f1ae3b18e19c6213f1898d64e960c871856c",
-      "mtime": 1792052559.801994
+      "size": 776273,
+      "sha256": "663eae6cfe9da611b0f2b27423c89f5a80c3ccb14843a4864609381dd02dd47e",
+      "mtime": 1792068559.2997682
     },
     "assets/series_ai/vol_01/subj_01_lineart.png": {
-      "size": 27303,
-      "sha256": "4a9c8f2b577aa5b2e3e3c38050110817f11bb90153454ba483cb63d526cfed00",
-      "mtime": 1792052559.801994
+      "size": 26851,
+      "sha256": "2bf13521d9392e4a42ce86bc40712f8a009c6baec7d2a1005affda2f92af17ef",
+      "mtime": 1792068559.348006
     },
     "assets/series_ai/vol_02/subj_01_color.png": {
       "size": 656277,
@@ -466,24 +471,24 @@
       "mtime": 1792052559.9456556
     },
     "assets/series_ai/vol_06/subj_01_color.png": {
-      "size": 450550,
-      "sha256": "a42c582f776b8998196eb4a054746c71293ee8ae062c02471881886463b85141",
-      "mtime": 1792052559.9476874
+      "size": 602892,
+      "sha256": "510bb48619ccef4f04183e5e27fe89e9e29faca94b3c5c8e4c5aaed9a71ea97f",
+      "mtime": 1792068559.4963493
     },
     "assets/series_ai/vol_06/subj_01_lineart.png": {
-      "size": 22109,
-      "sha256": "e342e06057683a1dac45ac13bc8c9459a52917bd7b0230429434fc824ff92a82",
-      "mtime": 1792052559.9476874
+      "size": 21834,
+      "sha256": "635b126a1181ea9bf1e04dcb982028d693452bcf9ab1787652c883e8d8aa1605",
+      "mtime": 1792068559.5479004
     },
     "assets/series_ai/vol_07/subj_01_color.png": {
-      "size": 351546,
-      "sha256": "25d348f8594f90d3c3eb3899d0b5d3b097e0996dc1e7f151e40ba1d719d4fb2b",
-      "mtime": 1792052559.9518168
+      "size": 440179,
+      "sha256": "824d15b87bad8b76dbd2ed24322ae61c1a5fbd182b6e66a0c8db27a235061d37",
+      "mtime": 1792068559.6063426
     },
     "assets/series_ai/vol_07/subj_01_lineart.png": {
-      "size": 17530,
-      "sha256": "e9605f8d8281f829e76a381d896caab2e6f3b7859ee04abddc063ca601a88932",
-      "mtime": 1792052559.9518168
+      "size": 24146,
+      "sha256": "fe7db53afde435ca41d08afbdccbf89a40aec8d1be5f40112103a6b941d1fbff",
+      "mtime": 1792068559.6688864
     },
     "assets/series_ai/vol_08/subj_01_color.png": {
       "size": 473053,
@@ -496,14 +501,14 @@
       "mtime": 1792052559.958123
     },
     "assets/series_ai/vol_09/subj_01_color.png": {
-      "size": 457729,
-      "sha256": "0f9356780827e3d002fb5b76375c8d32e8c6341bed259e8b70c54d0efc81e5e6",
-      "mtime": 1792052559.9621367
+      "size": 618095,
+      "sha256": "1fe3957114f4ad1366dfdd6b966cd9332e373439cd67ded6ba0c94980fda7c73",
+      "mtime": 1792068559.765876
     },
     "assets/series_ai/vol_09/subj_01_lineart.png": {
-      "size": 23080,
-      "sha256": "c375210694992c5a69695a19ea2de906da18c3862067d98a3970e5ecee564278",
-      "mtime": 1792052559.9621367
+      "size": 25431,
+      "sha256": "daf72c608efe295e9153660242740a39a590382548fe813b1fb36b8eecebe6c8",
+      "mtime": 1792068559.8167367
     },
     "assets/series_ai/vol_10/subj_01_color.png": {
       "size": 698094,

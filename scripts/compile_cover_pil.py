@@ -49,18 +49,18 @@ NAVY_TEXT = (18, 30, 66, 255)
 YELLOW_TEXT = (255, 230, 80, 255)
 
 SERIES_TITLES = [
-    {"id": "vol_01", "vol": "Vol. 1",  "title": "Alphabet",   "pill": "ABC",       "bg_top": (255, 107, 53),  "bg_bottom": (255, 159, 28),  "neon": (255, 230, 109)},
-    {"id": "vol_02", "vol": "Vol. 2",  "title": "Animals",    "pill": "TIGER",     "bg_top": (255, 73, 73),   "bg_bottom": (255, 126, 71),  "neon": (255, 235, 120), "theme_environment": "jungle"},
-    {"id": "vol_03", "vol": "Vol. 3",  "title": "Birds",      "pill": "PARROT",    "bg_top": (16, 185, 129),  "bg_bottom": (52, 211, 153),  "neon": (167, 243, 208)},
-    {"id": "vol_04", "vol": "Vol. 4",  "title": "Sports",     "pill": "SOCCER",    "bg_top": (101, 163, 13),  "bg_bottom": (132, 204, 22),  "neon": (217, 249, 157)},
-    {"id": "vol_05", "vol": "Vol. 5",  "title": "Monsters",   "pill": "MONSTER",   "bg_top": (217, 70, 239),  "bg_bottom": (244, 114, 182), "neon": (251, 207, 232)},
-    {"id": "vol_06", "vol": "Vol. 6",  "title": "Numbers",    "pill": "1 2 3",     "bg_top": (153, 27, 27),   "bg_bottom": (220, 38, 38),   "neon": (254, 202, 202)},
-    {"id": "vol_07", "vol": "Vol. 7",  "title": "Fruits",     "pill": "FRUITS",    "bg_top": (13, 148, 136),  "bg_bottom": (45, 212, 191),  "neon": (153, 246, 228)},
-    {"id": "vol_08", "vol": "Vol. 8",  "title": "Shapes",     "pill": "SHAPES",    "bg_top": (236, 72, 153),  "bg_bottom": (251, 113, 133), "neon": (254, 205, 211)},
-    {"id": "vol_09", "vol": "Vol. 9",  "title": "Toys",       "pill": "BEAR",      "bg_top": (2, 132, 199),   "bg_bottom": (56, 189, 248),  "neon": (186, 230, 253)},
-    {"id": "vol_10", "vol": "Vol. 10", "title": "Flowers",    "pill": "SUNFLOWER", "bg_top": (120, 53, 15),   "bg_bottom": (180, 83, 9),    "neon": (253, 230, 138)},
-    {"id": "vol_11", "vol": "Vol. 11", "title": "Transport",  "pill": "CAR",       "bg_top": (30, 58, 138),   "bg_bottom": (59, 130, 246),  "neon": (191, 219, 254)},
-    {"id": "vol_12", "vol": "Vol. 12", "title": "Vegetables", "pill": "CARROT",    "bg_top": (109, 40, 217),  "bg_bottom": (139, 92, 246),  "neon": (221, 214, 254)},
+    {"id": "vol_01", "vol": "Vol. 1",  "title": "Alphabet",   "pill": "LETTER A",  "pill_color": (220, 38, 38, 255), "bg_top": (255, 107, 53),  "bg_bottom": (255, 159, 28),  "neon": (255, 230, 109)},
+    {"id": "vol_02", "vol": "Vol. 2",  "title": "Animals",    "pill": "TIGER",     "pill_color": (220, 38, 38, 255), "bg_top": (255, 73, 73),   "bg_bottom": (255, 126, 71),  "neon": (255, 235, 120), "theme_environment": "jungle"},
+    {"id": "vol_03", "vol": "Vol. 3",  "title": "Birds",      "pill": "PARROT",    "pill_color": (220, 38, 38, 255), "bg_top": (16, 185, 129),  "bg_bottom": (52, 211, 153),  "neon": (167, 243, 208)},
+    {"id": "vol_04", "vol": "Vol. 4",  "title": "Sports",     "pill": "SOCCER",    "pill_color": (220, 38, 38, 255), "bg_top": (101, 163, 13),  "bg_bottom": (132, 204, 22),  "neon": (217, 249, 157)},
+    {"id": "vol_05", "vol": "Vol. 5",  "title": "Monsters",   "pill": "MONSTER",   "pill_color": (220, 38, 38, 255), "bg_top": (217, 70, 239),  "bg_bottom": (244, 114, 182), "neon": (251, 207, 232)},
+    {"id": "vol_06", "vol": "Vol. 6",  "title": "Numbers",    "pill": "NUMBER 1",  "pill_color": (220, 38, 38, 255), "bg_top": (155, 34, 38),   "bg_bottom": (174, 32, 18),   "neon": (254, 202, 202)},
+    {"id": "vol_07", "vol": "Vol. 7",  "title": "Fruits",     "pill": "APPLE",     "pill_color": (220, 38, 38, 255), "bg_top": (0, 187, 249),   "bg_bottom": (0, 119, 182),   "neon": (180, 245, 255)},
+    {"id": "vol_08", "vol": "Vol. 8",  "title": "Shapes",     "pill": "SHAPES",    "pill_color": (220, 38, 38, 255), "bg_top": (236, 72, 153),  "bg_bottom": (251, 113, 133), "neon": (254, 205, 211)},
+    {"id": "vol_09", "vol": "Vol. 9",  "title": "Toys",       "pill": "TOY ROBOT", "pill_color": (220, 38, 38, 255), "bg_top": (0, 150, 199),   "bg_bottom": (2, 62, 138),    "neon": (186, 230, 253)},
+    {"id": "vol_10", "vol": "Vol. 10", "title": "Flowers",    "pill": "SUNFLOWER", "pill_color": (220, 38, 38, 255), "bg_top": (120, 53, 15),   "bg_bottom": (180, 83, 9),    "neon": (253, 230, 138)},
+    {"id": "vol_11", "vol": "Vol. 11", "title": "Transport",  "pill": "CAR",       "pill_color": (220, 38, 38, 255), "bg_top": (30, 58, 138),   "bg_bottom": (59, 130, 246),  "neon": (191, 219, 254)},
+    {"id": "vol_12", "vol": "Vol. 12", "title": "Vegetables", "pill": "CARROT",    "pill_color": (220, 38, 38, 255), "bg_top": (109, 40, 217),  "bg_bottom": (139, 92, 246),  "neon": (221, 214, 254)},
 ]
 
 
@@ -415,14 +415,14 @@ def render_two_panel_activity_card(
     draw.rounded_rectangle([2, 2, card_w + 2, card_h + 2], radius=26, fill="white", outline="#CBD5E1", width=4)
 
     # 3. Top Theme Pill Badge
-    pill_w = min(int(card_w * 0.52), 260)
+    badge_f = load_fancy_font("Fredoka-Bold.ttf", 26)
+    b_bb = draw.textbbox((0, 0), pill_text, font=badge_f)
+    bw, bh = b_bb[2] - b_bb[0], b_bb[3] - b_bb[1]
+    pill_w = max(min(int(card_w * 0.55), 320), bw + 44)
     pill_h = 44
     px0 = (card_w + 4 - pill_w) // 2
     py0 = 14
     draw.rounded_rectangle([px0, py0, px0 + pill_w, py0 + pill_h], radius=14, fill=pill_color)
-    badge_f = load_fancy_font("Fredoka-Bold.ttf", 26)
-    b_bb = draw.textbbox((0, 0), pill_text, font=badge_f)
-    bw, bh = b_bb[2] - b_bb[0], b_bb[3] - b_bb[1]
     draw.text((px0 + (pill_w - bw) // 2, py0 + (pill_h - bh) // 2 - 2), pill_text, fill="white", font=badge_f)
 
     # 4. Dimensions for the Two Sub-Panels
@@ -595,7 +595,7 @@ def render_single_front_cover(
         color_path=resolved_col,
         lineart_path=resolved_line,
         pill_text=vol_meta.get("pill", "COLOR"),
-        pill_color=vol_meta["bg_top"],
+        pill_color=vol_meta.get("pill_color", vol_meta.get("bg_top", (220, 38, 38, 255))),
     )
     cx0 = width_px - activity_card.width - int(width_px * 0.04)
     cy0 = int(height_px * 0.34)

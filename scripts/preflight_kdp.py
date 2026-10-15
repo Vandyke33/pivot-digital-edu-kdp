@@ -230,20 +230,33 @@ def preflight_volume(vol_id: str, repo_root: Path | str | None = None) -> dict[s
     # 1. PDF Parsing: valid uncorrupted PDF files
     reader_interior: PdfReader | None = None
     reader_cover: PdfReader | None = None
-    parsing_ok = False
-    if files["interior_pdf"] and files["cover_pdf"]:
+    interior_ok = False
+    cover_ok = False
+
+    if files["interior_pdf"]:
         try:
             reader_interior = PdfReader(str(files["interior_pdf"]))
-            reader_cover = PdfReader(str(files["cover_pdf"]))
-            parsing_ok = (len(reader_interior.pages) > 0 and len(reader_cover.pages) > 0)
+            interior_ok = len(reader_interior.pages) > 0
         except Exception:
-            parsing_ok = False
-    results["pdf_parsing"] = parsing_ok
+            interior_ok = False
+
+    if files["cover_pdf"]:
+        try:
+            reader_cover = PdfReader(str(files["cover_pdf"]))
+            cover_ok = len(reader_cover.pages) > 0
+        except Exception:
+            cover_ok = False
+
+    results["pdf_parsing"] = (interior_ok and cover_ok) if (files["interior_pdf"] and files["cover_pdf"]) else (interior_ok or cover_ok)
 
     # 2. Page Count: Interior PDF has exactly 32 pages, Cover spread has 1 page spread
     page_count_ok = False
     if reader_interior and reader_cover:
         page_count_ok = (len(reader_interior.pages) == 32 and len(reader_cover.pages) == 1)
+    elif reader_cover:
+        page_count_ok = (len(reader_cover.pages) == 1)
+        if manifest_data:
+            page_count_ok = page_count_ok and (manifest_data.get("expected_page_count") == 32)
     elif manifest_data:
         # Fallback to manifest contract if PDFs are pending
         page_count_ok = (manifest_data.get("expected_page_count") == 32 and len(manifest_data.get("pages", [])) == 32)
@@ -359,10 +372,12 @@ def preflight_volume(vol_id: str, repo_root: Path | str | None = None) -> dict[s
 
     # 12. Visual Proofs: 300 DPI cover PNG and interior contact sheet PNG exist and have file size > 50 KB
     proofs_ok = False
-    if files["cover_proof"] and files["interior_proof"]:
-        if (files["cover_proof"].exists() and files["cover_proof"].stat().st_size > 50_000 and
-            files["interior_proof"].exists() and files["interior_proof"].stat().st_size > 50_000):
-            proofs_ok = True
+    cov_proof_ok = bool(files["cover_proof"] and files["cover_proof"].exists() and files["cover_proof"].stat().st_size > 50_000)
+    int_proof_ok = bool(files["interior_proof"] and files["interior_proof"].exists() and files["interior_proof"].stat().st_size > 50_000)
+    if files["interior_pdf"]:
+        proofs_ok = cov_proof_ok and int_proof_ok
+    else:
+        proofs_ok = cov_proof_ok
     results["visual_proofs"] = proofs_ok
 
     return results

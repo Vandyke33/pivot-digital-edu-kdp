@@ -110,7 +110,8 @@ CANVA_HERO_BRIEFS = {
     "vol_09": {
         "title": "Toys",
         "brief": (
-            "A cheerful cartoon kid avatar playing with an adorable classic teddy bear and a colorful toy wooden train, "
+            "A happy cheerful cartoon little boy sitting on green grass playing with a colorful toy robot, "
+            "rainbow wooden stacking rings, and a colorful toy drum with drumsticks, "
             "3D Pixar Disney animation style, isolated on a clean solid white background, "
             "vibrant colors, playful, high detail, no text, no letters, no words, no frame"
         ),
