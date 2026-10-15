@@ -1,0 +1,684 @@
+{
+  "snapshot_id": "vault_snapshot_20261015_111032_gold_master",
+  "created_at_utc": "2026-10-15T11:10:38.407131+00:00",
+  "total_files": 135,
+  "total_bytes": 91067199,
+  "archive_path": "backups\\vault_snapshot_20261015_111032_gold_master.zip",
+  "files": {
+    "assets/brand/pivot_digital_logo_dark.svg": {
+      "size": 2906,
+      "sha256": "caf129f0f16f2446b89644fff4b28ba561f4a7182b6779b44b1afcbafca20be5",
+      "mtime": 1791906491.3000329
+    },
+    "assets/brand/pivot_digital_publication_logo.svg": {
+      "size": 2879,
+      "sha256": "ba2e2fe63e101f477156bde1eb69440be50ebe76aeeadaebcaf22864836716f5",
+      "mtime": 1791906491.347439
+    },
+    "assets/logos/pivot_champs.png": {
+      "size": 741078,
+      "sha256": "6b7319024a7c2907c2ae958693aa438355eb8759ad5d439332255778902cc818",
+      "mtime": 1791910064.1749284
+    },
+    "assets/logos/pivot_champs.svg": {
+      "size": 1023096,
+      "sha256": "046882ecd8df680c5fe2d7603e60baf3464c9e8f3a14ffc20d91fb570a2c6504",
+      "mtime": 1791907026.4083633
+    },
+    "assets/logos/pivot_kids.png": {
+      "size": 816389,
+      "sha256": "fd4e52270cafa0e0a75d9c77450f87f64eb0ece03182724074da5b9ba639b331",
+      "mtime": 1791910063.8045619
+    },
+    "assets/logos/pivot_kids.svg": {
+      "size": 899520,
+      "sha256": "d931bf14f43cd2afa79f1560fad358ab432b07176a5b7e7576c598ee1fc1943c",
+      "mtime": 1791907024.221587
+    },
+    "assets/logos/pivot_kids_sticker.png": {
+      "size": 478914,
+      "sha256": "fe3fd3a7eeeef2f1ad48929a809914a68ec1fc67768a0eaa5d6bf7851a255ec4",
+      "mtime": 1791920817.45013
+    },
+    "assets/logos/pivot_learn.png": {
+      "size": 718080,
+      "sha256": "4b06b31078141b3ff63d00ab83accfe0ed029953103fddacd595187e61e40f46",
+      "mtime": 1791910064.9087715
+    },
+    "assets/logos/pivot_learn.svg": {
+      "size": 809877,
+      "sha256": "dbc9aceabb63c9c8e41de93386e160b5bdfe4fec915be006dc2eb97842432b5e",
+      "mtime": 1791907030.7454221
+    },
+    "assets/logos/pivot_scribbles.png": {
+      "size": 839578,
+      "sha256": "360cccb2199d69162e1a7a92275d730d9d62c09894228f47cea4a6e442895848",
+      "mtime": 1791910064.56477
+    },
+    "assets/logos/pivot_scribbles.svg": {
+      "size": 1356547,
+      "sha256": "a0aeca0e3f95b9d36f479ab965ddcd9d0e2f378b4c9c5a4a933a0ba54953b7ba",
+      "mtime": 1791907028.709751
+    },
+    "assets/cover_heroes/vol_01_hero.png": {
+      "size": 695296,
+      "sha256": "326c7937f09c580dbe29d026679b94fc96e592b16778dbaf403d644380c7a8b4",
+      "mtime": 1792052559.671944
+    },
+    "assets/cover_heroes/vol_02_hero.png": {
+      "size": 3199639,
+      "sha256": "daed36880444e58dfee0ecee91e30a235f19cad6f21796c1eb63e100454491e7",
+      "mtime": 1792060923.0610456
+    },
+    "assets/cover_heroes/vol_03_hero.png": {
+      "size": 456373,
+      "sha256": "edf5592220595061c1503d56cacde251f0591045010fffb90fcf84c546c655bb",
+      "mtime": 1792052559.6873467
+    },
+    "assets/cover_heroes/vol_04_hero.png": {
+      "size": 527009,
+      "sha256": "8879b9060b45353a6a9e348eda89f3a0b3c9a5e43a01385f3cf7eda36dd22e29",
+      "mtime": 1792052559.6873467
+    },
+    "assets/cover_heroes/vol_05_hero.png": {
+      "size": 440834,
+      "sha256": "7f237bcaf43529515334e6ab1a592183f3abbbef81fe01d9f97c9f7afefa2004",
+      "mtime": 1792052559.6873467
+    },
+    "assets/cover_heroes/vol_06_hero.png": {
+      "size": 607083,
+      "sha256": "4d28981634d43510011d41a26b37d27b04fc00fa36a8c1c63d1affb93290b1fc",
+      "mtime": 1792052559.6873467
+    },
+    "assets/cover_heroes/vol_07_hero.png": {
+      "size": 488066,
+      "sha256": "3d36a1ea3c2ca57a87071c3666b86ccc3a76227cb0b7b59115c3e73d8e772573",
+      "mtime": 1792052559.7011995
+    },
+    "assets/cover_heroes/vol_08_hero.png": {
+      "size": 492870,
+      "sha256": "8481b932e0d08617d913e9343a97c780e536cbe632c7d4c912b7426c3e6a6cfe",
+      "mtime": 1792052559.7063494
+    },
+    "assets/cover_heroes/vol_09_hero.png": {
+      "size": 741148,
+      "sha256": "dd39dd678e5fd30192c34c006e51e011ee720f3c759c340fc8e847aa77b7db0f",
+      "mtime": 1792052559.7063494
+    },
+    "assets/cover_heroes/vol_10_hero.png": {
+      "size": 982425,
+      "sha256": "46aabc5021dbc1a051324e2ad9d630c015528e46ca12c319873554b0835a3d45",
+      "mtime": 1792052559.7063494
+    },
+    "assets/cover_heroes/vol_11_hero.png": {
+      "size": 594940,
+      "sha256": "b1b4cb850872c65a021d0ba2fce1c06afa783e82b24bee2d4ab72f397b8fa730",
+      "mtime": 1792052559.7063494
+    },
+    "assets/cover_heroes/vol_12_hero.png": {
+      "size": 601982,
+      "sha256": "56bd4d827427af5e365e1fbd3ebf407311448874e9bf35fd2988e09a64827985",
+      "mtime": 1792052559.7205567
+    },
+    "assets/cover_heroes/raw/vol_02_canva_raw.png": {
+      "size": 5937924,
+      "sha256": "f162cc7bbe25ea611b69b7291454ad24cc3085cd75eb464588c7a180d85bffc5",
+      "mtime": 1792060923.052847
+    },
+    "assets/series_ai/vol_01/subj_01_color.png": {
+      "size": 495487,
+      "sha256": "d0cc5a6eaa84186d7e10eee9ada3f1ae3b18e19c6213f1898d64e960c871856c",
+      "mtime": 1792052559.801994
+    },
+    "assets/series_ai/vol_01/subj_01_lineart.png": {
+      "size": 27303,
+      "sha256": "4a9c8f2b577aa5b2e3e3c38050110817f11bb90153454ba483cb63d526cfed00",
+      "mtime": 1792052559.801994
+    },
+    "assets/series_ai/vol_02/subj_01_color.png": {
+      "size": 656277,
+      "sha256": "03078c99b5b1dde4965a68e6ad57def7668425abc1abc3114bdccd0af72acf76",
+      "mtime": 1792052559.803989
+    },
+    "assets/series_ai/vol_02/subj_01_lineart.png": {
+      "size": 31283,
+      "sha256": "53feef064083d2b656ca157f5e43aea0c50ef15471c7e67ba7b6cb275f6150ce",
+      "mtime": 1792052559.803989
+    },
+    "assets/series_ai/vol_02/subj_02_color.png": {
+      "size": 593166,
+      "sha256": "e266fe71942838663e805b4c2be7c0f3283e85152555957139c7ba5d22d57801",
+      "mtime": 1792052559.803989
+    },
+    "assets/series_ai/vol_02/subj_02_lineart.png": {
+      "size": 30092,
+      "sha256": "457906d7e10d0e34efc743d7c61a193a2a3835ad3040a9fc3e632fc9adfd96c3",
+      "mtime": 1792052559.803989
+    },
+    "assets/series_ai/vol_02/subj_03_color.png": {
+      "size": 492323,
+      "sha256": "f713d2ac9c71eae056eac97f7f5b14c26822cb8471e79ed505c0f8d74965a7df",
+      "mtime": 1792052559.803989
+    },
+    "assets/series_ai/vol_02/subj_03_lineart.png": {
+      "size": 26190,
+      "sha256": "09f5c5e57c5ee5a33fb24c5bad17b527d6944f67b10150f2f118c1c14260b487",
+      "mtime": 1792052559.8197827
+    },
+    "assets/series_ai/vol_02/subj_04_color.png": {
+      "size": 528070,
+      "sha256": "c55670c8f5aa4084e9b30c24ea690491dc68479dad38f72f4b6825c92f1c97c9",
+      "mtime": 1792052559.8224523
+    },
+    "assets/series_ai/vol_02/subj_04_lineart.png": {
+      "size": 26961,
+      "sha256": "ec630caa14cb5625c306503a2e8e4f46787b1aa6188ef8085963b60e50d776eb",
+      "mtime": 1792052559.8224523
+    },
+    "assets/series_ai/vol_02/subj_05_color.png": {
+      "size": 591617,
+      "sha256": "1caa2113c78efab0c1b6fbd7d2637b7cbe30bf8a58dbd9fbaf9f2659b97fb7b7",
+      "mtime": 1792052559.827399
+    },
+    "assets/series_ai/vol_02/subj_05_lineart.png": {
+      "size": 30284,
+      "sha256": "411669381b5c93ad33daef75d1c7c3b4ab48a43d7bac75586a25b48e6c9afe20",
+      "mtime": 1792052559.827399
+    },
+    "assets/series_ai/vol_02/subj_06_color.png": {
+      "size": 583959,
+      "sha256": "da100ec28e9beb6c70808a8bc3928ee91a76e9e3eef7252870d1e5cd3271cdc6",
+      "mtime": 1792052559.8315446
+    },
+    "assets/series_ai/vol_02/subj_06_lineart.png": {
+      "size": 33547,
+      "sha256": "1c984136aa705f25443a0519c42b85d4d9eedab46a85669d740a0a866e6658ef",
+      "mtime": 1792052559.833551
+    },
+    "assets/series_ai/vol_02/subj_07_color.png": {
+      "size": 463912,
+      "sha256": "372b936a38304be34f7a8ddafd969451b2363d131b69f328880488ddb0499c6a",
+      "mtime": 1792052559.8370726
+    },
+    "assets/series_ai/vol_02/subj_07_lineart.png": {
+      "size": 25671,
+      "sha256": "cb375389778fa3b26617a9d48115772439b557f82bd61530531bdfb7e4a8edee",
+      "mtime": 1792052559.8376474
+    },
+    "assets/series_ai/vol_02/subj_08_color.png": {
+      "size": 454242,
+      "sha256": "3af062987f91e8656f69fd0c6d76a03910f6e965abe411858b7ea3c2ebaba1bd",
+      "mtime": 1792052559.8414643
+    },
+    "assets/series_ai/vol_02/subj_08_lineart.png": {
+      "size": 26602,
+      "sha256": "a2cf1d5f7d401f78fe12f030f143b50d2e48114cb9edf70b585d85a3ffe96b25",
+      "mtime": 1792052559.8420942
+    },
+    "assets/series_ai/vol_02/subj_09_color.png": {
+      "size": 443631,
+      "sha256": "80e7d123fbfdd39b6468a8c4178ec222bfd32c26335f73ba875609cb64cd602a",
+      "mtime": 1792052559.8450677
+    },
+    "assets/series_ai/vol_02/subj_09_lineart.png": {
+      "size": 25947,
+      "sha256": "8dc8d900b96d576c79c20f61f91ba83259b32a108313fc7738514673b91ab273",
+      "mtime": 1792052559.8456116
+    },
+    "assets/series_ai/vol_02/subj_10_color.png": {
+      "size": 573014,
+      "sha256": "e3f0ded2d45a2c00de4089a6673c5e16b81f6f3318508ba61302c3679f01b03d",
+      "mtime": 1792052559.8489206
+    },
+    "assets/series_ai/vol_02/subj_10_lineart.png": {
+      "size": 31513,
+      "sha256": "97ed0d1f4263e182988e17abaae54b2c33452dcabe5d9fc8e52591cf668bc2da",
+      "mtime": 1792052559.8495016
+    },
+    "assets/series_ai/vol_02/subj_11_color.png": {
+      "size": 464497,
+      "sha256": "064c631567c983628715f59dda2a13af6819fc36fd3d4baaf501f0abf686a2b1",
+      "mtime": 1792052559.853763
+    },
+    "assets/series_ai/vol_02/subj_11_lineart.png": {
+      "size": 24837,
+      "sha256": "8bf9c8cb605b2f97976f1514f133d1510a58d1582297af85bbf40a5c8a66a8d0",
+      "mtime": 1792052559.8548498
+    },
+    "assets/series_ai/vol_02/subj_12_color.png": {
+      "size": 457477,
+      "sha256": "bfd896ee732cc48f0aa690464d3a2b2c8ee188b20a92f1630d88789d579ecaf2",
+      "mtime": 1792052559.8588307
+    },
+    "assets/series_ai/vol_02/subj_12_lineart.png": {
+      "size": 24780,
+      "sha256": "8c8a9e13925f7065e82b906419790fdb7ddd4854eef5851100ec0eefcf81c799",
+      "mtime": 1792052559.8594484
+    },
+    "assets/series_ai/vol_02/subj_13_color.png": {
+      "size": 519423,
+      "sha256": "71a718ab9bea16f54b522e1af948564b5af9ee1388b044a504adf1b7a496bb10",
+      "mtime": 1792052559.8629265
+    },
+    "assets/series_ai/vol_02/subj_13_lineart.png": {
+      "size": 25643,
+      "sha256": "68a590ae281c62d17c3f60ed64b1abc24aad48b6012ef2d7757f8658e54ad509",
+      "mtime": 1792052559.863484
+    },
+    "assets/series_ai/vol_02/subj_14_color.png": {
+      "size": 600565,
+      "sha256": "7db8cd061f72bec6c983040481ff3491e35882924120c2526280e220eeefe1fc",
+      "mtime": 1792052559.8668
+    },
+    "assets/series_ai/vol_02/subj_14_lineart.png": {
+      "size": 30011,
+      "sha256": "0ef86c090a1d420c343f41ec649c54629c6562b5ab1cf620cf29cd083b12b4bb",
+      "mtime": 1792052559.8673408
+    },
+    "assets/series_ai/vol_02/subj_15_color.png": {
+      "size": 567808,
+      "sha256": "f97bc06dee8320fe15fba9294d5da79c084df0488bf8464fd1008926e8380ca5",
+      "mtime": 1792052559.8685858
+    },
+    "assets/series_ai/vol_02/subj_15_lineart.png": {
+      "size": 29673,
+      "sha256": "22a8781900799b979db7c80c73648e3fa4a44a960b644bc91606dc16ba253042",
+      "mtime": 1792052559.8685858
+    },
+    "assets/series_ai/vol_02/subj_16_color.png": {
+      "size": 499712,
+      "sha256": "cee1c51e9a09b306d2b4a16106831e60625214f7dbc437e41d31e12edac07340",
+      "mtime": 1792052559.8731854
+    },
+    "assets/series_ai/vol_02/subj_16_lineart.png": {
+      "size": 25052,
+      "sha256": "d93dbd5e724fd171f70430f807034897c1d6f688054cc011d51389b311a458f5",
+      "mtime": 1792052559.8731854
+    },
+    "assets/series_ai/vol_02/subj_17_color.png": {
+      "size": 450085,
+      "sha256": "e94d4cfc9265783cd20abfb796aae5f172ff736fe78d9b1c0a1cde11fd838add",
+      "mtime": 1792052559.8771544
+    },
+    "assets/series_ai/vol_02/subj_17_lineart.png": {
+      "size": 24406,
+      "sha256": "e8a486ef547d077f62f56205a3e21abb62e58f8b7a20c7105d0a0c8e6a2db6e7",
+      "mtime": 1792052559.8771544
+    },
+    "assets/series_ai/vol_02/subj_18_color.png": {
+      "size": 599416,
+      "sha256": "13467599cb8ed98734df5cb1dfeaf8e083e0d3bf9be9861bd74481c911be724e",
+      "mtime": 1792052559.8813474
+    },
+    "assets/series_ai/vol_02/subj_18_lineart.png": {
+      "size": 31631,
+      "sha256": "1ecdf2fa0d1d352fc0554b45bd351785616d9f7ff3096e720b1da1f8ac22ff4a",
+      "mtime": 1792052559.8813474
+    },
+    "assets/series_ai/vol_02/subj_19_color.png": {
+      "size": 613281,
+      "sha256": "c08c774d71f9311d6e48c69b61d671b0764f0d543ab12a9f8648e13d668f626a",
+      "mtime": 1792052559.884907
+    },
+    "assets/series_ai/vol_02/subj_19_lineart.png": {
+      "size": 31223,
+      "sha256": "ad96fba53a37ada8732a8603befb14f38e7e08fd2d6ce925c1982f3f1dbaa0ce",
+      "mtime": 1792052559.888257
+    },
+    "assets/series_ai/vol_02/subj_20_color.png": {
+      "size": 604786,
+      "sha256": "a633071cc177f3e98fc5973c4b0231c4ae0bd0af290259af5d20b5095edb92aa",
+      "mtime": 1792052559.8913925
+    },
+    "assets/series_ai/vol_02/subj_20_lineart.png": {
+      "size": 32224,
+      "sha256": "3649cf1bea8e7ff221b134c3488250f7e7402eb1712a50af6d358700e52b06c0",
+      "mtime": 1792052559.892403
+    },
+    "assets/series_ai/vol_02/subj_21_color.png": {
+      "size": 515227,
+      "sha256": "d83e72c77e0056ebf04ea1e07e835ab5de475acc1525f23e8d499e3d7ceea8c7",
+      "mtime": 1792052559.892403
+    },
+    "assets/series_ai/vol_02/subj_21_lineart.png": {
+      "size": 28780,
+      "sha256": "b2be5c27df747e09154cfe57888d5be7414ac0508f25acd0750003dad2f7b783",
+      "mtime": 1792052559.892403
+    },
+    "assets/series_ai/vol_02/subj_22_color.png": {
+      "size": 640742,
+      "sha256": "1e233cb09983dbe66547b82c611408019d7c687ba90a7b835e10d527c30df017",
+      "mtime": 1792052559.892403
+    },
+    "assets/series_ai/vol_02/subj_22_lineart.png": {
+      "size": 33766,
+      "sha256": "bfc605f2c0c8f570593f0cefe09e832509b19e7dc71a70d9436ed6a934bb39d5",
+      "mtime": 1792052559.892403
+    },
+    "assets/series_ai/vol_02/subj_23_color.png": {
+      "size": 604912,
+      "sha256": "c30a88b9b070e4a30f722e8659116841d27f7cbd189ce9a8c40597a54a9b50f6",
+      "mtime": 1792052559.9016924
+    },
+    "assets/series_ai/vol_02/subj_23_lineart.png": {
+      "size": 31255,
+      "sha256": "e52a3501d51b46feb46c193c0b2c95a7c5e889a0094cabfcd14f7da401a4ab44",
+      "mtime": 1792052559.905114
+    },
+    "assets/series_ai/vol_02/subj_24_color.png": {
+      "size": 537085,
+      "sha256": "2c1a0264e5678b5e6ea5c5fe5d21c798fd20cea83078e56295b5d77b9bcd77e7",
+      "mtime": 1792052559.905114
+    },
+    "assets/series_ai/vol_02/subj_24_lineart.png": {
+      "size": 27504,
+      "sha256": "4e4e0397831c0a6d8a5c86aa744a4778ac363c0be3b60fe5561dd869db52ce9c",
+      "mtime": 1792052559.905114
+    },
+    "assets/series_ai/vol_02/subj_25_color.png": {
+      "size": 717873,
+      "sha256": "63782a685656bc9d7ceaad2b63da8156ceb9c7bfcfc9beb4136f93f8449ee7a5",
+      "mtime": 1792052559.9111235
+    },
+    "assets/series_ai/vol_02/subj_25_lineart.png": {
+      "size": 35268,
+      "sha256": "4e584e80e1b1462688a6c0149ceae6d7fa8f4534d4f3e008770e3b83e1b351f8",
+      "mtime": 1792052559.9111235
+    },
+    "assets/series_ai/vol_02/subj_26_color.png": {
+      "size": 527779,
+      "sha256": "935ef10e38fba788ca9b0061f29253c4c3b620cfa81970153cb9846428e806f2",
+      "mtime": 1792052559.9154172
+    },
+    "assets/series_ai/vol_02/subj_26_lineart.png": {
+      "size": 28108,
+      "sha256": "095b8f6da63909030295f1f1b495b9581e4614754b725a653848776e45f1aa28",
+      "mtime": 1792052559.9154172
+    },
+    "assets/series_ai/vol_02/subj_27_color.png": {
+      "size": 440856,
+      "sha256": "6a2292e640313aa045e2d832d3a0c981c429ff7d8a10b874cceb909d59b98fe1",
+      "mtime": 1792052559.918635
+    },
+    "assets/series_ai/vol_02/subj_27_lineart.png": {
+      "size": 22847,
+      "sha256": "248f43df6b950ed56ecdaf361b848778d1bf1233890f0988f4bc3b11e34ecb5a",
+      "mtime": 1792052559.918635
+    },
+    "assets/series_ai/vol_02/subj_28_color.png": {
+      "size": 601419,
+      "sha256": "969e7db188fe685c7a20da6fb8037b5b4b2f9782ecf5f4370859f4b163d03751",
+      "mtime": 1792052559.918635
+    },
+    "assets/series_ai/vol_02/subj_28_lineart.png": {
+      "size": 29758,
+      "sha256": "e3165f34eb4876d9e8d3a4d047f604b3548a065d41180dd0056dd65b156178a1",
+      "mtime": 1792052559.918635
+    },
+    "assets/series_ai/vol_02/subj_29_color.png": {
+      "size": 439502,
+      "sha256": "25f2d081845ccc248ac6691f76596ddd1b5186cc554ab9a7d0d40a2181a62412",
+      "mtime": 1792052559.927721
+    },
+    "assets/series_ai/vol_02/subj_29_lineart.png": {
+      "size": 24410,
+      "sha256": "ded103c79b39772f646e48a9b031c95a2a003d9f42c3b134d7182db3592cba89",
+      "mtime": 1792052559.927721
+    },
+    "assets/series_ai/vol_02/subj_30_color.png": {
+      "size": 547597,
+      "sha256": "558e89ee1509fe7e1fb016226f9e7b060872668b794cca2b8f9a7e37d5a5233b",
+      "mtime": 1792052559.932233
+    },
+    "assets/series_ai/vol_02/subj_30_lineart.png": {
+      "size": 31474,
+      "sha256": "fe984a1e321fc3c19f219e2f1d81e8d47b48721ebd17c3aa2388e6b63a6bdf09",
+      "mtime": 1792052559.9340332
+    },
+    "assets/series_ai/vol_03/subj_01_color.png": {
+      "size": 492234,
+      "sha256": "14b527018a4fd229d0a342018523f43b9b86ba4b3d7b147a0665cb07e2479f42",
+      "mtime": 1792052559.9372094
+    },
+    "assets/series_ai/vol_03/subj_01_lineart.png": {
+      "size": 26161,
+      "sha256": "160653d8af9a9f4f45d69254ea291b775e494e4952dd0e09250c0236576e548c",
+      "mtime": 1792052559.9372094
+    },
+    "assets/series_ai/vol_04/subj_01_color.png": {
+      "size": 389597,
+      "sha256": "530189c9284e2cd4c90f38863cb4c9059605fc8bb36e89159f9d9b4cdef5130e",
+      "mtime": 1792052559.9372094
+    },
+    "assets/series_ai/vol_04/subj_01_lineart.png": {
+      "size": 20971,
+      "sha256": "149da7ae16b2a48a5d771b89f6cf856767552ef12728e08660585e3eb755f4fe",
+      "mtime": 1792052559.9372094
+    },
+    "assets/series_ai/vol_05/subj_01_color.png": {
+      "size": 445117,
+      "sha256": "48645fa51163329b32609c7532987061035b3af7d07f23fc6905f9d9e5570586",
+      "mtime": 1792052559.9456556
+    },
+    "assets/series_ai/vol_05/subj_01_lineart.png": {
+      "size": 24138,
+      "sha256": "6eea28bab030e201374d1c429cb42957d4e75540b1953a289feb9e54d808b070",
+      "mtime": 1792052559.9456556
+    },
+    "assets/series_ai/vol_06/subj_01_color.png": {
+      "size": 450550,
+      "sha256": "a42c582f776b8998196eb4a054746c71293ee8ae062c02471881886463b85141",
+      "mtime": 1792052559.9476874
+    },
+    "assets/series_ai/vol_06/subj_01_lineart.png": {
+      "size": 22109,
+      "sha256": "e342e06057683a1dac45ac13bc8c9459a52917bd7b0230429434fc824ff92a82",
+      "mtime": 1792052559.9476874
+    },
+    "assets/series_ai/vol_07/subj_01_color.png": {
+      "size": 351546,
+      "sha256": "25d348f8594f90d3c3eb3899d0b5d3b097e0996dc1e7f151e40ba1d719d4fb2b",
+      "mtime": 1792052559.9518168
+    },
+    "assets/series_ai/vol_07/subj_01_lineart.png": {
+      "size": 17530,
+      "sha256": "e9605f8d8281f829e76a381d896caab2e6f3b7859ee04abddc063ca601a88932",
+      "mtime": 1792052559.9518168
+    },
+    "assets/series_ai/vol_08/subj_01_color.png": {
+      "size": 473053,
+      "sha256": "5e69b8227f7e85390b7e4d9a63adcef48063e5ccf136ca375a125b620c3bac52",
+      "mtime": 1792052559.958123
+    },
+    "assets/series_ai/vol_08/subj_01_lineart.png": {
+      "size": 22824,
+      "sha256": "729da2b25554d116977977237cb356e2a545a5a51c3b6b7374da0ffbee7a2eb8",
+      "mtime": 1792052559.958123
+    },
+    "assets/series_ai/vol_09/subj_01_color.png": {
+      "size": 457729,
+      "sha256": "0f9356780827e3d002fb5b76375c8d32e8c6341bed259e8b70c54d0efc81e5e6",
+      "mtime": 1792052559.9621367
+    },
+    "assets/series_ai/vol_09/subj_01_lineart.png": {
+      "size": 23080,
+      "sha256": "c375210694992c5a69695a19ea2de906da18c3862067d98a3970e5ecee564278",
+      "mtime": 1792052559.9621367
+    },
+    "assets/series_ai/vol_10/subj_01_color.png": {
+      "size": 698094,
+      "sha256": "bc4640add6c0c4a1a3b44c72e0dffb8134adb128881df42ce4dd32a82fcaf226",
+      "mtime": 1792052559.9671502
+    },
+    "assets/series_ai/vol_10/subj_01_lineart.png": {
+      "size": 31358,
+      "sha256": "eedd1ed6813ae19ec6efee9dbf2eeb29e3f1a28403750ba42c1ee2e245f0fe74",
+      "mtime": 1792052559.9675567
+    },
+    "assets/series_ai/vol_11/subj_01_color.png": {
+      "size": 475347,
+      "sha256": "8dc34a945ca3ac86834d555e80b777e6599c3574d4b9dc08be0c44d709820683",
+      "mtime": 1792052559.9714677
+    },
+    "assets/series_ai/vol_11/subj_01_lineart.png": {
+      "size": 23553,
+      "sha256": "44d56c0410197c93cc099c475813243277361587dbcc23d843be539dd5960e53",
+      "mtime": 1792052559.9714677
+    },
+    "assets/series_ai/vol_12/subj_01_color.png": {
+      "size": 358074,
+      "sha256": "28f67ed595b4b44da50bd75941f92a4f398a1d0a5a8754f4a702e08b3c1a4195",
+      "mtime": 1792052559.9748087
+    },
+    "assets/series_ai/vol_12/subj_01_lineart.png": {
+      "size": 19199,
+      "sha256": "91d5cde1f211cf5823a7d0da3b979d8ba4738409aafd58d860936bcc295a23fc",
+      "mtime": 1792052559.9748087
+    },
+    "assets/cover/crayons_3d.png": {
+      "size": 570626,
+      "sha256": "3211f9ee9f7c6581a7ff3e97acaaff123e2f432f9e1fa4fcdb25e9c6da9081af",
+      "mtime": 1792052559.670489
+    },
+    "assets/cover/jungle_foreground_frame.png": {
+      "size": 1175623,
+      "sha256": "885933eb1ad2e88de5ffd0093c55af0e07bf3aec1e038649871d8a7ff95454d8",
+      "mtime": 1792052559.671944
+    },
+    "assets/cover/mascot_kid_wand.png": {
+      "size": 583103,
+      "sha256": "ada5c8a4d7c968c1ecdc9ffcb60151eaebff9eff093109f535f2925eb200a093",
+      "mtime": 1792052559.671944
+    },
+    "assets/fonts/Fredoka-Bold.ttf": {
+      "size": 159184,
+      "sha256": "2ba02e68b152868aef9ba28e24b3648c7d457fe6f25c761f2c2c53fb61a73fc8",
+      "mtime": 1791981829.7259758
+    },
+    "assets/fonts/LuckiestGuy-Regular.ttf": {
+      "size": 73320,
+      "sha256": "cfbdd68a039f92df51cf3721506af6242e64594c6325fe0bedbeff3fe385d980",
+      "mtime": 1791981828.8546562
+    },
+    "assets/fonts/LuckiestGuy.ttf": {
+      "size": 73320,
+      "sha256": "cfbdd68a039f92df51cf3721506af6242e64594c6325fe0bedbeff3fe385d980",
+      "mtime": 1791981828.8546562
+    },
+    "manifests/activity-layouts-v1-example.json": {
+      "size": 3607,
+      "sha256": "3af3a8ac58164736000b221271bb1720308b420452d0ac804958fcf1e5909ab1",
+      "mtime": 1791905054.6505685
+    },
+    "manifests/alphabet-v1.0-core-32p.json": {
+      "size": 6007,
+      "sha256": "b106b3e122978b5e00a108738fe0b94c0a21c4e7a792aa98ad34aae96a7afb78",
+      "mtime": 1792007262.9339056
+    },
+    "manifests/animals-v1.0-core-32p.json": {
+      "size": 6009,
+      "sha256": "5ca6386a85b67c3f6968c9fceca8dc7057d156814a9403a4d58afd5bdba91f0b",
+      "mtime": 1792007262.9375565
+    },
+    "manifests/animals-v1.0-core.json": {
+      "size": 9989,
+      "sha256": "c8a7e29b4a7055336bda3177bda854416f1a230a636ece4f29e229afe2196a52",
+      "mtime": 1792000920.1061287
+    },
+    "manifests/birds-v1.0-core-32p.json": {
+      "size": 6086,
+      "sha256": "6e09a1c76a3e113c77c6cf7cc4775f203e645a341a021aac5222c0c15402259f",
+      "mtime": 1792007262.9395654
+    },
+    "manifests/flowers-v1.0-core-32p.json": {
+      "size": 6207,
+      "sha256": "c1986508875b7f1a921dc160350d0c5d9ae59dc0c11fa3e1e630e4b5267291d4",
+      "mtime": 1792007262.9478312
+    },
+    "manifests/fruits-v1.0-core-32p.json": {
+      "size": 6166,
+      "sha256": "4456a5cee6fb81c3494f19342e64218e659a9e3c52edf125cffe6e9e688ef586",
+      "mtime": 1792007262.9395654
+    },
+    "manifests/monsters-v1.0-core-32p.json": {
+      "size": 6077,
+      "sha256": "cdb2a321c2844fcff4ad61a9db5f6b046ed9fe09f43296dfeb74c5883d7fa4a2",
+      "mtime": 1792007262.9395654
+    },
+    "manifests/numbers-v1.0-core-32p.json": {
+      "size": 6513,
+      "sha256": "fb05dfe7e4321afef098016efe10f9aa0674ee49e43fb93a5a62617314363daa",
+      "mtime": 1792007262.9395654
+    },
+    "manifests/series_thumbnails_batch.json": {
+      "size": 11926,
+      "sha256": "1f304c39bf5ab9410e631f6df7627e18d6278aeeab81731136afe9f773cf68e9",
+      "mtime": 1792000853.6880226
+    },
+    "manifests/shapes-v1.0-core-32p.json": {
+      "size": 6223,
+      "sha256": "7904ea3c68c7be698ffec46d123b1c15f21679f9cdfffbc60660f030be314c1f",
+      "mtime": 1792007262.9458196
+    },
+    "manifests/solar-system-explorers-v1.0-core.json": {
+      "size": 4554,
+      "sha256": "944a80bdd9b824749f8757e0fa070238f756240e480ea44f81c44aacf91b356f",
+      "mtime": 1791905046.5200195
+    },
+    "manifests/sports-v1.0-core-32p.json": {
+      "size": 6211,
+      "sha256": "994841d080ab9560da3b8b67cecc6c0666ca696e99c4b593800f7936ede9325f",
+      "mtime": 1792007262.9395654
+    },
+    "manifests/toys-v1.0-core-32p.json": {
+      "size": 6315,
+      "sha256": "babba79538b314cd07622ba3952c171f6ca551dba633e534b89dd28c2b8f8f9c",
+      "mtime": 1792007262.9478312
+    },
+    "manifests/transport-v1.0-core-32p.json": {
+      "size": 6211,
+      "sha256": "6b42b4f10025c10b41d6f4e71bf9eb745937ddf51376f74665fb2a4349eb10ed",
+      "mtime": 1792007262.9498415
+    },
+    "manifests/vegetables-v1.0-core-32p.json": {
+      "size": 6222,
+      "sha256": "c395b53465406ac29b721de654a752a9d29326137b5cf3512a12ab6f2c53eed5",
+      "mtime": 1792007262.9498415
+    },
+    "catalogs/asset_registry.json": {
+      "size": 1765,
+      "sha256": "b0abb9e31eed66b1f3db078fbc6aaf6f2920ccb598c710834df6575f94b637e2",
+      "mtime": 1791903711.4294343
+    },
+    "catalogs/catalog_master.json": {
+      "size": 56601,
+      "sha256": "f7d35b2cef8d7d86c554d5f68b55174a852edd6c7ed54a8cc6d72b8dbc4c045a",
+      "mtime": 1792007262.9318953
+    },
+    "local_builds/animals/v1.0-core/animals-cover-spread-32p-proof.png": {
+      "size": 13744381,
+      "sha256": "cee90fcb7973aaa3a2d7e373d51ac7c04a8af858172ef827850a29e3e5a7abf2",
+      "mtime": 1792061264.703395
+    },
+    "local_builds/animals/v1.0-core/animals-cover-spread-32p.pdf": {
+      "size": 17185663,
+      "sha256": "8919329299280acc6d92ba2dade3a73dd3b4c7b9cc36f8ecef317ab41bb7c018",
+      "mtime": 1792061262.9289486
+    },
+    "local_builds/animals/v1.0-core/copy-to-color-vol_02-32p-interior.pdf": {
+      "size": 11011566,
+      "sha256": "18d2b9e1828ed62d6d44a216cb32a15c698d2dbb8dee2c143ad6cf7f4eb472c3",
+      "mtime": 1792062552.5721264
+    },
+    "local_builds/animals/v1.0-core/copy-to-color-vol_02-32p-interior_proof.png": {
+      "size": 266458,
+      "sha256": "9d7ad87313d5538c7ad4f97c0b723f408473ce4b7dd57cd8cd96c837c3cb5e40",
+      "mtime": 1792062554.6234653
+    },
+    "local_builds/animals/v1.0-core/prompts.jsonl": {
+      "size": 70766,
+      "sha256": "66001f59aa43a6e8ed2c82d344727f27306e4b3b107884913d3cc1956dc40629",
+      "mtime": 1792052560.2116356
+    }
+  }
+}

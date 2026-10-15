@@ -736,17 +736,24 @@ def build_32_page_copy_to_color_book(
             append_images=pages[1:],
         )
 
-    # Mirror to legacy path for vol_02 if present
+    # Mirror to legacy path for vol_02 if building within local_builds
     if vol_id == "vol_02":
-        legacy_dir = REPO_ROOT / "local_builds" / "animals" / "v1.0-core"
-        if legacy_dir.exists():
-            legacy_pdf = legacy_dir / "copy-to-color-vol_02-32p-interior.pdf"
-            if legacy_pdf.resolve() != out_pdf.resolve():
-                import shutil
-                try:
-                    shutil.copy2(str(out_pdf), str(legacy_pdf))
-                except Exception:
-                    pass
+        local_builds_dir = (REPO_ROOT / "local_builds").resolve()
+        try:
+            is_local_build = local_builds_dir in out_pdf.resolve().parents
+        except Exception:
+            is_local_build = False
+
+        if is_local_build:
+            legacy_dir = REPO_ROOT / "local_builds" / "animals" / "v1.0-core"
+            if legacy_dir.exists():
+                legacy_pdf = legacy_dir / "copy-to-color-vol_02-32p-interior.pdf"
+                if legacy_pdf.resolve() != out_pdf.resolve():
+                    import shutil
+                    try:
+                        shutil.copy2(str(out_pdf), str(legacy_pdf))
+                    except Exception:
+                        pass
 
     # Render proof contact sheet of sample pages (P1 Welcome, P2-P7, P32 Certificate)
     proof_path = out_pdf.parent / f"{out_pdf.stem}_proof.png"
