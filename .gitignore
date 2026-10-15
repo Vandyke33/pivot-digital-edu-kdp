@@ -50,6 +50,7 @@ env/
 temp/
 working_assets/
 local_builds/
+backups/
 dist/
 build/
 
