@@ -44,7 +44,7 @@ SERIES_FRONTS_DIR.mkdir(parents=True, exist_ok=True)
 # Strict negative prompt: no text, no letters, no words, no banners, clean solid white background
 CANVA_HERO_BRIEFS = {
     "vol_01": {
-        "title": "Alphabet",
+        "title": "Alphabets",
         "brief": (
             "A cheerful cartoon toddler kid avatar joyfully sitting on oversized colorful 3D ABC alphabet blocks "
             "holding a giant colorful crayon, 3D Pixar Disney animation style, isolated on a clean solid white background, "

@@ -50,7 +50,7 @@ PREFLIGHT_CRITERIA = [
 ]
 
 VOLUME_MAP: dict[str, dict[str, str]] = {
-    "vol_01": {"name": "alphabet", "title": "Alphabet", "book_id": "PIVOT-ALPHABET-001-32P"},
+    "vol_01": {"name": "alphabet", "title": "Alphabets", "book_id": "PIVOT-ALPHABET-001-32P"},
     "vol_02": {"name": "animals", "title": "Animals", "book_id": "PIVOT-ANIMALS-002-32P"},
     "vol_03": {"name": "birds", "title": "Birds", "book_id": "PIVOT-BIRDS-003-32P"},
     "vol_04": {"name": "sports", "title": "Sports", "book_id": "PIVOT-SPORTS-004-32P"},

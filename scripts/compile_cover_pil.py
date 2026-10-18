@@ -49,7 +49,7 @@ NAVY_TEXT = (18, 30, 66, 255)
 YELLOW_TEXT = (255, 230, 80, 255)
 
 SERIES_TITLES = [
-    {"id": "vol_01", "vol": "Vol. 1",  "title": "Alphabet",   "pill": "LETTER A",  "pill_color": (220, 38, 38, 255), "bg_top": (255, 107, 53),  "bg_bottom": (255, 159, 28),  "neon": (255, 230, 109)},
+    {"id": "vol_01", "vol": "Vol. 1",  "title": "Alphabets",  "pill": "LETTER A",  "pill_color": (220, 38, 38, 255), "bg_top": (255, 107, 53),  "bg_bottom": (255, 159, 28),  "neon": (255, 230, 109)},
     {"id": "vol_02", "vol": "Vol. 2",  "title": "Animals",    "pill": "TIGER",     "pill_color": (220, 38, 38, 255), "bg_top": (255, 73, 73),   "bg_bottom": (255, 126, 71),  "neon": (255, 235, 120), "theme_environment": "jungle"},
     {"id": "vol_03", "vol": "Vol. 3",  "title": "Birds",      "pill": "PARROT",    "pill_color": (220, 38, 38, 255), "bg_top": (16, 185, 129),  "bg_bottom": (52, 211, 153),  "neon": (167, 243, 208)},
     {"id": "vol_04", "vol": "Vol. 4",  "title": "Sports",     "pill": "SOCCER",    "pill_color": (220, 38, 38, 255), "bg_top": (101, 163, 13),  "bg_bottom": (132, 204, 22),  "neon": (217, 249, 157)},

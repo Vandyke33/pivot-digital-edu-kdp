@@ -53,12 +53,12 @@ class AnimalsCoverSpreadTests(unittest.TestCase):
     def test_series_titles_12_registry(self) -> None:
         # Back cover requires a 4x3 grid = exactly 12 miniature titles
         self.assertEqual(len(SERIES_TITLES_12), 12)
-        expected_sample_titles = {"Alphabet", "Animals", "Birds", "Sports", "Monsters", "Numbers", "Fruits", "Shapes", "Toys", "Flowers", "Transport", "Vegetables"}
+        expected_sample_titles = {"Alphabets", "Animals", "Birds", "Sports", "Monsters", "Numbers", "Fruits", "Shapes", "Toys", "Flowers", "Transport", "Vegetables"}
         actual_titles = {item["title"] for item in SERIES_TITLES_12}
         self.assertEqual(actual_titles, expected_sample_titles)
 
         # Check 1-to-1 volume ordering
-        self.assertEqual(SERIES_TITLES_12[0]["title"], "Alphabet")
+        self.assertIn(SERIES_TITLES_12[0]["title"], ("Alphabet", "Alphabets"))
         self.assertEqual(SERIES_TITLES_12[0]["vol"], 1)
         self.assertEqual(SERIES_TITLES_12[1]["title"], "Animals")
         self.assertEqual(SERIES_TITLES_12[1]["vol"], 2)

@@ -3,8 +3,8 @@
   "book_id": "PIVOT-ALPHABET-001-32P",
   "series_id": "copy_to_color_alphabet",
   "edition_id": "v1.0-core-32p",
-  "title": "Copy to Color: Alphabet",
-  "subtitle": "Interactive Early Learning Alphabet Coloring Activity Book for Ages 3-5",
+  "title": "Copy to Color: Alphabets",
+  "subtitle": "Interactive Early Learning Alphabets Coloring Activity Book for Ages 3-5",
   "publisher": "The Pivot Digital Publication",
   "trim": {
     "width_in": 8.5,
@@ -54,7 +54,7 @@
     {
       "number": 1,
       "type": "welcome",
-      "title": "Copy to Color: Alphabet"
+      "title": "Copy to Color: Alphabets"
     },
     {
       "number": 2,

@@ -264,7 +264,7 @@ class TestTier1Features(unittest.TestCase):
         """F04.5: Verify canonical series title 'Copy to Color' is applied across all titles."""
         for item in SERIES_TITLES_12:
             self.assertTrue(item["title"] in [
-                "Alphabet", "Animals", "Birds", "Sports", "Monsters", "Numbers",
+                "Alphabet", "Alphabets", "Animals", "Birds", "Sports", "Monsters", "Numbers",
                 "Fruits", "Shapes", "Toys", "Flowers", "Transport", "Vegetables"
             ])
 

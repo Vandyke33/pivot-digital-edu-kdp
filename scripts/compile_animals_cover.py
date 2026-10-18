@@ -23,7 +23,7 @@ import resvg_py
 
 # 12 distinct miniature titles for the back cover 4x3 grid (matches manifests/series_thumbnails_batch.json 1-to-1)
 SERIES_TITLES_12 = [
-    {"title": "Alphabet", "color": "#FF6B35", "accent": "#FDE047", "vol": 1},
+    {"title": "Alphabets", "color": "#FF6B35", "accent": "#FDE047", "vol": 1},
     {"title": "Animals", "color": "#FF4D4D", "accent": "#FDE047", "vol": 2},
     {"title": "Birds", "color": "#2EC4B6", "accent": "#FEF08A", "vol": 3},
     {"title": "Sports", "color": "#80ED99", "accent": "#1E293B", "vol": 4},

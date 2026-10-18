@@ -119,7 +119,7 @@ SERIES_SUBJECTS: dict[str, list[tuple[str, str]]] = {
 }
 
 VOL_TITLES: dict[str, str] = {
-    "vol_01": "Alphabet",
+    "vol_01": "Alphabets",
     "vol_02": "Animals",
     "vol_03": "Birds",
     "vol_04": "Sports",

@@ -60,7 +60,7 @@ MEDIABOX_H_PT = 810.0  # 11.250 * 72 pt
 # ---------------------------------------------------------------------------
 SERIES_CATALOG: dict[str, dict[str, Any]] = {
     "vol_01": {
-        "title": "Alphabet",
+        "title": "Alphabets",
         "primary": (255, 107, 53),
         "secondary": (220, 38, 38),
         "accent": (255, 230, 109),
